@@ -333,6 +333,7 @@ function renderResult(){
   });
   show("s-result");
   setTimeout(drawRadar,100);
+  localStorage.setItem("cct_result",JSON.stringify({scores:scores,incIdx:incIdx,goalIdx:goalIdx,ans:ans}));
 }
 function drawRadar(){
   var svg=document.getElementById("radar");
@@ -413,6 +414,8 @@ async function initLiff(){
       userId=p.userId;displayName=p.displayName;pictureUrl=p.pictureUrl||"";
     }
   }catch(e){console.log("LIFF skip:",e);}
+  var saved=localStorage.getItem("cct_result");
+  if(saved){try{var d=JSON.parse(saved);scores=d.scores;incIdx=d.incIdx;goalIdx=d.goalIdx;ans=d.ans;renderResult();}catch(e){localStorage.removeItem("cct_result");}}
 }
 async function shareQuiz(){
   try{
