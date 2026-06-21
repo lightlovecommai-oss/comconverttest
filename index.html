@@ -205,7 +205,7 @@ html,body{background:#f5ede3;font-family:-apple-system,sans-serif;min-height:100
 
   <!-- 第一區：溝通變現潛力 -->
   <div class="card" style="text-align:center;">
-    <div style="font-size:11px;color:#9a6b3e;background:#f0e4d4;border-radius:12px;padding:3px 12px;display:inline-block;margin-bottom:12px;">溝通變現能力診斷</div>
+    <div id="reset-trigger" style="font-size:11px;color:#9a6b3e;background:#f0e4d4;border-radius:12px;padding:3px 12px;display:inline-block;margin-bottom:12px;">溝通變現能力診斷</div>
     <div style="font-size:13px;color:#a08060;margin-bottom:4px;">你的溝通變現潛力</div>
     <div id="r-potential" style="font-size:52px;font-weight:700;color:#e8734a;line-height:1;margin-bottom:4px;">—</div>
     <div style="font-size:11px;color:#c8b09a;">A × T × P × I</div>
@@ -613,20 +613,26 @@ document.getElementById("btn-share").addEventListener("click",shareQuiz);
 initLiff();
 
 (function(){
-  var taps=0,timer=null;
-  document.getElementById("app-logo").addEventListener("click",function(){
-    taps++;
-    clearTimeout(timer);
-    if(taps>=5){
-      taps=0;
-      localStorage.removeItem("cct_result");
-      cur=0;ans=[];scores={A:0,T:0,P:0,I:0,potential:0};incIdx=0;goalIdx=0;srcIdx=0;
-      formData={name:"",email:"",job:""};
-      show("s-intro");
-    } else {
-      timer=setTimeout(function(){taps=0;},1500);
-    }
-  });
+  function makeReset(elId){
+    var taps=0,timer=null;
+    var el=document.getElementById(elId);
+    if(!el) return;
+    el.addEventListener("click",function(){
+      taps++;
+      clearTimeout(timer);
+      if(taps>=5){
+        taps=0;
+        localStorage.removeItem("cct_result");
+        cur=0;ans=[];scores={A:0,T:0,P:0,I:0,potential:0};incIdx=0;goalIdx=0;srcIdx=0;
+        formData={name:"",email:"",job:""};
+        show("s-intro");
+      } else {
+        timer=setTimeout(function(){taps=0;},1500);
+      }
+    });
+  }
+  makeReset("app-logo");
+  makeReset("reset-trigger");
 })();
 </script>
 </body>
