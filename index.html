@@ -152,32 +152,52 @@ html,body{background:#f5ede3;font-family:-apple-system,sans-serif;min-height:100
   </div>
 </div></div></div>
 
-<div id="s-result" class="screen"><div class="wrap"><div class="card">
-  <div style="text-align:center;margin-bottom:1rem;">
-    <div style="display:inline-block;font-size:11px;color:#9a6b3e;background:#f0e4d4;border-radius:12px;padding:3px 12px;margin-bottom:8px;">溝通變現能力表</div>
-    <div style="font-size:20px;font-weight:600;color:#2d1f0f;margin-bottom:3px;" id="r-main"></div>
-    <div style="font-size:13px;color:#a08060;" id="r-sub"></div>
+<div id="s-result" class="screen"><div class="wrap">
+
+  <!-- 第一區：溝通變現潛力 -->
+  <div class="card" style="text-align:center;">
+    <div style="font-size:11px;color:#9a6b3e;background:#f0e4d4;border-radius:12px;padding:3px 12px;display:inline-block;margin-bottom:12px;">溝通變現能力診斷</div>
+    <div style="font-size:13px;color:#a08060;margin-bottom:4px;">你的溝通變現潛力</div>
+    <div id="r-potential" style="font-size:52px;font-weight:700;color:#e8734a;line-height:1;margin-bottom:4px;">—</div>
+    <div style="font-size:11px;color:#c8b09a;">A × T × P × I</div>
   </div>
-  <div id="inc-card" class="inccard"></div>
-  <div class="chartbox" style="flex-direction:column;align-items:center;gap:4px;">
-    <svg id="radar" viewBox="0 0 260 270" width="260" height="270" xmlns="http://www.w3.org/2000/svg"></svg>
-    <div style="font-size:11px;color:#a08060;">點擊維度查看分數</div>
+
+  <!-- 第二區：ATPI 四個分數 + 雷達圖 -->
+  <div class="card">
+    <div class="chartbox" style="flex-direction:column;align-items:center;gap:4px;border:none;padding:0;margin-bottom:.75rem;">
+      <svg id="radar" viewBox="0 0 260 270" width="260" height="270" xmlns="http://www.w3.org/2000/svg"></svg>
+      <div style="font-size:11px;color:#a08060;">點擊維度查看分數</div>
+    </div>
+    <div id="score-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"></div>
   </div>
-  <div id="score-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1rem;"></div>
-  <div class="strcard">
-    <div class="strlbl">你最強的維度</div>
-    <div class="strname" id="r-strong-name"></div>
-    <div class="strdesc" id="r-strong-desc"></div>
+
+  <!-- 第三區：溝通能力分析（斷點） -->
+  <div class="card">
+    <div style="font-size:11px;color:#a08060;margin-bottom:6px;">你的溝通能力分析</div>
+    <div id="r-weak-name" style="font-size:15px;font-weight:600;color:#2d1f0f;margin-bottom:6px;"></div>
+    <div id="r-weak-desc" style="font-size:13px;color:#6b4c30;line-height:1.7;white-space:pre-line;"></div>
   </div>
-  <button class="btnO" id="btn-consult">預約「提升溝通變現」諮詢</button>
+
+  <!-- 第四區：天賦變現路徑 -->
+  <div class="card">
+    <div style="font-size:11px;color:#a08060;margin-bottom:6px;">你最容易成功的天賦變現路徑</div>
+    <div id="r-strong-name" style="font-size:15px;font-weight:600;color:#2d1f0f;margin-bottom:6px;"></div>
+    <div id="r-strong-desc" style="font-size:13px;color:#6b4c30;line-height:1.7;white-space:pre-line;"></div>
+  </div>
+
+  <!-- 第六區：下一步 -->
+  <div class="card" style="background:#fff8f4;border:0.5px solid #f0c8b0;">
+    <div style="font-size:13px;color:#6b4c30;line-height:1.8;margin-bottom:1rem;">你的溝通能力已具備基礎，但<strong style="color:#e8734a;">沒有變現 SOP，能力不會自動變成收入</strong>——賺錢靠運氣，不靠設計。來諮詢，我們一起把你的成交流程系統化。</div>
+    <button class="btnO" id="btn-consult">預約「提升溝通變現」諮詢</button>
+  </div>
+
   <button class="btnG" id="btn-share">
     <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
     分享給朋友
   </button>
-  <div class="copybox">每個人都有不同的溝通變現方式，只是沒有掌握自己最佳的用法（就像我當年一樣）。溝通變現有兩種面向：<strong>溝通技巧</strong>與<strong>變現流程</strong>。如果有興趣，咱們可以一起研究，一起提升收入。</div>
   <div class="saving" id="saving-msg"></div>
   <button class="btnN ready" id="btn-workshop" onclick="location.href='https://lightlovecommai-oss.github.io/consult-workshop/?id='+encodeURIComponent(userId)">學員變現入口</button>
-</div></div></div>
+</div></div>
 
 <script>
 var LIFF_ID="2010316474-UovQ1zhe";
@@ -185,21 +205,23 @@ var SHEET_API="https://script.google.com/macros/s/AKfycbyqGWp8sAKRi9CNKDdQBFVb3i
 var QUIZ_URL="https://liff.line.me/2010316474-UovQ1zhe";
 
 var QS=[
-  {text:"你期待透過提升「溝通變現能力」，能為你多增加多少年收入？（溝通、銷售、演講皆屬此能力）",dim:"GOAL",label:"開始前先想想",opts:["0～20萬","40～100萬","100～300萬","300萬以上"]},
-  {text:"不管是跟客戶、同事還是陌生人，對方常常會主動延伸話題，甚至問你「然後呢？」",dim:"A",label:"吸引力",opts:["幾乎從不","偶爾","一半情況","經常","幾乎總是"]},
-  {text:"當我跟朋友或客戶說一個觀點、分享一個案例時，對方常常會出現明顯反應——點頭、好奇，或忍不住說「真的嗎？」",dim:"A",label:"吸引力",opts:["幾乎從不","偶爾","一半情況","經常","幾乎總是"]},
-  {text:"在 3 人以上的群體裡，我不需要刻意搶話或提高音量，對方自然會把注意力放在我說的話上。",dim:"A",label:"吸引力",opts:["幾乎從不","偶爾","一半情況","經常","幾乎總是"]},
-  {text:"不管是客戶、老闆還是伴侶，對方常常會覺得「你真的懂我在說什麼」。",dim:"T",label:"信任力",opts:["幾乎從不","偶爾","一半情況","經常","幾乎總是"]},
-  {text:"溝通時，我能自然讓對方多說心裡話，而不是我一直在說——無論是銷售、聊天還是開會。",dim:"T",label:"信任力",opts:["幾乎從不","偶爾","一半情況","經常","幾乎總是"]},
-  {text:"對方願意告訴我「平常不會跟別人說」的真實想法、壓力或困擾。",dim:"T",label:"信任力",opts:["幾乎從不","偶爾","一半情況","經常","幾乎總是"]},
-  {text:"我說完一段話之後，對方會覺得「這個人好像真的可以幫到我」——不管是在銷售、演講還是日常對話。",dim:"P",label:"專業力",opts:["完全不會","很少","一半情況","經常","幾乎總是"]},
-  {text:"當我說明一個方法或建議時，客戶、老闆或伴侶常常表示聽起來「簡單而且可以馬上試試看」。",dim:"P",label:"專業力",opts:["幾乎從不","偶爾","一半情況","經常","幾乎總是"]},
-  {text:"我能用對方熟悉的案例或情境，讓不同背景的人都覺得「這說的就是我」。",dim:"P",label:"專業力",opts:["幾乎從不","偶爾","一半情況","經常","幾乎總是"]},
-  {text:"你目前主要用哪種方式溝通或銷售？",dim:"I",label:"影響力",opts:["完全1對1對話","以1對1為主，偶爾多人","主要1對N演講／課程"]},
-  {text:"不論是朋友、客戶還是員工，溝通結束後，對方常常會主動採取行動或做出改變。",dim:"I",label:"影響力",opts:["幾乎從不","偶爾","一半情況","經常","幾乎總是"]},
+  {text:"你期待透過提升「溝通變現能力」，能為你額外增加多少年收入？",dim:"GOAL",label:"開始前先想想",opts:["多賺 20 萬以內","多賺 20～100 萬","多賺 100～300 萬","多賺 300 萬以上"]},
+  {text:"跟客戶或陌生人介紹自己在做什麼之後，對方會主動想繼續了解，而不是點頭就結束。",dim:"A",label:"吸引力｜1對1",opts:["幾乎從不","偶爾","一半情況","經常","幾乎總是"]},
+  {text:"在 3 人以上的團體當中，通常你講了話之後，會引起其他人共鳴繼續聊下去，焦點也常在你身上。",dim:"A",label:"吸引力｜群體",opts:["幾乎從不","偶爾","一半情況","經常","幾乎總是"]},
+  {text:"你在 FB、IG、Threads 發的內容，會滿容易讓陌生流量喜歡或轉發。",dim:"A",label:"吸引力｜社群",opts:["幾乎從不","偶爾","一半情況","經常","幾乎總是"]},
+  {text:"跟客戶或朋友聊完之後，對方會願意透露真實想法或困擾，容易讓人信賴。",dim:"T",label:"信任力｜1對1",opts:["幾乎從不","偶爾","一半情況","經常","幾乎總是"]},
+  {text:"在團體場合裡，你很容易變成資訊搜集站，通常會掌握團體的內部狀況。",dim:"T",label:"信任力｜群體",opts:["幾乎從不","偶爾","一半情況","經常","幾乎總是"]},
+  {text:"你在 FB、IG、Threads 發的內容，會容易收到留言或很多人共鳴，並上面也會有好朋友的回應。",dim:"T",label:"信任力｜社群",opts:["幾乎從不","偶爾","一半情況","經常","幾乎總是"]},
+  {text:"跟客戶介紹完你的服務或方法之後，對方會覺得「這個人真的很專業，而且能幫到我」。",dim:"P",label:"專業力｜1對1",opts:["幾乎從不","偶爾","一半情況","經常","幾乎總是"]},
+  {text:"在團體場合裡，你說的話或建議，通常讓人覺得邏輯清晰，並且解決方案很管用。",dim:"P",label:"專業力｜群體",opts:["幾乎從不","偶爾","一半情況","經常","幾乎總是"]},
+  {text:"你在 FB、IG、Threads 發的專業內容，會有人評價「這個很有用」。",dim:"P",label:"專業力｜社群",opts:["幾乎從不","偶爾","一半情況","經常","幾乎總是"]},
+  {text:"跟客戶聊完之後，很容易促成交易，或是後續幾次之後就達成合作。",dim:"I",label:"推進力｜1對1",opts:["幾乎從不","偶爾","一半情況","經常","幾乎總是"]},
+  {text:"在團體場合有你的存在，很容易讓進度往下推進，或是達成共識。",dim:"I",label:"推進力｜群體",opts:["幾乎從不","偶爾","一半情況","經常","幾乎總是"]},
+  {text:"你在 FB、IG、Threads 不一定很多人看，但就是會有人找到你並達成交易。",dim:"I",label:"推進力｜社群",opts:["幾乎從不","偶爾","一半情況","經常","幾乎總是"]},
+  {text:"你想要收入變多的項目，最多的客戶從哪裡來？",dim:"SRC",label:"客戶來源",opts:["朋友／舊客戶／商會介紹","認識的新朋友或陌生人","社群或網路找上門","受僱領薪，沒有自己的客戶"]},
   {text:"你目前的年收入落在哪個區間？",dim:"INC",label:"基本資料",opts:["0-60萬","60-120萬","120-300萬","300-1000萬","1000萬以上"]}
 ];
-var DIMS={A:{name:"吸引力",desc:"讓人想靠近你",color:"#e8734a"},T:{name:"信任力",desc:"讓人願意相信你",color:"#5DCAA5"},P:{name:"專業力",desc:"讓人覺得你很會",color:"#378ADD"},I:{name:"影響力",desc:"讓人願意行動",color:"#c8a84b"}};
+var DIMS={A:{name:"吸引力",desc:"Attract・讓人想靠近你",color:"#e8734a"},T:{name:"信任力",desc:"Trust・讓人願意相信你",color:"#5DCAA5"},P:{name:"專業力",desc:"Professional・讓人覺得你很會",color:"#378ADD"},I:{name:"推進力",desc:"Impact・讓人願意採取行動",color:"#c8a84b"}};
 var DORD=["A","T","P","I"];
 var INC_LABELS=["L1-0-60萬","L2-60-120萬","L3-120-300萬","L4-300-1000萬","L5-1000萬以上"];
 var INC_TITLES=["溝通萌芽者","溝通變現者","溝通進階者","溝通變現達人","頂尖溝通變現家"];
@@ -235,7 +257,7 @@ var STRONG_DESC={
 但溝通變現是一連串流程，流程改變收入就會提升。`
 };
 
-var cur=0,ans=[],scores={A:0,T:0,P:0,I:0},incIdx=0,goalIdx=0;
+var cur=0,ans=[],scores={A:0,T:0,P:0,I:0,potential:0},incIdx=0,goalIdx=0,srcIdx=0;
 var userId="",displayName="",pictureUrl="";
 var formData={name:"",email:"",job:""};
 
@@ -289,29 +311,38 @@ function calcScores(){
     else if(q.dim==="I") rI+=v;
     else if(q.dim==="INC") incIdx=ans[i];
     else if(q.dim==="GOAL") goalIdx=ans[i];
+    else if(q.dim==="SRC") srcIdx=ans[i];
   });
+  // 各維度 3 題，每題 1-5 分，最高 15 分
   scores.A=Math.round((rA/15)*100);
   scores.T=Math.round((rT/15)*100);
   scores.P=Math.round((rP/15)*100);
-  scores.I=Math.round((rI/6)*100);
+  scores.I=Math.round((rI/15)*100);
+  // 溝通變現潛力 = A × T × P × I（各為 0-1，結果乘以 100）
+  scores.potential=Math.round((scores.A/100)*(scores.T/100)*(scores.P/100)*(scores.I/100)*10000);
 }
+var STRONG_PATH={
+  A:"想像這個場景：你在一個商業活動或社群聚會開口說話，周圍的人自然把目光轉向你，有人開始追問「然後呢？」，有人默默加了你的 LINE。\n\n這就是你最容易、也是天賦的變現路徑——吸引型。你不需要刻意推銷，人自然往你身邊靠。最適合你的場景：社群經營、內容創作、演講分享，讓陌生人主動找上門。",
+  T:"想像這個場景：你跟一個潛在客戶聊了半小時，對方把從沒跟別人說過的困擾都說出來了，最後主動問你「你有沒有什麼課程或服務？」\n\n這就是你最容易、也是天賦的變現路徑——關係型。你不用追客戶，客戶會追你。最適合你的場景：1對1 深度諮詢、長期顧問關係、讓滿意的客戶主動介紹新客戶。",
+  P:"想像這個場景：你在一個場合分享了一個觀點或案例，對方聽完沉默了幾秒，然後說「這個人真的很懂，我想跟他聊聊」——主動問你有沒有合作的方式。\n\n這就是你最容易、也是天賦的變現路徑——權威型。你的專業本身就是最強的吸引力。最適合你的場景：顧問服務、企業培訓、高單價專業諮詢，讓對方覺得「值得付這個價格」。",
+  I:"想像這個場景：你在台上或現場說完一段話，台下的人紛紛走過來問你「怎麼跟你合作」、「下一堂課什麼時候開」——你還沒開口推銷，他們已經準備好了。\n\n這就是你最容易、也是天賦的變現路徑——推進型。你天生能讓人在當下做決定。最適合你的場景：演講現場收單、工作坊、活動型銷售，把每次亮相變成一次成交機會。"
+};
+var WEAK_DESC={
+  A:"吸引力是成交流程的入口——沒有人被你吸引進來，後面的信任、專業、推進都沒有機會發揮。\n\n你需要的不是更努力說話，而是讓說話本身更有磁性，讓對方自然想靠近。",
+  T:"信任力是成交的地基——對方可能覺得你很厲害，但還沒有到「願意掏錢給你」的程度。\n\n你需要的是讓對方在短時間內感覺「你真的懂我」，打開心房才能打開錢包。",
+  P:"專業力決定對方願不願意付你高單價——如果對方覺得你說的東西「聽起來不錯但不確定有沒有用」，就不會成交。\n\n你需要的是把你的能力用對方聽得懂的語言說出來。",
+  I:"推進力是臨門一腳——前面吸引、信任、專業都做對了，但對方就是沒有採取行動。\n\n你需要的是在對的時機給對方一個說「好」的理由，而不是等他自己決定。"
+};
+var INC_MIDPOINTS=[30,90,210,650,1500];
+var GOAL_ADDS=[10,60,200,500];
 function renderResult(){
   var sk=DORD.reduce(function(a,b){return scores[a]>scores[b]?a:b;});
-  var uk=DORD.filter(function(k){return k!==sk;}).reduce(function(a,b){return scores[a]>scores[b]?a:b;});
   var wk=DORD.reduce(function(a,b){return scores[a]<scores[b]?a:b;});
-  document.getElementById("r-main").textContent="主能力："+DIMS[sk].name;
-  document.getElementById("r-sub").textContent="副能力："+DIMS[uk].name;
-  document.getElementById("r-strong-name").textContent=DIMS[sk].name+"・"+DIMS[sk].desc;
-  document.getElementById("r-strong-desc").textContent=STRONG_DESC[sk];
-  var ic=document.getElementById("inc-card");
-  ic.innerHTML="";
-  ic.appendChild(mk("div","inclevel","你目前位於"));
-  ic.appendChild(mk("div","inctitle",INC_TITLES[incIdx]));
-  ic.appendChild(mk("div","incbeat","擊敗 "+INC_BEAT[incIdx]+"% 使用者"));
-  ic.appendChild(mk("div","incnxtlbl","下一階段目標"));
-  ic.appendChild(mk("div","incnxt","🎯 "+INC_NEXT[incIdx]));
-  ic.appendChild(mk("div","incwklbl","最需要補強"));
-  ic.appendChild(mk("div","incwk","⚡ "+DIMS[wk].name+"・"+DIMS[wk].desc));
+
+  // 第一區：溝通變現潛力
+  document.getElementById("r-potential").textContent=scores.potential;
+
+  // 第二區：ATPI 分數
   var sg=document.getElementById("score-grid");
   sg.innerHTML="";
   DORD.forEach(function(k){
@@ -332,9 +363,18 @@ function renderResult(){
     card.appendChild(name); card.appendChild(score); card.appendChild(barWrap);
     sg.appendChild(card);
   });
+
+  // 第三區：溝通能力分析（斷點）
+  document.getElementById("r-weak-name").textContent=DIMS[wk].name+"（"+DIMS[wk].desc.split("・")[1]+"）是你最大的缺口";
+  document.getElementById("r-weak-desc").textContent=WEAK_DESC[wk];
+
+  // 第四區：天賦變現路徑
+  document.getElementById("r-strong-name").textContent=DIMS[sk].name+"型・你最容易成功的天賦變現路徑";
+  document.getElementById("r-strong-desc").textContent=STRONG_PATH[sk];
+
   show("s-result");
   setTimeout(drawRadar,100);
-  localStorage.setItem("cct_result",JSON.stringify({scores:scores,incIdx:incIdx,goalIdx:goalIdx,ans:ans}));
+  localStorage.setItem("cct_result",JSON.stringify({scores:scores,incIdx:incIdx,goalIdx:goalIdx,srcIdx:srcIdx,ans:ans}));
 }
 function drawRadar(){
   var svg=document.getElementById("radar");
@@ -416,7 +456,7 @@ async function initLiff(){
     }
   }catch(e){console.log("LIFF skip:",e);}
   var saved=localStorage.getItem("cct_result");
-  if(saved){try{var d=JSON.parse(saved);scores=d.scores;incIdx=d.incIdx;goalIdx=d.goalIdx;ans=d.ans;renderResult();}catch(e){localStorage.removeItem("cct_result");}}
+  if(saved){try{var d=JSON.parse(saved);scores=d.scores;incIdx=d.incIdx;goalIdx=d.goalIdx;srcIdx=d.srcIdx||0;ans=d.ans;renderResult();}catch(e){localStorage.removeItem("cct_result");}}
 }
 async function shareQuiz(){
   try{
@@ -428,7 +468,7 @@ async function shareQuiz(){
 }
 
 document.getElementById("btn-start").addEventListener("click",function(){
-  cur=0;ans=[];scores={A:0,T:0,P:0,I:0};incIdx=0;goalIdx=0;
+  cur=0;ans=[];scores={A:0,T:0,P:0,I:0,potential:0};incIdx=0;goalIdx=0;srcIdx=0;
   show("s-quiz");renderQ();
 });
 document.getElementById("btn-next").addEventListener("click",function(){
