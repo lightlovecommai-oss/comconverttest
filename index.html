@@ -78,6 +78,8 @@ html,body{background:#f5ede3;font-family:-apple-system,sans-serif;min-height:100
 </head>
 <body>
 
+<div id="app-logo" style="text-align:center;padding:14px 0 2px;font-size:11px;color:#c8b09a;letter-spacing:2px;user-select:none;">溝通變現能力測驗</div>
+
 <div id="s-intro" class="screen active"><div class="wrap"><div class="card">
   <div class="btitle" style="margin-bottom:8px;">這份測驗適合你，如果你正在做：</div>
   <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:1.25rem;">
@@ -128,6 +130,53 @@ html,body{background:#f5ede3;font-family:-apple-system,sans-serif;min-height:100
   <button class="btnO" id="btn-start">開始測驗（免費）</button>
 </div></div></div>
 
+<div id="s-explain" class="screen"><div class="wrap">
+
+  <div class="card">
+    <div style="font-size:11px;color:#9a6b3e;background:#f0e4d4;border-radius:12px;padding:3px 12px;display:inline-block;margin-bottom:12px;">測驗前先了解</div>
+    <div style="font-size:18px;font-weight:700;color:#2d1f0f;line-height:1.5;margin-bottom:8px;">「開口變現」是什麼？</div>
+    <div style="font-size:13.5px;color:#4a3220;line-height:1.8;">你說話的方式，決定別人願不願意把錢給你。<br><br>同樣的服務、同樣的產品，有人開口就成交，有人說了半天對方還在「考慮看看」。<br><br>差別不在努力，在於你的<strong style="color:#e8734a;">溝通方式有沒有帶動對方走完整個成交流程</strong>。</div>
+  </div>
+
+  <div class="card">
+    <div style="font-size:13px;font-weight:600;color:#2d1f0f;margin-bottom:12px;">成交需要四個環節，缺一個就會卡住</div>
+
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div style="background:#fff8f4;border-left:3px solid #e8734a;border-radius:0 12px 12px 0;padding:12px 14px;">
+        <div style="font-size:12px;font-weight:600;color:#e8734a;margin-bottom:4px;">① 吸引力（Attract）</div>
+        <div style="font-size:13px;color:#4a3220;line-height:1.7;margin-bottom:6px;">讓人想靠近你、想繼續聽你說</div>
+        <div style="font-size:12px;color:#9a6b3e;line-height:1.6;">❌ 吸引力不夠：說了很多，對方點頭就走，沒有後續</div>
+      </div>
+
+      <div style="background:#f0fbf7;border-left:3px solid #5DCAA5;border-radius:0 12px 12px 0;padding:12px 14px;">
+        <div style="font-size:12px;font-weight:600;color:#5DCAA5;margin-bottom:4px;">② 信任力（Trust）</div>
+        <div style="font-size:13px;color:#4a3220;line-height:1.7;margin-bottom:6px;">讓人覺得你懂他、願意說真心話</div>
+        <div style="font-size:12px;color:#9a6b3e;line-height:1.6;">❌ 信任力不夠：對方喜歡你，但不願意掏錢，因為還沒有「被懂」的感覺</div>
+      </div>
+
+      <div style="background:#f0f5ff;border-left:3px solid #378ADD;border-radius:0 12px 12px 0;padding:12px 14px;">
+        <div style="font-size:12px;font-weight:600;color:#378ADD;margin-bottom:4px;">③ 專業力（Professional）</div>
+        <div style="font-size:13px;color:#4a3220;line-height:1.7;margin-bottom:6px;">讓人覺得你真的懂、這個價格值得</div>
+        <div style="font-size:12px;color:#9a6b3e;line-height:1.6;">❌ 專業力不夠：對方覺得「聽起來不錯」，但不確定有沒有用，遲遲不成交</div>
+      </div>
+
+      <div style="background:#fdfaf0;border-left:3px solid #c8a84b;border-radius:0 12px 12px 0;padding:12px 14px;">
+        <div style="font-size:12px;font-weight:600;color:#c8a84b;margin-bottom:4px;">④ 推進力（Impact）</div>
+        <div style="font-size:13px;color:#4a3220;line-height:1.7;margin-bottom:6px;">讓人願意現在就採取行動</div>
+        <div style="font-size:12px;color:#9a6b3e;line-height:1.6;">❌ 推進力不夠：前面三關都過了，對方最後說「我再想想」，然後就沒有然後了</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="background:#2d1f0f;border:none;">
+    <div style="font-size:12px;color:rgba(255,255,255,0.55);margin-bottom:8px;">這個測驗會做什麼</div>
+    <div style="font-size:14px;color:#fff;line-height:1.8;">幫你找出四個環節裡<strong style="color:#f0a882;">哪個是你的天賦強項</strong>，以及<strong style="color:#f0a882;">哪個是讓你卡住的缺口</strong>——然後給你一條最省力的變現路徑。</div>
+  </div>
+
+  <button class="btnO" id="btn-explain-go">我準備好了，開始測驗 →</button>
+
+</div></div>
+
 <div id="s-quiz" class="screen"><div class="wrap"><div class="card">
   <div class="progtop"><span id="q-counter">第 1 題，共 13 題</span><span id="q-pct">0%</span></div>
   <div class="progbar"><div class="progfill" id="prog-fill" style="width:0%"></div></div>
@@ -171,18 +220,23 @@ html,body{background:#f5ede3;font-family:-apple-system,sans-serif;min-height:100
     <div id="score-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"></div>
   </div>
 
-  <!-- 第三區：溝通能力分析（斷點） -->
+  <!-- 第三區：強項組合 × 最省力變現路徑 -->
   <div class="card">
-    <div style="font-size:11px;color:#a08060;margin-bottom:6px;">你的溝通能力分析</div>
-    <div id="r-weak-name" style="font-size:15px;font-weight:600;color:#2d1f0f;margin-bottom:6px;"></div>
-    <div id="r-weak-desc" style="font-size:13px;color:#6b4c30;line-height:1.7;white-space:pre-line;"></div>
+    <div style="font-size:11px;color:#a08060;margin-bottom:10px;">你的強項組合 × 最省力變現路徑</div>
+    <div id="r-combo-badges" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;"></div>
+    <div id="r-combo-title" style="font-size:16px;font-weight:700;color:#2d1f0f;margin-bottom:10px;line-height:1.5;"></div>
+    <div style="font-size:11px;color:#a08060;margin-bottom:6px;">你最省力的成交流程</div>
+    <div id="r-combo-flow" style="font-size:13px;color:#4a3220;line-height:1.9;margin-bottom:14px;white-space:pre-line;"></div>
+    <div style="height:0.5px;background:#e8ddd2;margin-bottom:12px;"></div>
+    <div style="font-size:11px;color:#a08060;margin-bottom:6px;">弱項不用補，用這個替代</div>
+    <div id="r-combo-tips" style="font-size:13px;color:#6b4c30;line-height:1.9;white-space:pre-line;"></div>
   </div>
 
-  <!-- 第四區：天賦變現路徑 -->
-  <div class="card">
-    <div style="font-size:11px;color:#a08060;margin-bottom:6px;">你最容易成功的天賦變現路徑</div>
-    <div id="r-strong-name" style="font-size:15px;font-weight:600;color:#2d1f0f;margin-bottom:6px;"></div>
-    <div id="r-strong-desc" style="font-size:13px;color:#6b4c30;line-height:1.7;white-space:pre-line;"></div>
+  <!-- 第四區：最大缺口提醒 -->
+  <div class="card" style="border-color:#f0c8b0;">
+    <div style="font-size:11px;color:#a08060;margin-bottom:6px;">現在最值得修的一個缺口</div>
+    <div id="r-weak-name" style="font-size:15px;font-weight:600;color:#2d1f0f;margin-bottom:6px;"></div>
+    <div id="r-weak-desc" style="font-size:13px;color:#6b4c30;line-height:1.7;white-space:pre-line;"></div>
   </div>
 
   <!-- 第六區：下一步 -->
@@ -327,6 +381,44 @@ var STRONG_PATH={
   P:"想像這個場景：你在一個場合分享了一個觀點或案例，對方聽完沉默了幾秒，然後說「這個人真的很懂，我想跟他聊聊」——主動問你有沒有合作的方式。\n\n這就是你最容易、也是天賦的變現路徑——權威型。你的專業本身就是最強的吸引力。最適合你的場景：顧問服務、企業培訓、高單價專業諮詢，讓對方覺得「值得付這個價格」。",
   I:"想像這個場景：你在台上或現場說完一段話，台下的人紛紛走過來問你「怎麼跟你合作」、「下一堂課什麼時候開」——你還沒開口推銷，他們已經準備好了。\n\n這就是你最容易、也是天賦的變現路徑——推進型。你天生能讓人在當下做決定。最適合你的場景：演講現場收單、工作坊、活動型銷售，把每次亮相變成一次成交機會。"
 };
+var COMBO_PATH={
+  AT:{
+    title:"社群養粉 × 轉介紹成交",
+    flow:"① 發內容，A 自然帶來陌生流量\n② 有人私訊，T 讓他覺得你懂他\n③ 聊著聊著，對方主動問「你有什麼服務？」\n④ 不用推銷，他們已經說服自己了",
+    tips:"P 弱 → 別賣方法論，賣「陪你一起做」的陪伴型服務\nI 弱 → 不做現場收單，改用限時報名表單讓截止日期幫你逼單\n定價走中低客單，靠口碑和量滾起來",
+    avoid:"演講現場收單（I 弱，氣氛熱但沒人買）、高單價顧問（P 弱撐不住價格）"
+  },
+  AP:{
+    title:"知識型內容 × 課程產品",
+    flow:"① 持續輸出有深度的內容，A 帶流量、P 讓人覺得你很懂\n② 累積一群「覺得你很厲害」的追蹤者\n③ 推出課程或工作坊（不需要深度信任就能成交）\n④ 課程體驗本身幫你建立 T，之後再升級高單價",
+    tips:"T 弱 → 靠出現頻率建熟悉感，常出現 = 類信任，不靠深聊\nI 弱 → 用稀缺名額＋截止日期讓環境幫你推進，不用自己開口\n最適合做課程、電子書、訂閱制",
+    avoid:"1 對 1 長期顧問（T 弱，關係很難深，客戶會離開）"
+  },
+  AI:{
+    title:"演講亮相 × 現場收單 → 後端升級",
+    flow:"① 上台或辦活動，A 讓台下捨不得滑手機\n② 活動結束前用 I 現場推低客單入門產品，趁熱打鐵\n③ 進來的人靠課程體驗建立 T 和 P 的信任\n④ 後端再做一次高單價升級",
+    tips:"T 弱 → 不靠個人關係，靠見證和學員案例讓別人說話\nP 弱 → 賣結果不賣方法（「學員平均 3 個月增加 20 萬」比「7 步驟方法論」更有力）\n前端低客單可以很低，甚至免費，靠 A+I 把人收進來",
+    avoid:"高單價 1 對 1 諮詢（T+P 弱，對方聊完覺得不夠值）"
+  },
+  PT:{
+    title:"深度服務 × 口碑轉介紹循環",
+    flow:"① 先在現有人脈裡找第一批客戶，T 讓對方覺得你真的懂他\n② P 撐住高單價，交付讓對方超滿意\n③ 主動請客戶介紹下一個人（客戶的 A 幫你做你做不到的事）\n④ 新客戶帶著信任進來，跳過 A 的關卡，直接進入成交",
+    tips:"A 弱 → 不做冷流量，找 A 強的合作夥伴導流，你專攻後端成交和交付\nI 弱 → 諮詢結尾問「如果繼續，三個月後你想達到什麼？」讓對方自己描繪未來，自然說 yes\n走高客單，靠深度不靠量",
+    avoid:"短影音或社群冷啟動（A 弱，發了也沒人看，很挫折）"
+  },
+  IT:{
+    title:"人脈深耕 × 結果說話 → 持續升價",
+    flow:"① 從現有人脈找第一批客戶，T 讓他們信任你、願意試試看\n② I 在對話結尾自然推進成交，不拖\n③ 拿到真實結果，讓結果替代 P 的位置\n④ 靠口碑和結果持續升價，不需要陌生流量",
+    tips:"A 弱 → 不自己冷啟動，去別人的場合露臉（上 Podcast、聯名活動、商業社群）\nP 弱 → 用學員結果替代理論（「他做了 X 之後 Y 了」比「我有 Z 方法論」更有說服力）\n這個組合最怕沒有舞台，要積極被介紹到人脈圈",
+    avoid:"社群文字內容冷啟動（A+P 弱，發文沒有流量也沒有重量）"
+  },
+  IP:{
+    title:"專業提案 × B2B 企業成交",
+    flow:"① 鎖定企業或機構客戶，不靠個人魅力，靠提案和結果說話\n② P 撐住提案品質，讓對方覺得「這個人真的懂」\n③ I 推動決策層，縮短採購周期，讓他們現在做決定\n④ 交付後直接談下一個合約，不需要重新開發",
+    tips:"A 弱 → 靠精緻的提案書和案例集替代個人魅力\nT 弱 → 用流程建立信任（回覆快、交付準時、清楚的合約），不靠個人溫度\n另一條路：找 A+T 強的合夥人做前端，你專攻後端提案和交付",
+    avoid:"社群內容行銷冷啟動（A+T 弱，內容沒有溫度也沒有流量）"
+  }
+};
 var WEAK_DESC={
   A:"吸引力是成交流程的入口——沒有人被你吸引進來，後面的信任、專業、推進都沒有機會發揮。\n\n你需要的不是更努力說話，而是讓說話本身更有磁性，讓對方自然想靠近。",
   T:"信任力是成交的地基——對方可能覺得你很厲害，但還沒有到「願意掏錢給你」的程度。\n\n你需要的是讓對方在短時間內感覺「你真的懂我」，打開心房才能打開錢包。",
@@ -336,8 +428,10 @@ var WEAK_DESC={
 var INC_MIDPOINTS=[30,90,210,650,1500];
 var GOAL_ADDS=[10,60,200,500];
 function renderResult(){
-  var sk=DORD.reduce(function(a,b){return scores[a]>scores[b]?a:b;});
-  var wk=DORD.reduce(function(a,b){return scores[a]<scores[b]?a:b;});
+  var sorted=DORD.slice().sort(function(a,b){return scores[b]-scores[a];});
+  var sk=sorted[0],sk2=sorted[1],wk=sorted[3];
+  var comboKey=[sk,sk2].sort().join("");
+  var combo=COMBO_PATH[comboKey]||COMBO_PATH[Object.keys(COMBO_PATH)[0]];
 
   // 第一區：溝通變現潛力
   document.getElementById("r-potential").textContent=scores.potential;
@@ -364,13 +458,29 @@ function renderResult(){
     sg.appendChild(card);
   });
 
-  // 第三區：溝通能力分析（斷點）
-  document.getElementById("r-weak-name").textContent=DIMS[wk].name+"（"+DIMS[wk].desc.split("・")[1]+"）是你最大的缺口";
-  document.getElementById("r-weak-desc").textContent=WEAK_DESC[wk];
+  // 第三區：強項組合 × 最省力變現路徑
+  var badges=document.getElementById("r-combo-badges");
+  badges.innerHTML="";
+  [sk,sk2].forEach(function(k){
+    var b=document.createElement("span");
+    b.style.cssText="background:"+DIMS[k].color+";color:#fff;font-size:12px;font-weight:600;border-radius:20px;padding:3px 12px;";
+    b.textContent=DIMS[k].name;
+    badges.appendChild(b);
+  });
+  var wkBadges=[sorted[2],sorted[3]];
+  wkBadges.forEach(function(k){
+    var b=document.createElement("span");
+    b.style.cssText="background:#f0e4d4;color:#a08060;font-size:12px;border-radius:20px;padding:3px 12px;";
+    b.textContent=DIMS[k].name+" 待提升";
+    badges.appendChild(b);
+  });
+  document.getElementById("r-combo-title").textContent=combo.title;
+  document.getElementById("r-combo-flow").textContent=combo.flow;
+  document.getElementById("r-combo-tips").textContent=combo.tips;
 
-  // 第四區：天賦變現路徑
-  document.getElementById("r-strong-name").textContent=DIMS[sk].name+"型・你最容易成功的天賦變現路徑";
-  document.getElementById("r-strong-desc").textContent=STRONG_PATH[sk];
+  // 第四區：最大缺口
+  document.getElementById("r-weak-name").textContent=DIMS[wk].name+"（"+DIMS[wk].desc.split("・")[1]+"）是你現在最大的缺口";
+  document.getElementById("r-weak-desc").textContent=WEAK_DESC[wk];
 
   show("s-result");
   setTimeout(drawRadar,100);
@@ -468,6 +578,9 @@ async function shareQuiz(){
 }
 
 document.getElementById("btn-start").addEventListener("click",function(){
+  show("s-explain");
+});
+document.getElementById("btn-explain-go").addEventListener("click",function(){
   cur=0;ans=[];scores={A:0,T:0,P:0,I:0,potential:0};incIdx=0;goalIdx=0;srcIdx=0;
   show("s-quiz");renderQ();
 });
@@ -498,6 +611,23 @@ document.getElementById("btn-consult").addEventListener("click",function(){
 document.getElementById("btn-share").addEventListener("click",shareQuiz);
 
 initLiff();
+
+(function(){
+  var taps=0,timer=null;
+  document.getElementById("app-logo").addEventListener("click",function(){
+    taps++;
+    clearTimeout(timer);
+    if(taps>=5){
+      taps=0;
+      localStorage.removeItem("cct_result");
+      cur=0;ans=[];scores={A:0,T:0,P:0,I:0,potential:0};incIdx=0;goalIdx=0;srcIdx=0;
+      formData={name:"",email:"",job:""};
+      show("s-intro");
+    } else {
+      timer=setTimeout(function(){taps=0;},1500);
+    }
+  });
+})();
 </script>
 </body>
 </html>
