@@ -499,7 +499,7 @@ function renderResult(){
 
   show("s-result");
   setTimeout(drawRadar,100);
-  localStorage.setItem("cct_result",JSON.stringify({scores:scores,incIdx:incIdx,goalIdx:goalIdx,srcIdx:srcIdx,ans:ans}));
+  localStorage.setItem("cct_result_v2",JSON.stringify({scores:scores,incIdx:incIdx,goalIdx:goalIdx,srcIdx:srcIdx,ans:ans}));
 }
 function drawRadar(){
   var svg=document.getElementById("radar");
@@ -580,8 +580,8 @@ async function initLiff(){
       userId=p.userId;displayName=p.displayName;pictureUrl=p.pictureUrl||"";
     }
   }catch(e){console.log("LIFF skip:",e);}
-  var saved=localStorage.getItem("cct_result");
-  if(saved){try{var d=JSON.parse(saved);scores=d.scores;incIdx=d.incIdx;goalIdx=d.goalIdx;srcIdx=d.srcIdx||0;ans=d.ans;renderResult();}catch(e){localStorage.removeItem("cct_result");}}
+  var saved=localStorage.getItem("cct_result_v2");
+  if(saved){try{var d=JSON.parse(saved);scores=d.scores;incIdx=d.incIdx;goalIdx=d.goalIdx;srcIdx=d.srcIdx||0;ans=d.ans;renderResult();}catch(e){localStorage.removeItem("cct_result_v2");}}
 }
 async function shareQuiz(){
   try{
@@ -637,7 +637,7 @@ initLiff();
       clearTimeout(timer);
       if(taps>=5){
         taps=0;
-        localStorage.removeItem("cct_result");
+        localStorage.removeItem("cct_result_v2");
         cur=0;ans=[];scores={A:0,T:0,P:0,I:0,potential:0};incIdx=0;goalIdx=0;srcIdx=0;
         formData={name:"",email:"",job:""};
         show("s-intro");
