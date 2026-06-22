@@ -582,7 +582,12 @@ async function shareQuiz(){
   try{
     if(typeof liff!=="undefined"&&liff.isApiAvailable&&liff.isApiAvailable("shareTargetPicker")){
       var sk=DORD.reduce(function(a,b){return scores[a]>scores[b]?a:b;});
-      await liff.shareTargetPicker([{type:"flex",altText:"我的溝通強項是「"+DIMS[sk].name+"」，擊敗"+INC_BEAT[incIdx]+"%使用者！",contents:{type:"bubble",header:{type:"box",layout:"vertical",paddingAll:"lg",backgroundColor:"#2d1f0f",contents:[{type:"text",text:"溝通變現能力測驗",color:"#f0e4d4",size:"sm",weight:"bold"},{type:"text",text:"我的溝通強項",color:"#a08060",size:"xs",margin:"md"},{type:"text",text:DIMS[sk].name+"・"+DIMS[sk].desc,color:"#ffffff",size:"xl",weight:"bold",margin:"sm"},{type:"text",text:"擊敗 "+INC_BEAT[incIdx]+"% 使用者",color:"#e8734a",size:"sm",margin:"sm"}]},body:{type:"box",layout:"vertical",spacing:"sm",paddingAll:"lg",contents:[{type:"text",text:STRENGTH_INTRO[sk],size:"sm",color:"#4a3220",wrap:true,lineSpacing:"6px"},{type:"separator",margin:"lg"},{type:"text",text:"你的溝通強項是什麼？來測測看！",size:"sm",color:"#6b4c30",wrap:true,margin:"lg"}]},footer:{type:"box",layout:"vertical",paddingAll:"lg",contents:[{type:"button",style:"primary",color:"#e8734a",action:{type:"uri",label:"免費開始測驗",uri:QUIZ_URL}}]}}}]);
+      var sorted2=DORD.slice().sort(function(a,b){return scores[b]-scores[a];});
+      var sk2nd=sorted2[1];
+      var comboKey2=[sk,sk2nd].sort().join("");
+      var combo2=COMBO_PATH[comboKey2]||COMBO_PATH[Object.keys(COMBO_PATH)[0]];
+      var unlocked=1000-scores.potential;
+      await liff.shareTargetPicker([{type:"flex",altText:"我的溝通強項是「"+DIMS[sk].name+"」，尚未解鎖潛力 "+unlocked+" / 1000",contents:{type:"bubble",header:{type:"box",layout:"vertical",paddingAll:"lg",backgroundColor:"#e8734a",contents:[{type:"text",text:"溝通變現能力測驗",color:"#fff8f4",size:"sm",weight:"bold"},{type:"text",text:"我的溝通強項",color:"#fff0e6",size:"xs",margin:"md"},{type:"text",text:DIMS[sk].name+"・"+DIMS[sk].desc.split("・")[1],color:"#ffffff",size:"xl",weight:"bold",margin:"sm"},{type:"text",text:"尚未解鎖潛力："+unlocked+" / 1000",color:"#fff0e6",size:"sm",margin:"sm"},{type:"text",text:"我的變現甜蜜路徑："+combo2.title,color:"#ffffff",size:"sm",margin:"xs",wrap:true}]},body:{type:"box",layout:"vertical",spacing:"sm",paddingAll:"lg",contents:[{type:"text",text:STRENGTH_INTRO[sk],size:"sm",color:"#4a3220",wrap:true,lineSpacing:"6px"},{type:"separator",margin:"lg"},{type:"text",text:"你的溝通強項是什麼？來測測看！",size:"sm",color:"#6b4c30",wrap:true,margin:"lg"}]},footer:{type:"box",layout:"vertical",paddingAll:"lg",contents:[{type:"button",style:"primary",color:"#e8734a",action:{type:"uri",label:"找到專屬的變現能力",uri:QUIZ_URL}}]}}}]);
     }else{alert("分享功能請在 LINE 內使用");}
   }catch(e){console.log(e);}
 }
