@@ -134,8 +134,15 @@ html,body{background:#f5ede3;font-family:-apple-system,sans-serif;min-height:100
 
   <div class="card">
     <div style="font-size:11px;color:#9a6b3e;background:#f0e4d4;border-radius:12px;padding:3px 12px;display:inline-block;margin-bottom:12px;">測驗前先了解</div>
-    <div style="font-size:18px;font-weight:700;color:#2d1f0f;line-height:1.5;margin-bottom:8px;">「溝通變現」是什麼？</div>
-    <div style="font-size:13.5px;color:#4a3220;line-height:1.8;">你說話的方式，決定別人願不願意把錢給你。<br><br>同樣的服務、同樣的產品，有人開口就成交，有人說了半天對方還在「考慮看看」。<br><br>差別不在努力，在於你的<strong style="color:#e8734a;">溝通方式有沒有帶動對方走完整個成交流程</strong>。</div>
+    <div style="font-size:18px;font-weight:700;color:#2d1f0f;line-height:1.5;margin-bottom:10px;">「溝通變現」是什麼？</div>
+    <div style="display:flex;gap:8px;margin-bottom:14px;">
+      <div style="background:#fff;border:1px solid #e8734a;border-radius:10px;padding:6px 14px;font-size:12px;font-weight:600;color:#e8734a;">溝通能力</div>
+      <div style="display:flex;align-items:center;font-size:14px;color:#c8b09a;">×</div>
+      <div style="background:#fff;border:1px solid #c8a84b;border-radius:10px;padding:6px 14px;font-size:12px;font-weight:600;color:#c8a84b;">變現流程</div>
+    </div>
+    <div style="font-size:13.5px;color:#4a3220;line-height:1.8;">你說話的方式，決定別人願不願意行動或把錢交給你。<br><br>同樣的服務、同樣的產品，有人開口就成交，有人說了半天對方還在「考慮看看」。<br><br>差別不在努力，在於你的溝通方式有沒有帶動對方走完整個成交流程。</div>
+    <div style="height:0.5px;background:#e8ddd2;margin:14px 0;"></div>
+    <div style="font-size:13px;color:#2d1f0f;line-height:1.8;">這四個能力是<strong style="color:#e8734a;">底層邏輯</strong>，<br>不管你用在聊天、演講還是社群，<br>強的人在哪個場景都有影響力。</div>
   </div>
 
   <div class="card">
@@ -207,8 +214,11 @@ html,body{background:#f5ede3;font-family:-apple-system,sans-serif;min-height:100
   <div class="card" style="text-align:center;">
     <div id="reset-trigger" style="font-size:11px;color:#9a6b3e;background:#f0e4d4;border-radius:12px;padding:3px 12px;display:inline-block;margin-bottom:12px;">溝通變現能力診斷</div>
     <div style="font-size:13px;color:#a08060;margin-bottom:4px;">你的溝通變現潛力</div>
-    <div id="r-potential" style="font-size:52px;font-weight:700;color:#e8734a;line-height:1;margin-bottom:4px;">—</div>
-    <div style="font-size:11px;color:#c8b09a;">A × T × P × I</div>
+    <div style="display:flex;align-items:baseline;justify-content:center;gap:4px;margin-bottom:4px;">
+      <div id="r-potential" style="font-size:52px;font-weight:700;color:#e8734a;line-height:1;">—</div>
+      <div style="font-size:16px;color:#c8b09a;font-weight:400;">/ 1000</div>
+    </div>
+    <div style="font-size:11px;color:#c8b09a;">吸引力 × 信任力 × 專業力 × 推進力</div>
   </div>
 
   <!-- 第二區：ATPI 四個分數 + 雷達圖 -->
@@ -234,14 +244,14 @@ html,body{background:#f5ede3;font-family:-apple-system,sans-serif;min-height:100
 
   <!-- 第四區：最大缺口提醒 -->
   <div class="card" style="border-color:#f0c8b0;">
-    <div style="font-size:11px;color:#a08060;margin-bottom:6px;">現在最值得修的一個缺口</div>
+    <div style="font-size:11px;color:#a08060;margin-bottom:6px;">掌握這個能力，CP 值最高</div>
     <div id="r-weak-name" style="font-size:15px;font-weight:600;color:#2d1f0f;margin-bottom:6px;"></div>
     <div id="r-weak-desc" style="font-size:13px;color:#6b4c30;line-height:1.7;white-space:pre-line;"></div>
   </div>
 
   <!-- 第六區：下一步 -->
   <div class="card" style="background:#fff8f4;border:0.5px solid #f0c8b0;">
-    <div style="font-size:13px;color:#6b4c30;line-height:1.8;margin-bottom:1rem;">你的溝通能力已具備基礎，但<strong style="color:#e8734a;">沒有變現 SOP，能力不會自動變成收入</strong>——賺錢靠運氣，不靠設計。來諮詢，我們一起把你的成交流程系統化。</div>
+    <div id="r-cta-desc" style="font-size:13px;color:#6b4c30;line-height:1.8;margin-bottom:1rem;"></div>
     <button class="btnO" id="btn-consult">預約「提升溝通變現」諮詢</button>
   </div>
 
@@ -373,7 +383,7 @@ function calcScores(){
   scores.P=Math.round((rP/15)*100);
   scores.I=Math.round((rI/15)*100);
   // 溝通變現潛力 = A × T × P × I（各為 0-1，結果乘以 100）
-  scores.potential=Math.round((scores.A/100)*(scores.T/100)*(scores.P/100)*(scores.I/100)*10000);
+  scores.potential=Math.round(Math.pow((scores.A/100)*(scores.T/100)*(scores.P/100)*(scores.I/100),0.8)*1000);
 }
 var STRONG_PATH={
   A:"想像這個場景：你在一個商業活動或社群聚會開口說話，周圍的人自然把目光轉向你，有人開始追問「然後呢？」，有人默默加了你的 LINE。\n\n這就是你最容易、也是天賦的變現路徑——吸引型。你不需要刻意推銷，人自然往你身邊靠。最適合你的場景：社群經營、內容創作、演講分享，讓陌生人主動找上門。",
@@ -384,39 +394,39 @@ var STRONG_PATH={
 var COMBO_PATH={
   AT:{
     title:"社群養粉 × 轉介紹成交",
-    flow:"① 發內容，A 自然帶來陌生流量\n② 有人私訊，T 讓他覺得你懂他\n③ 聊著聊著，對方主動問「你有什麼服務？」\n④ 不用推銷，他們已經說服自己了",
-    tips:"P 弱 → 別賣方法論，賣「陪你一起做」的陪伴型服務\nI 弱 → 不做現場收單，改用限時報名表單讓截止日期幫你逼單\n定價走中低客單，靠口碑和量滾起來",
-    avoid:"演講現場收單（I 弱，氣氛熱但沒人買）、高單價顧問（P 弱撐不住價格）"
+    flow:"① 發內容，吸引力自然帶來陌生流量\n② 有人私訊，信任力讓他覺得你懂他\n③ 聊著聊著，對方主動問「你有什麼服務？」\n④ 不用推銷，他們已經說服自己了",
+    tips:"專業力弱 → 別賣方法論，賣「陪你一起做」的陪伴型服務\n推進力弱 → 不做現場收單，改用限時報名表單讓截止日期幫你逼單\n定價走中低客單，靠口碑和量滾起來",
+    avoid:"演講現場收單（推進力弱，氣氛熱但沒人買）、高單價顧問（專業力弱撐不住價格）"
   },
   AP:{
     title:"知識型內容 × 課程產品",
-    flow:"① 持續輸出有深度的內容，A 帶流量、P 讓人覺得你很懂\n② 累積一群「覺得你很厲害」的追蹤者\n③ 推出課程或工作坊（不需要深度信任就能成交）\n④ 課程體驗本身幫你建立 T，之後再升級高單價",
-    tips:"T 弱 → 靠出現頻率建熟悉感，常出現 = 類信任，不靠深聊\nI 弱 → 用稀缺名額＋截止日期讓環境幫你推進，不用自己開口\n最適合做課程、電子書、訂閱制",
-    avoid:"1 對 1 長期顧問（T 弱，關係很難深，客戶會離開）"
+    flow:"① 持續輸出有深度的內容，吸引力帶流量、專業力讓人覺得你很懂\n② 累積一群「覺得你很厲害」的追蹤者\n③ 推出課程或工作坊（不需要深度信任就能成交）\n④ 課程體驗本身幫你建立信任力，之後再升級高單價",
+    tips:"信任力弱 → 靠出現頻率建熟悉感，常出現 = 類信任，不靠深聊\n推進力弱 → 用稀缺名額＋截止日期讓環境幫你推進，不用自己開口\n最適合做課程、電子書、訂閱制",
+    avoid:"1 對 1 長期顧問（信任力弱，關係很難深，客戶會離開）"
   },
   AI:{
     title:"演講亮相 × 現場收單 → 後端升級",
-    flow:"① 上台或辦活動，A 讓台下捨不得滑手機\n② 活動結束前用 I 現場推低客單入門產品，趁熱打鐵\n③ 進來的人靠課程體驗建立 T 和 P 的信任\n④ 後端再做一次高單價升級",
-    tips:"T 弱 → 不靠個人關係，靠見證和學員案例讓別人說話\nP 弱 → 賣結果不賣方法（「學員平均 3 個月增加 20 萬」比「7 步驟方法論」更有力）\n前端低客單可以很低，甚至免費，靠 A+I 把人收進來",
-    avoid:"高單價 1 對 1 諮詢（T+P 弱，對方聊完覺得不夠值）"
+    flow:"① 上台或辦活動，吸引力讓台下捨不得滑手機\n② 活動結束前用推進力現場推低客單入門產品，趁熱打鐵\n③ 進來的人靠課程體驗建立信任力和專業力\n④ 後端再做一次高單價升級",
+    tips:"信任力弱 → 不靠個人關係，靠見證和學員案例讓別人說話\n專業力弱 → 賣結果不賣方法（「學員平均 3 個月增加 20 萬」比「7 步驟方法論」更有力）\n前端低客單可以很低，甚至免費，靠吸引力和推進力把人收進來",
+    avoid:"高單價 1 對 1 諮詢（信任力和專業力弱，對方聊完覺得不夠值）"
   },
   PT:{
     title:"深度服務 × 口碑轉介紹循環",
-    flow:"① 先在現有人脈裡找第一批客戶，T 讓對方覺得你真的懂他\n② P 撐住高單價，交付讓對方超滿意\n③ 主動請客戶介紹下一個人（客戶的 A 幫你做你做不到的事）\n④ 新客戶帶著信任進來，跳過 A 的關卡，直接進入成交",
-    tips:"A 弱 → 不做冷流量，找 A 強的合作夥伴導流，你專攻後端成交和交付\nI 弱 → 諮詢結尾問「如果繼續，三個月後你想達到什麼？」讓對方自己描繪未來，自然說 yes\n走高客單，靠深度不靠量",
-    avoid:"短影音或社群冷啟動（A 弱，發了也沒人看，很挫折）"
+    flow:"① 先在現有人脈裡找第一批客戶，信任力讓對方覺得你真的懂他\n② 專業力撐住高單價，交付讓對方超滿意\n③ 主動請客戶介紹下一個人（客戶的吸引力幫你做你做不到的事）\n④ 新客戶帶著信任進來，直接進入成交",
+    tips:"吸引力弱 → 不做冷流量，找吸引力強的合作夥伴導流，你專攻後端成交和交付\n推進力弱 → 諮詢結尾問「如果繼續，三個月後你想達到什麼？」讓對方自己描繪未來，自然說 yes\n走高客單，靠深度不靠量",
+    avoid:"短影音或社群冷啟動（吸引力弱，發了也沒人看，很挫折）"
   },
   IT:{
     title:"人脈深耕 × 結果說話 → 持續升價",
-    flow:"① 從現有人脈找第一批客戶，T 讓他們信任你、願意試試看\n② I 在對話結尾自然推進成交，不拖\n③ 拿到真實結果，讓結果替代 P 的位置\n④ 靠口碑和結果持續升價，不需要陌生流量",
-    tips:"A 弱 → 不自己冷啟動，去別人的場合露臉（上 Podcast、聯名活動、商業社群）\nP 弱 → 用學員結果替代理論（「他做了 X 之後 Y 了」比「我有 Z 方法論」更有說服力）\n這個組合最怕沒有舞台，要積極被介紹到人脈圈",
-    avoid:"社群文字內容冷啟動（A+P 弱，發文沒有流量也沒有重量）"
+    flow:"① 從現有人脈找第一批客戶，信任力讓他們願意試試看\n② 推進力在對話結尾自然帶到成交，不拖\n③ 拿到真實結果，讓結果替代專業力的位置\n④ 靠口碑和結果持續升價，不需要陌生流量",
+    tips:"吸引力弱 → 不自己冷啟動，去別人的場合露臉（上 Podcast、聯名活動、商業社群）\n專業力弱 → 用學員結果替代理論（「他做了這件事之後收入翻倍了」比「我有方法論」更有說服力）\n這個組合最怕沒有舞台，要積極被介紹到人脈圈",
+    avoid:"社群文字內容冷啟動（吸引力和專業力弱，發文沒有流量也沒有重量）"
   },
   IP:{
     title:"專業提案 × B2B 企業成交",
-    flow:"① 鎖定企業或機構客戶，不靠個人魅力，靠提案和結果說話\n② P 撐住提案品質，讓對方覺得「這個人真的懂」\n③ I 推動決策層，縮短採購周期，讓他們現在做決定\n④ 交付後直接談下一個合約，不需要重新開發",
-    tips:"A 弱 → 靠精緻的提案書和案例集替代個人魅力\nT 弱 → 用流程建立信任（回覆快、交付準時、清楚的合約），不靠個人溫度\n另一條路：找 A+T 強的合夥人做前端，你專攻後端提案和交付",
-    avoid:"社群內容行銷冷啟動（A+T 弱，內容沒有溫度也沒有流量）"
+    flow:"① 鎖定企業或機構客戶，不靠個人魅力，靠提案和結果說話\n② 專業力撐住提案品質，讓對方覺得「這個人真的懂」\n③ 推進力推動決策層，縮短採購周期，讓他們現在做決定\n④ 交付後直接談下一個合約，不需要重新開發",
+    tips:"吸引力弱 → 靠精緻的提案書和案例集替代個人魅力\n信任力弱 → 用流程建立信任（回覆快、交付準時、清楚的合約），不靠個人溫度\n另一條路：找吸引力和信任力強的合夥人做前端，你專攻後端提案和交付",
+    avoid:"社群內容行銷冷啟動（吸引力和信任力弱，內容沒有溫度也沒有流量）"
   }
 };
 var WEAK_DESC={
@@ -424,6 +434,12 @@ var WEAK_DESC={
   T:"信任力是成交的地基——對方可能覺得你很厲害，但還沒有到「願意掏錢給你」的程度。\n\n你需要的是讓對方在短時間內感覺「你真的懂我」，打開心房才能打開錢包。",
   P:"專業力決定對方願不願意付你高單價——如果對方覺得你說的東西「聽起來不錯但不確定有沒有用」，就不會成交。\n\n你需要的是把你的能力用對方聽得懂的語言說出來。",
   I:"推進力是臨門一腳——前面吸引、信任、專業都做對了，但對方就是沒有採取行動。\n\n你需要的是在對的時機給對方一個說「好」的理由，而不是等他自己決定。"
+};
+var CTA_DESC={
+  A:"你的能力已經具備，但陌生人還沒有機會認識你——沒有流量，成交就無從發生。來諮詢，我們一起設計讓對方主動找上你的路徑。",
+  T:"你說的東西有價值，但對方還沒有到「願意掏錢給你」的程度——信任沒建立，成交就無法發生。來諮詢，我們一起縮短建立信任的時間。",
+  P:"對方喜歡你、也信任你，但不確定你能不能真的解決他的問題——這一關過不了，高單價就很難收。來諮詢，我們一起把你的專業說成對方聽得懂的語言。",
+  I:"前面都做對了，但對方最後說「我再想想」——臨門一腳沒有踢到，所有努力都白費。來諮詢，我們一起把你的成交流程補上這最後一塊。"
 };
 var INC_MIDPOINTS=[30,90,210,650,1500];
 var GOAL_ADDS=[10,60,200,500];
@@ -481,6 +497,7 @@ function renderResult(){
   // 第四區：最大缺口
   document.getElementById("r-weak-name").textContent=DIMS[wk].name+"（"+DIMS[wk].desc.split("・")[1]+"）是你現在最大的缺口";
   document.getElementById("r-weak-desc").textContent=WEAK_DESC[wk];
+  document.getElementById("r-cta-desc").textContent=CTA_DESC[wk];
 
   show("s-result");
   setTimeout(drawRadar,100);
