@@ -207,7 +207,7 @@ html,body{background:#f5ede3;font-family:-apple-system,sans-serif;min-height:100
   <!-- 第一區：溝通變現潛力 -->
   <div class="card" style="text-align:center;">
     <div id="reset-trigger" style="font-size:11px;color:#9a6b3e;background:#f0e4d4;border-radius:12px;padding:3px 12px;display:inline-block;margin-bottom:12px;">溝通變現能力診斷</div>
-    <div style="font-size:13px;color:#a08060;margin-bottom:4px;">你的溝通變現潛力</div>
+    <div style="font-size:13px;color:#a08060;margin-bottom:4px;">尚未解鎖潛力</div>
     <div style="display:flex;align-items:baseline;justify-content:center;gap:4px;margin-bottom:4px;">
       <div id="r-potential" style="font-size:52px;font-weight:700;color:#e8734a;line-height:1;">—</div>
       <div style="font-size:16px;color:#c8b09a;font-weight:400;">/ 1000</div>
@@ -443,7 +443,7 @@ function renderResult(){
   var combo=COMBO_PATH[comboKey]||COMBO_PATH[Object.keys(COMBO_PATH)[0]];
 
   // 第一區：溝通變現潛力
-  document.getElementById("r-potential").textContent=scores.potential;
+  document.getElementById("r-potential").textContent=1000-scores.potential;
 
   // 第二區：ATPI 分數
   var sg=document.getElementById("score-grid");
