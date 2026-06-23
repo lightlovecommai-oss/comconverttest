@@ -229,7 +229,7 @@ html,body{background:#f5ede3;font-family:-apple-system,sans-serif;min-height:100
     <div style="font-size:11px;color:#a08060;margin-bottom:10px;">你的強項組合 × 最省力變現路徑</div>
     <div id="r-combo-badges" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;"></div>
     <div id="r-combo-title" style="font-size:16px;font-weight:700;color:#2d1f0f;margin-bottom:10px;line-height:1.5;"></div>
-    <div style="font-size:11px;color:#a08060;margin-bottom:6px;">你最省力的成交流程</div>
+    <div style="font-size:11px;color:#a08060;margin-bottom:6px;">你的溝通變現甜蜜路徑</div>
     <div id="r-combo-flow" style="font-size:13px;color:#4a3220;line-height:1.9;margin-bottom:14px;white-space:pre-line;"></div>
     <div style="height:0.5px;background:#e8ddd2;margin-bottom:12px;"></div>
     <div style="font-size:11px;color:#a08060;margin-bottom:6px;">弱項不用補，用這個替代</div>
@@ -581,9 +581,8 @@ async function initLiff(){
 async function shareQuiz(){
   try{
     if(typeof liff!=="undefined"&&liff.isApiAvailable&&liff.isApiAvailable("shareTargetPicker")){
-      var sk=DORD.reduce(function(a,b){return scores[a]>scores[b]?a:b;});
       var sorted2=DORD.slice().sort(function(a,b){return scores[b]-scores[a];});
-      var sk2nd=sorted2[1];
+      var sk=sorted2[0],sk2nd=sorted2[1];
       var comboKey2=[sk,sk2nd].sort().join("");
       var combo2=COMBO_PATH[comboKey2]||COMBO_PATH[Object.keys(COMBO_PATH)[0]];
       var unlocked=1000-scores.potential;
