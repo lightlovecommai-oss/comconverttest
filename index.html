@@ -496,7 +496,7 @@ function renderResult(){
 
   show("s-result");
   setTimeout(drawRadar,100);
-  localStorage.setItem("cct_result_v2",JSON.stringify({scores:scores,incIdx:incIdx,goalIdx:goalIdx,srcIdx:srcIdx,ans:ans}));
+  localStorage.setItem("cct_result_v2",JSON.stringify({scores:scores,incIdx:incIdx,goalIdx:goalIdx,srcIdx:srcIdx,ans:ans,form:formData}));
 }
 function drawRadar(){
   var svg=document.getElementById("radar");
@@ -597,7 +597,13 @@ async function initLiff(){
     }
   }catch(e){console.log("LIFF skip:",e);}
   var saved=localStorage.getItem("cct_result_v2");
-  if(saved){try{var d=JSON.parse(saved);scores=d.scores;incIdx=d.incIdx;goalIdx=d.goalIdx;srcIdx=d.srcIdx||0;ans=d.ans;renderResult();}catch(e){localStorage.removeItem("cct_result_v2");}}
+  if(saved){try{
+    var d=JSON.parse(saved);scores=d.scores;incIdx=d.incIdx;goalIdx=d.goalIdx;srcIdx=d.srcIdx||0;ans=d.ans;
+    if(d.form){formData={name:d.form.name||"",email:d.form.email||"",job:d.form.job||""};}
+    renderResult();
+    // 已登入(拿得到 userId)就把快取結果補送一次到試算表；後端 upsert，一人一列不重複
+    if(userId){saveToSheet();}
+  }catch(e){localStorage.removeItem("cct_result_v2");}}
 }
 async function shareQuiz(){
   try{
