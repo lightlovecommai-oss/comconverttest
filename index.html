@@ -258,7 +258,9 @@ html,body{background:#f5ede3;font-family:-apple-system,sans-serif;min-height:100
 
 <script>
 var LIFF_ID="2010316474-UovQ1zhe";
-var SHEET_API="https://script.google.com/macros/s/AKfycbyqGWp8sAKRi9CNKDdQBFVb3imeqxqZNBLJ00I58qnscMMTbjP9_jHYnY8xJtzEMFI/exec";
+/* 名單直接寫進課程系統試算表「(引流.A)能力測驗」分頁（consult-workshop 的 Apps Script），
+   讓課程 dashboard 的自評能即時讀到。送出時帶 action:"quiz"（見該 Code.gs doPost）。 */
+var SHEET_API="https://script.google.com/macros/s/AKfycbwEwlg4cFa7B_e76ULJM26C2B9fgjwjFTXPFb_yRMWt1wZs33iTGnEI1LZ9v8uZHvdz/exec";
 var QUIZ_URL="https://liff.line.me/2010316474-UovQ1zhe";
 
 var QS=[
@@ -558,11 +560,30 @@ async function saveToSheet(){
   document.getElementById("saving-msg").textContent="儲存中...";
   var sk=DORD.reduce(function(a,b){return scores[a]>scores[b]?a:b;});
   var uk=DORD.filter(function(k){return k!==sk;}).reduce(function(a,b){return scores[a]>scores[b]?a:b;});
-  var payload={userId:userId,displayName:displayName,pictureUrl:pictureUrl,name:formData.name,email:formData.email,job:formData.job,scoreA:scores.A,scoreT:scores.T,scoreP:scores.P,scoreI:scores.I,incomeLevel:INC_LABELS[incIdx]||"",goalIncome:GOAL_LABELS[goalIdx]||"",mainAbility:DIMS[sk].name,subAbility:DIMS[uk].name,rawAnswers:ans.join(","),timestamp:new Date().toISOString()};
+  var payload={action:"quiz",userId:userId,displayName:displayName,pictureUrl:pictureUrl,name:formData.name,email:formData.email,job:formData.job,scoreA:scores.A,scoreT:scores.T,scoreP:scores.P,scoreI:scores.I,incomeLevel:INC_LABELS[incIdx]||"",goalIncome:GOAL_LABELS[goalIdx]||"",mainAbility:DIMS[sk].name,subAbility:DIMS[uk].name,rawAnswers:ans.join(","),timestamp:new Date().toISOString()};
+  /* 用 text/plain 送出（簡單請求、不觸發 CORS 預檢），Apps Script 回應帶 access-control-allow-origin:*，
+     所以可以移除 no-cors、真正讀到回應並確認寫入結果。失敗自動重試一次。 */
+  var msgEl=document.getElementById("saving-msg");
+  async function postOnce(){
+    var r=await fetch(SHEET_API,{method:"POST",body:JSON.stringify(payload),headers:{"Content-Type":"text/plain;charset=utf-8"}});
+    if(!r.ok) throw new Error("HTTP "+r.status);
+    var d=await r.json().catch(function(){return {};});
+    if(d.status!=="ok") throw new Error("bad status: "+(d.status||"unknown"));
+    return d;
+  }
   try{
-    await fetch(SHEET_API,{method:"POST",mode:"no-cors",body:JSON.stringify(payload),headers:{"Content-Type":"application/json"}});
-    document.getElementById("saving-msg").textContent="";
-  }catch(e){document.getElementById("saving-msg").textContent="";}
+    await postOnce();
+    msgEl.textContent="";
+  }catch(e){
+    console.warn("saveToSheet 第一次失敗，重試：",e);
+    try{
+      await postOnce();
+      msgEl.textContent="";
+    }catch(e2){
+      console.error("saveToSheet 儲存失敗：",e2);
+      msgEl.textContent="資料儲存失敗，請截圖結果或稍後再試一次 🙏";
+    }
+  }
 }
 async function initLiff(){
   try{
