@@ -1,5 +1,7 @@
 # comconverttest — 溝通變現能力測驗
 
+> ↔ **企劃大腦**：本專案是產品「ATPI 測驗（引流品）」的執行。產品定義／商業模式見 `../../5-企劃與產品手冊/productkit`（核心概念真相＝`1-手冊（內部）/01-核心定義字典.md`）。
+
 ## 專案概覽
 單一 HTML 檔案的 LINE LIFF 測驗問卷，評估用戶的「溝通變現能力」並收集潛在客戶資料。
 - **線上網址**：https://lightlovecommai-oss.github.io/comconverttest/
