@@ -383,7 +383,7 @@ def build_pdf():
     story.append(Spacer(1, 8*mm))
 
     story.append(HRFlowable(width='100%', thickness=0.5, color=BORDER, spaceAfter=6))
-    story.append(Paragraph('測驗線上網址：https://lightlovecommai-oss.github.io/comconverttest/', S['small']))
+    story.append(Paragraph('測驗線上網址：https://quiz.atpifit.com/', S['small']))
 
     doc.build(story)
     print(f'PDF 已產生：{output_path}')
