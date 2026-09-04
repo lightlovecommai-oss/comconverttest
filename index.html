@@ -84,6 +84,49 @@ html,body{background:#f5ede3;font-family:-apple-system,sans-serif;min-height:100
 .btnG{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:#fff;color:#9a6b3e;border:1px solid #e8ddd2;border-radius:24px;padding:13px;font-size:16px;cursor:pointer;margin-bottom:8px;}
 .btnN{display:block;width:100%;background:#2d1f0f;color:#fff;border:none;border-radius:24px;padding:14px;font-size:17px;font-weight:500;cursor:pointer;margin-top:1.25rem;opacity:.25;text-align:center;}
 .btnN.ready{opacity:1;}
+/* ── 三頁大demo搬入（2026-09-04 老師指示：先把相近元素放一起，之後再整合）──
+   dq- 前綴＝demo-quiz.html 搬進來的板塊（q-1 hero／q-3 體格單／q-5 地圖／q-6 分享卡）。 */
+.dq-blk{position:relative;margin-bottom:16px;}
+.dq-tag{position:absolute;top:-9px;right:0;font-size:10px;font-weight:700;letter-spacing:1px;color:#fff;background:#C99A4E;border-radius:10px;padding:2px 8px;z-index:5;}
+.dq-mock{font-size:10px;color:#fff;background:#8A7266;border-radius:8px;padding:1px 6px;margin-left:6px;vertical-align:2px;}
+.dq-pill{display:inline-block;font-size:12px;font-weight:700;letter-spacing:1px;color:#8a6a1e;background:#F3E7CF;border-radius:20px;padding:4px 12px;}
+.dq-cd{background:#fff;border-radius:16px;padding:17px 16px;box-shadow:0 2px 10px rgba(74,27,12,.05);}
+.dq-sec{font-size:13px;font-weight:700;color:#6E4A3C;margin-bottom:11px;}
+.dq-rule4{height:2px;border-radius:2px;background:linear-gradient(90deg,#C6603A,#6E8B77,#6E8CA8,#C99A4E);margin-top:14px;}
+.dq-go{margin-top:14px;width:100%;display:block;text-align:center;text-decoration:none;background:#C6603A;color:#fff;border:0;border-radius:18px;padding:17px;font-size:17px;font-weight:700;font-family:inherit;cursor:pointer;min-height:58px;box-shadow:0 6px 18px rgba(198,96,58,.28);transition:transform .15s;}
+.dq-go:active{transform:scale(.97);}
+.dq-hero-t{font-size:28px;font-weight:900;line-height:1.35;margin-top:12px;color:#4A1B0C;}
+.dq-hero-t em{font-style:normal;color:#C6603A;}
+.dq-hero-s{font-size:14px;color:#6E4A3C;line-height:1.9;margin-top:10px;}
+.dq-hero-meta{display:flex;gap:14px;margin-top:14px;font-size:12.5px;color:#8A7266;}
+.dq-hero-meta b{color:#993C1D;}
+.dq-dim{margin-bottom:13px;}
+.dq-dim-hd{display:flex;align-items:baseline;gap:8px;font-size:14px;font-weight:700;}
+.dq-dim-hd small{font-weight:400;color:#8A7266;font-size:12px;}
+.dq-dim-v{margin-left:auto;font-size:15px;font-variant-numeric:tabular-nums;}
+.dq-dim-bar{height:8px;border-radius:8px;background:#EFE5DC;margin-top:6px;overflow:hidden;}
+.dq-dim-bf{height:100%;border-radius:8px;}
+.dq-peek{position:relative;margin-top:14px;border-radius:12px;overflow:hidden;}
+.dq-peek-g{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;filter:blur(3px);opacity:.55;}
+.dq-peek-c{background:#F7F1EC;border-radius:10px;padding:8px;font-size:11px;line-height:1.5;color:#4A1B0C;}
+.dq-peek-ov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#993C1D;text-align:center;line-height:1.7;}
+.dq-map{position:relative;padding-left:26px;}
+.dq-map:before{content:"";position:absolute;left:8px;top:10px;bottom:10px;width:3px;border-radius:3px;background:linear-gradient(180deg,#C6603A,#6E8B77,#6E8CA8,#C99A4E);}
+.dq-stn{position:relative;padding:9px 0 9px 6px;}
+.dq-stn:before{content:"";position:absolute;left:-24px;top:16px;width:13px;height:13px;border-radius:50%;border:2.5px solid #fff;box-shadow:0 1px 4px rgba(74,27,12,.2);}
+.dq-stn.here:before{background:#C6603A;animation:dqherepulse 1.8s infinite;}
+.dq-stn.n2:before{background:#6E8B77;}
+.dq-stn.n3:before{background:#6E8CA8;}
+.dq-stn.n4:before{background:#C99A4E;}
+@keyframes dqherepulse{0%,100%{box-shadow:0 0 0 0 rgba(198,96,58,.4);}50%{box-shadow:0 0 0 7px rgba(198,96,58,0);}}
+.dq-stn-t{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px;color:#4A1B0C;}
+.dq-stn-t .dq-you{font-size:11px;color:#fff;background:#C6603A;border-radius:10px;padding:1px 8px;font-weight:700;}
+.dq-stn-s{font-size:12.5px;color:#8A7266;margin-top:3px;line-height:1.7;}
+.dq-stn a{color:#AF5433;font-weight:700;text-decoration:none;}
+.dq-share{background:#4A1B0C;border-radius:16px;padding:18px;color:#F7F1EC;text-align:center;}
+.dq-share-t{font-size:16px;font-weight:700;line-height:1.7;}
+.dq-share-s{font-size:12.5px;color:rgba(247,241,236,.6);margin-top:8px;line-height:1.7;}
+.dq-share-b{display:inline-block;margin-top:14px;background:#F7F1EC;color:#4A1B0C;border-radius:14px;padding:11px 26px;font-size:14px;font-weight:700;text-decoration:none;}
 </style>
 </head>
 <body>
@@ -94,7 +137,19 @@ html,body{background:#f5ede3;font-family:-apple-system,sans-serif;min-height:100
 </div>
 <div style="text-align:center;padding:2px 24px 16px;font-size:18px;font-weight:600;color:#2d1f0f;line-height:1.65;">溝通的目的，是提升你的影響力。<br><span style="color:#AF5433;">變現，是影響力自然而然的結果。</span></div>
 
-<div id="s-intro" class="screen active"><div class="wrap"><div class="card">
+<div id="s-intro" class="screen active"><div class="wrap">
+
+  <!-- q-1 大demo搬入（2026-09-04）：好奇鉤子 hero——不先留資、60秒承諾、測完先拿一句 -->
+  <div class="dq-blk" style="margin:6px 0 22px;"><span class="dq-tag">q-1</span>
+    <span class="dq-pill">影響力健身房 · 免費體格檢測</span>
+    <div class="dq-hero-t">為什麼有些人一開口，<br>別人就<em>想聽</em>？</div>
+    <div class="dq-hero-s">不是天賦，是 <b>4 大影響力肌肉</b>——吸引、信任、專業、推進。60 秒測出你哪一塊最有感，<b>今天就能用</b>。</div>
+    <div class="dq-hero-meta"><span>⏱ <b>60 秒</b></span><span>📱 不用留資料</span><span>🎁 測完先拿一句話</span></div>
+    <div class="dq-rule4"></div>
+    <button class="dq-go" onclick="document.getElementById('btn-start').click()">開始測 →</button>
+  </div>
+
+  <div class="card">
   <div class="btitle" style="margin-bottom:8px;">這份測驗適合你，如果你正在做：</div>
   <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:1.25rem;">
     <div style="background:#fff;border:0.5px solid #e8ddd2;border-radius:12px;padding:10px 13px;display:flex;gap:10px;align-items:flex-start;">
@@ -245,6 +300,26 @@ html,body{background:#f5ede3;font-family:-apple-system,sans-serif;min-height:100
     <div id="score-grid" style="display:grid;grid-template-columns:1fr;gap:8px;"></div>
   </div>
 
+  <!-- q-3 大demo搬入（2026-09-04）：體格單＋12格模糊偷看鉤子。分數是示意，
+       真分數在上面那張卡——先併排、之後再整合（偷看鉤子可能接真的12格）。 -->
+  <div class="dq-blk"><span class="dq-tag">q-3</span>
+    <div class="dq-cd">
+      <div class="dq-sec">你的影響力體格單<span class="dq-mock">示意</span></div>
+      <div class="dq-dim"><div class="dq-dim-hd" style="color:#AF5433;">吸引肌肉<small>讓他想靠近</small><span class="dq-dim-v">3.4</span></div><div class="dq-dim-bar"><div class="dq-dim-bf" style="width:60%;background:#C6603A;"></div></div></div>
+      <div class="dq-dim"><div class="dq-dim-hd" style="color:#5C7464;">信任肌肉<small>讓他願意說</small><span class="dq-dim-v">4.1</span></div><div class="dq-dim-bar"><div class="dq-dim-bf" style="width:78%;background:#6E8B77;"></div></div></div>
+      <div class="dq-dim"><div class="dq-dim-hd" style="color:#54718D;">專業肌肉<small>讓他要找你</small><span class="dq-dim-v">2.9</span></div><div class="dq-dim-bar"><div class="dq-dim-bf" style="width:48%;background:#6E8CA8;"></div></div></div>
+      <div class="dq-dim"><div class="dq-dim-hd" style="color:#8E682B;">推進肌肉<small>讓他願意動</small><span class="dq-dim-v">2.4</span></div><div class="dq-dim-bar"><div class="dq-dim-bf" style="width:35%;background:#C99A4E;"></div></div></div>
+      <div class="dq-peek">
+        <div class="dq-peek-g">
+          <div class="dq-peek-c">讓他想聽</div><div class="dq-peek-c">讓他心動</div><div class="dq-peek-c">讓他放心</div>
+          <div class="dq-peek-c">讓他敢說</div><div class="dq-peek-c">讓他信你</div><div class="dq-peek-c">讓他懂你</div>
+          <div class="dq-peek-c">讓他服你</div><div class="dq-peek-c">讓他要你</div><div class="dq-peek-c">讓他行動</div>
+        </div>
+        <div class="dq-peek-ov">每塊大肌肉還能拆成 3 塊小肌群<br>——進健身房才全開</div>
+      </div>
+    </div>
+  </div>
+
   <!-- 第三區：強項組合 × 最省力變現路徑 -->
   <div class="card">
     <div style="font-size:14px;color:#7a5636;margin-bottom:10px;">你的強項組合 × 最省力變現路徑</div>
@@ -268,6 +343,20 @@ html,body{background:#f5ede3;font-family:-apple-system,sans-serif;min-height:100
     <div style="font-size:14px;color:#8A7266;line-height:1.6;margin-top:8px;">進館後就從這三塊開始練——不必四塊一起補。</div>
   </div>
 
+  <!-- q-5 大demo搬入（2026-09-04）：全貌感地圖——你在這裡＋future pacing，
+       連到三頁大demo（絕對網址，因為 demo 檔在 consult-workshop repo）。 -->
+  <div class="dq-blk"><span class="dq-tag">q-5</span>
+    <div class="dq-cd">
+      <div class="dq-sec">影響力之路——你在這裡</div>
+      <div class="dq-map">
+        <div class="dq-stn here"><div class="dq-stn-t">測出體格 <span class="dq-you">你在這裡</span></div><div class="dq-stn-s">60 秒，知道自己先練哪塊最有感</div></div>
+        <div class="dq-stn n2"><div class="dq-stn-t">免費體驗</div><div class="dq-stn-s">每月分享會＋社群，先看別人怎麼練</div></div>
+        <div class="dq-stn n3"><div class="dq-stn-t">進健身房</div><div class="dq-stn-s">12 小肌群圖鑑、每天一招、夥伴一起 → <a href="https://app.atpifit.com/demo-member.html">看會員的一天 →</a></div></div>
+        <div class="dq-stn n4"><div class="dq-stn-t">私人教練席</div><div class="dq-stn-s">教練看著你的每一筆紀錄，把影響力練進真實關係 → <a href="https://app.atpifit.com/demo-pro.html">看教練席 →</a></div></div>
+      </div>
+    </div>
+  </div>
+
   <!-- 第五區：下一步。⚠️ 2026-09-01 老師拍板「分流取消」＝只留一個出口（進館）。
        舊的 Calendly 諮詢鈕與 LINE 分享鈕已移除（分享鈕的連結還會把人繞回測驗起點）。
        這顆鈕沒有 disabled 狀態：免費路人也要進得去，健身房那邊已改成
@@ -275,6 +364,17 @@ html,body{background:#f5ede3;font-family:-apple-system,sans-serif;min-height:100
   <div class="card" style="background:#fff8f4;border:0.5px solid #f0c8b0;">
     <div id="r-cta-desc" style="font-size:15px;color:#6b4c30;line-height:1.8;margin-bottom:1rem;"></div>
     <button class="btnO" id="btn-workshop" style="margin-bottom:0;">進溝通健身房，開始練 →</button>
+  </div>
+
+  <!-- q-6 大demo搬入（2026-09-04）：分享卡——分享本身就是在練吸引肌肉。
+       ⚠️ 按鈕是示意（分享鈕 2026-09-01 拍板下架過：連回測驗＝迴圈不是出口），
+       這裡先併排給老師抓元素，之後再整合決定去留。 -->
+  <div class="dq-blk"><span class="dq-tag">q-6</span>
+    <div class="dq-share">
+      <div class="dq-share-t">把體格單傳給一個朋友，<br>猜猜他哪塊最有感。</div>
+      <div class="dq-share-s">傳出去的那一刻，你已經在練吸引肌肉了。</div>
+      <a class="dq-share-b" href="#">傳給朋友<span class="dq-mock" style="background:rgba(74,27,12,.4);">示意</span></a>
+    </div>
   </div>
   <div class="saving" id="saving-msg"></div>
 </div></div>
