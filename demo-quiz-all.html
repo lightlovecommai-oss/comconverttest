@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>quiz 全畫面 demo・逐頁檢視＋備註</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700;900&display=swap">
+<style>
+/* ═══ quiz（quiz.atpifit.com）全畫面攤平 demo・2026-09-05 ═══
+   目的：老師一頁一頁看正式 quiz 的每個畫面（含 16 題全展開），每個板塊掛備註便利貼。
+   內容照抄 index.html 正式版；結果頁的分數＝CLAUDE.md 測試樣本（標「示意」）。
+   備註存 localStorage（綁版本號 v1，板塊一改就換 key），底部可一鍵匯出。 */
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{background:#F7F1EC;font-family:"Noto Sans TC","PingFang TC",-apple-system,BlinkMacSystemFont,sans-serif;color:#4A1B0C;-webkit-font-smoothing:antialiased;}
+.wrap{max-width:480px;margin:0 auto;padding:1rem 1rem 110px;}
+.card{background:#fff;border-radius:18px;padding:18px 16px;border:1px solid #E8DDD3;box-shadow:0 2px 10px rgba(90,60,30,.05);margin-bottom:14px;}
+
+/* 畫面分隔標 */
+.scr-h{margin:34px 0 14px;padding:10px 14px;background:#4A1B0C;color:#F7F1EC;border-radius:12px;font-size:15px;font-weight:700;letter-spacing:.5px;}
+.scr-h small{display:block;font-weight:400;font-size:12px;color:rgba(247,241,236,.65);margin-top:3px;line-height:1.6;}
+.scr-h:first-of-type{margin-top:10px;}
+
+/* 板塊＋編號牌（同 member 精修模式） */
+.blk{position:relative;margin-bottom:6px;}
+.btag{position:absolute;top:-9px;right:0;font-size:10px;font-weight:700;letter-spacing:1px;color:#fff;background:#C99A4E;border-radius:10px;padding:2px 8px;z-index:5;}
+
+/* 備註便利貼（同 member.html rv-note） */
+.rv-note{background:#FFF6D8;border:1.5px dashed #D9BE6A;border-radius:10px;padding:9px 12px;font-size:14px;line-height:1.5;color:#5A4A1E;margin:6px 0 20px;min-height:21px;outline:none;}
+.rv-note:empty::before{content:"想怎麼改這個板塊（自動儲存）";color:#BCA65E;}
+.rv-note-all{background:#FDEBDD;border-color:#D9A276;color:#6E3A1E;margin:0 0 22px;}
+.rv-note-all:empty::before{content:"整份 quiz 的大方向寫這裡（自動儲存）";color:#C89A72;}
+
+/* 席位橫幅（quiz＝A 磚橘） */
+.tb{background:linear-gradient(135deg,#AF5433,#C6603A);padding:16px 20px 14px;color:#fff;border-radius:14px;}
+.tb-k{display:flex;align-items:center;font-size:11px;letter-spacing:3px;font-weight:700;color:rgba(255,255,255,.85);}
+.tb-d{margin-left:auto;font-size:12px;color:rgba(255,255,255,.75);letter-spacing:.5px;white-space:nowrap;}
+.tb-r{display:flex;align-items:center;gap:10px;margin-top:9px;}
+.tb-n{color:#fff;font-size:19px;font-weight:900;letter-spacing:.02em;}
+.tb-s{font-size:12.5px;color:rgba(255,255,255,.72);margin-top:5px;letter-spacing:.02em;}
+.hall{font-size:12px;font-weight:700;color:#fff;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);padding:3px 10px;border-radius:20px;white-space:nowrap;margin-left:auto;}
+
+/* boot 開場卡（正式版是滿版蓋頁，這裡攤平展示） */
+.boot-card{background:linear-gradient(135deg,#4A1B0C,#6B3018);border-radius:20px;padding:42px 24px 38px;text-align:center;box-shadow:0 10px 30px rgba(74,27,12,.25);max-width:420px;margin:0 auto;}
+.boot-k{font-size:20px;font-weight:900;color:#F7F1EC;margin-top:14px;}
+.boot-t{font-size:13px;color:rgba(247,241,236,.7);margin-top:6px;}
+.boot-s{font-size:12.5px;color:#E8C89A;margin-top:16px;}
+.boot-dots{display:flex;gap:8px;justify-content:center;margin-top:14px;}
+.boot-dots span{width:9px;height:9px;border-radius:50%;animation:bpulse 1.1s infinite;}
+.ld-logo{animation:ldBreath 2s ease-in-out infinite;}
+@keyframes ldBreath{0%,100%{opacity:.75;}50%{opacity:1;}}
+@keyframes bpulse{0%,100%{opacity:.25;transform:scale(.85);}50%{opacity:1;transform:scale(1);}}
+
+/* 行動鈕（30 規範：唯一漸層鈕） */
+.btnO{display:block;width:100%;background:linear-gradient(135deg,#C6603A 0%,#C99A4E 100%);text-shadow:0 1px 2px rgba(0,0,0,.18);box-shadow:0 6px 18px rgba(198,96,58,.28);color:#fff;border:none;border-radius:16px;padding:17px;font-size:17px;font-weight:700;min-height:56px;text-align:center;margin-bottom:8px;font-family:inherit;}
+.btnN{display:block;width:100%;background:linear-gradient(135deg,#C6603A 0%,#C99A4E 100%);text-shadow:0 1px 2px rgba(0,0,0,.18);color:#fff;border:none;border-radius:16px;padding:17px;font-size:17px;font-weight:700;min-height:56px;margin-top:1.25rem;opacity:.25;text-align:center;font-family:inherit;}
+.btnskip{flex:1;background:#fff;color:#AF5433;border:1px solid #C6603A;border-radius:16px;padding:13px;font-size:16px;font-family:inherit;line-height:1.4;}
+.btnrep{flex:1.4;background:linear-gradient(135deg,#C6603A 0%,#C99A4E 100%);text-shadow:0 1px 2px rgba(0,0,0,.18);color:#fff;border:none;border-radius:16px;padding:13px;font-size:15px;font-weight:700;font-family:inherit;line-height:1.4;min-height:50px;}
+.btnrow{display:flex;gap:8px;}
+.dq-go{margin-top:14px;width:100%;display:block;text-align:center;background:linear-gradient(135deg,#C6603A 0%,#C99A4E 100%);text-shadow:0 1px 2px rgba(0,0,0,.18);color:#fff;border:0;border-radius:16px;padding:17px;font-size:17px;font-weight:700;font-family:inherit;min-height:56px;box-shadow:0 6px 18px rgba(198,96,58,.28);}
+
+/* q-1 hero／q-5 地圖／q-3 體格單／q-6 分享卡（照抄正式版） */
+.dq-pill{display:inline-block;font-size:12px;font-weight:700;letter-spacing:1px;color:#8a6a1e;background:#F3E7CF;border-radius:20px;padding:4px 12px;}
+.dq-hero-t{font-size:28px;font-weight:900;line-height:1.35;margin-top:12px;}
+.dq-hero-t em{font-style:normal;color:#C6603A;}
+.dq-hero-s{font-size:14px;color:#6E4A3C;line-height:1.9;margin-top:10px;}
+.dq-hero-meta{display:flex;gap:14px;margin-top:14px;font-size:12.5px;color:#8A7266;}
+.dq-hero-meta b{color:#993C1D;}
+.dq-rule4{height:2px;border-radius:2px;background:linear-gradient(90deg,#C6603A,#6E8B77,#6E8CA8,#C99A4E);margin-top:14px;}
+.dq-cd{background:#fff;border-radius:16px;padding:17px 16px;box-shadow:0 2px 10px rgba(74,27,12,.05);}
+.dq-sec{font-size:13px;font-weight:700;color:#6E4A3C;margin-bottom:11px;}
+.dq-mock{font-size:10px;color:#fff;background:#8A7266;border-radius:8px;padding:1px 6px;margin-left:6px;vertical-align:2px;}
+.dq-map{position:relative;padding-left:26px;}
+.dq-map:before{content:"";position:absolute;left:8px;top:10px;bottom:10px;width:3px;border-radius:3px;background:linear-gradient(180deg,#C6603A,#6E8B77,#6E8CA8,#C99A4E);}
+.dq-stn{position:relative;padding:9px 0 9px 6px;}
+.dq-stn:before{content:"";position:absolute;left:-24px;top:16px;width:13px;height:13px;border-radius:50%;border:2.5px solid #fff;box-shadow:0 1px 4px rgba(74,27,12,.2);}
+.dq-stn.here:before{background:#C6603A;}
+.dq-stn.n2:before{background:#6E8B77;}
+.dq-stn.n3:before{background:#6E8CA8;}
+.dq-stn.n4:before{background:#C99A4E;}
+.dq-stn-t{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px;}
+.dq-you{font-size:11px;color:#fff;background:#C6603A;border-radius:10px;padding:1px 8px;font-weight:700;}
+.dq-stn-s{font-size:12.5px;color:#8A7266;margin-top:3px;line-height:1.7;}
+.dq-stn a{color:#AF5433;font-weight:700;text-decoration:none;}
+.dq-dim{margin-bottom:13px;}
+.dq-dim-hd{display:flex;align-items:baseline;gap:8px;font-size:14px;font-weight:700;}
+.dq-dim-hd small{font-weight:400;color:#8A7266;font-size:12px;}
+.dq-dim-v{margin-left:auto;font-size:15px;font-variant-numeric:tabular-nums;}
+.dq-dim-bar{height:8px;border-radius:8px;background:#EFE5DC;margin-top:6px;overflow:hidden;}
+.dq-dim-bf{height:100%;border-radius:8px;}
+.dq-peek{position:relative;margin-top:14px;border-radius:12px;overflow:hidden;}
+.dq-peek-g{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;filter:blur(3px);opacity:.55;}
+.dq-peek-c{background:#F7F1EC;border-radius:10px;padding:8px;font-size:11px;line-height:1.5;}
+.dq-peek-ov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#993C1D;text-align:center;line-height:1.7;}
+.dq-share{background:#4A1B0C;border-radius:16px;padding:18px;color:#F7F1EC;text-align:center;}
+.dq-share-t{font-size:16px;font-weight:700;line-height:1.7;}
+.dq-share-s{font-size:12.5px;color:rgba(247,241,236,.6);margin-top:8px;line-height:1.7;}
+.dq-share-b{display:inline-block;margin-top:14px;background:#F7F1EC;color:#4A1B0C;border-radius:14px;padding:11px 26px;font-size:14px;font-weight:700;text-decoration:none;}
+
+/* 題卡 */
+.progtop{display:flex;justify-content:space-between;font-size:14px;color:#6E4A3C;margin-bottom:6px;}
+.progbar{height:6px;border-radius:6px;background:#EFE5DC;overflow:hidden;margin-bottom:14px;}
+.progfill{height:100%;border-radius:6px;background:linear-gradient(90deg,#C6603A,#C99A4E);}
+.qlabel{font-size:13px;font-weight:700;color:#993C1D;background:#F0E3DB;border-radius:12px;padding:3px 12px;display:inline-block;margin-bottom:10px;}
+.qtxt{font-size:17px;font-weight:600;line-height:1.7;margin-bottom:14px;}
+.opt{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #E6DAD1;border-radius:12px;padding:13px 14px;text-align:left;width:100%;margin-bottom:8px;font-size:15px;line-height:1.6;color:#4A1B0C;font-family:inherit;}
+.opt .num{flex-shrink:0;width:24px;height:24px;border-radius:50%;background:#F0E3DB;color:#993C1D;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+
+/* 留資頁 */
+.ftitle{font-size:22px;font-weight:700;margin-bottom:6px;}
+.fsub{font-size:14px;color:#6E4A3C;line-height:1.7;margin-bottom:16px;}
+.field{margin-bottom:12px;}
+.field label{display:block;font-size:14px;color:#6E4A3C;margin-bottom:5px;}
+.field input,.field select{width:100%;background:#fff;border:1px solid #E6DAD1;border-radius:10px;padding:11px 13px;font-size:17px;color:#4A1B0C;-webkit-appearance:none;}
+
+/* 結果頁小元件 */
+.w3row{display:flex;align-items:center;gap:8px;padding:5px 0;}
+.w3row .nm{flex:1;font-size:15px;color:#5A3A2A;font-weight:500;}
+.w3row .tg{color:#fff;font-size:13px;border-radius:20px;padding:2px 9px;}
+.w3row .vv{font-size:14px;color:#6E4A3C;width:44px;text-align:right;}
+.mrow{display:flex;align-items:center;gap:8px;padding:4px 0;}
+.mrow .mn{flex:1;font-size:13.5px;color:#5A3A2A;}
+.mrow .dots{display:flex;gap:4px;}
+.mrow .dots i{width:9px;height:9px;border-radius:50%;display:block;}
+.mrow .mv{font-size:13px;color:#6E4A3C;width:20px;text-align:right;}
+
+/* 底部匯出列 */
+.expbar{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);z-index:50;display:flex;gap:8px;align-items:center;background:#4A1B0C;border-radius:22px;padding:8px 10px 8px 18px;box-shadow:0 6px 20px rgba(74,27,12,.35);}
+.expbar span{font-size:12px;color:rgba(247,241,236,.7);white-space:nowrap;}
+.expbar button{background:#C6603A;color:#fff;border:0;border-radius:16px;padding:9px 16px;font-size:13px;font-weight:700;font-family:inherit;white-space:nowrap;}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div style="font-size:20px;font-weight:900;margin:6px 0 4px;">quiz 全畫面 demo</div>
+<div style="font-size:13px;color:#8A7266;line-height:1.8;margin-bottom:14px;">正式版 quiz.atpifit.com 的每個畫面攤平＋16 題全展開。黃色便利貼直接打字（自動存這台手機），看完按底下「匯出備註」整包複製給我。分數與雷達＝示意樣本。</div>
+<div class="rv-note rv-note-all" contenteditable="true" data-note="總"></div>
+
+<!-- ═════════ 畫面 0 ═════════ -->
+<div class="scr-h">畫面 0｜開場等待頁（boot）<small>開頁先蓋滿版咖啡漸層卡，LIFF 載入完成就收掉（最多 3.5 秒）。跨頁 canon：載入中一律咖啡漸層。</small></div>
+<div class="blk" data-id="開-1"><span class="btag">開-1</span>
+  <div class="boot-card">
+    <svg class="ld-logo" width="66" height="49" viewBox="-52 -30 104 72" aria-hidden="true"><g fill="none" stroke="#E8C89A" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="M-36 -22 L36 -22 Q48 -22 48 -10"/><path d="M48 -10 L48 10 Q48 22 36 22"/><path d="M36 22 L-6 22 L-16 36 L-22 22 L-36 22 Q-48 22 -48 10"/><path d="M-48 10 L-48 -10 Q-48 -22 -36 -22"/></g><circle cx="-21" cy="0" r="5" fill="#C6603A"/><circle cx="-7" cy="0" r="5" fill="#6E8B77"/><circle cx="7" cy="0" r="5" fill="#6E8CA8"/><circle cx="21" cy="0" r="5" fill="#C99A4E"/></svg>
+    <div class="boot-k">影響力健身房</div>
+    <div class="boot-t">練好溝通，你就有影響力</div>
+    <div class="boot-s">準備你的體格檢測…</div>
+    <div class="boot-dots"><span style="background:#C6603A;"></span><span style="background:#6E8B77;animation-delay:.18s;"></span><span style="background:#6E8CA8;animation-delay:.36s;"></span><span style="background:#C99A4E;animation-delay:.54s;"></span></div>
+  </div>
+</div>
+
+<!-- ═════════ 共用頭 ═════════ -->
+<div class="scr-h">共用｜席位橫幅＋標語<small>每個畫面上方都有。quiz＝A 磚橘席位色；連點 logo 5 下＝重測彩蛋。</small></div>
+<div class="blk" data-id="橫-1"><span class="btag">橫-1</span>
+  <div class="tb">
+    <div class="tb-k"><span>ATPIFIT · MUSCLE CHECK</span><div class="tb-d">免費 · 60 秒</div></div>
+    <div class="tb-r">
+      <svg width="30" height="22" viewBox="-52 -30 104 72" aria-hidden="true"><g fill="none" stroke="#fff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="M-36 -22 L36 -22 Q48 -22 48 -10"/><path d="M48 -10 L48 10 Q48 22 36 22"/><path d="M36 22 L-6 22 L-16 36 L-22 22 L-36 22 Q-48 22 -48 10"/><path d="M-48 10 L-48 -10 Q-48 -22 -36 -22"/></g><circle cx="-21" cy="0" r="5" fill="#C6603A" stroke="#fff" stroke-width="1.4"/><circle cx="-7" cy="0" r="5" fill="#6E8B77" stroke="#fff" stroke-width="1.4"/><circle cx="7" cy="0" r="5" fill="#6E8CA8" stroke="#fff" stroke-width="1.4"/><circle cx="21" cy="0" r="5" fill="#C99A4E" stroke="#fff" stroke-width="1.4"/></svg>
+      <div class="tb-n">影響力健身房</div><span class="hall">體格檢測</span>
+    </div>
+    <div class="tb-s">練好溝通，你就有影響力</div>
+  </div>
+</div>
+<div class="blk" data-id="橫-2"><span class="btag">橫-2</span>
+  <div style="text-align:center;padding:10px 24px;font-size:18px;font-weight:600;color:#4A1B0C;line-height:1.65;">溝通的目的，是提升你的影響力。<br><span style="color:#AF5433;">變現，是影響力自然而然的結果。</span></div>
+</div>
+
+<!-- ═════════ 畫面 1：首頁 ═════════ -->
+<div class="scr-h">畫面 1｜首頁（s-intro）<small>好奇鉤子 → 適合誰 → 影響力之路 → 開始測驗。冗文（能幫你清單／光頭自介／學員故事）已刪。</small></div>
+<div class="blk" data-id="首-1"><span class="btag">首-1</span>
+  <div>
+    <span class="dq-pill">影響力健身房 · 免費體格檢測</span>
+    <div class="dq-hero-t">為什麼有些人一開口，<br>別人就<em>想聽</em>？</div>
+    <div class="dq-hero-s">不是天賦，是 <b>4 大影響力肌肉</b>——吸引、信任、專業、推進。60 秒測出你哪一塊最有感，<b>今天就能用</b>。</div>
+    <div class="dq-hero-meta"><span>⏱ <b>60 秒</b></span><span>📱 不用留資料</span><span>🎁 測完先拿一句話</span></div>
+    <div class="dq-rule4"></div>
+    <button class="dq-go">開始測 →</button>
+  </div>
+</div>
+<div class="blk" data-id="首-2"><span class="btag">首-2</span>
+  <div class="card" style="margin-bottom:0;">
+  <div style="font-size:16px;font-weight:700;margin-bottom:8px;">這份測驗適合你，如果你正在做：</div>
+  <div style="display:flex;flex-direction:column;gap:8px;">
+    <div style="background:#fff;border:0.5px solid #E6DAD1;border-radius:12px;padding:10px 13px;display:flex;gap:10px;align-items:flex-start;"><div style="font-size:22px;line-height:1;margin-top:1px;">💬</div><div><div style="font-size:15px;font-weight:600;margin-bottom:3px;">日常溝通</div><div style="font-size:15px;color:#6E4A3C;line-height:1.6;">與同事、家人、朋友溝通取得共鳴——讓老闆主動賞識你、關係更和諧、說話更有份量。</div></div></div>
+    <div style="background:#fff;border:0.5px solid #E6DAD1;border-radius:12px;padding:10px 13px;display:flex;gap:10px;align-items:flex-start;"><div style="font-size:22px;line-height:1;margin-top:1px;">🤝</div><div><div style="font-size:15px;font-weight:600;margin-bottom:3px;">1 對 1 銷售</div><div style="font-size:15px;color:#6E4A3C;line-height:1.6;">用吸引而非推銷的方式成交——讓對方主動詢問更多、自己說服自己，不再感覺被推。</div></div></div>
+    <div style="background:#fff;border:0.5px solid #E6DAD1;border-radius:12px;padding:10px 13px;display:flex;gap:10px;align-items:flex-start;"><div style="font-size:22px;line-height:1;margin-top:1px;">🎤</div><div><div style="font-size:15px;font-weight:600;margin-bottom:3px;">1 對 N 演講 ／ 課程</div><div style="font-size:15px;color:#6E4A3C;line-height:1.6;">感召式演講，讓台下自己被吸引——不強硬推，但讓每個人都覺得「這說的就是我」。</div></div></div>
+  </div>
+  </div>
+</div>
+<div class="blk" data-id="首-3"><span class="btag">首-3</span>
+  <div class="dq-cd">
+    <div class="dq-sec">影響力之路——你在這裡</div>
+    <div class="dq-map">
+      <div class="dq-stn here"><div class="dq-stn-t">測出體格 <span class="dq-you">你在這裡</span></div><div class="dq-stn-s">60 秒，知道自己先練哪塊最有感</div></div>
+      <div class="dq-stn n2"><div class="dq-stn-t">免費體驗</div><div class="dq-stn-s">每月分享會＋社群，先看別人怎麼練</div></div>
+      <div class="dq-stn n3"><div class="dq-stn-t">進健身房</div><div class="dq-stn-s">12 小肌群圖鑑、每天一招、夥伴一起 → <a>看會員的一天 →</a></div></div>
+      <div class="dq-stn n4"><div class="dq-stn-t">私人教練席</div><div class="dq-stn-s">教練看著你的每一筆紀錄，把影響力練進真實關係 → <a>看教練席 →</a></div></div>
+    </div>
+  </div>
+</div>
+<div class="blk" data-id="首-4"><span class="btag">首-4</span>
+  <button class="btnO">開始測驗（免費）</button>
+</div>
+
+<!-- ═════════ 畫面 2：測驗前說明 ═════════ -->
+<div class="scr-h">畫面 2｜測驗前說明（s-explain）<small>按「開始測驗」後先看這頁：溝通變現是什麼 → 四塊肌肉逐塊 → 這個測驗會做什麼。</small></div>
+<div class="blk" data-id="說-1"><span class="btag">說-1</span>
+  <div class="card" style="margin-bottom:0;">
+    <div style="font-size:14px;color:#993C1D;background:#F0E3DB;border-radius:12px;padding:3px 12px;display:inline-block;margin-bottom:12px;">測驗前先了解</div>
+    <div style="font-size:20px;font-weight:700;line-height:1.5;margin-bottom:10px;">「溝通變現」是什麼？</div>
+    <div style="font-size:15px;color:#5A3A2A;line-height:1.8;margin-bottom:14px;">1. 溝通能力<br>2. 變現流程</div>
+    <div style="font-size:15px;color:#5A3A2A;line-height:1.8;">你的溝通能力，決定別人願不願意行動或把錢交給你。<br><br>同樣的服務、同樣的產品，有人開口就成交，有人說了半天對方還在「考慮看看」。<br><br>差別不在努力，在於你的溝通方式有沒有帶動對方走完整個成交流程。</div>
+  </div>
+</div>
+<div class="blk" data-id="說-2"><span class="btag">說-2</span>
+  <div class="card" style="margin-bottom:0;">
+    <div style="font-size:15px;line-height:1.8;margin-bottom:12px;">這四塊肌肉是<strong style="color:#AF5433;">底層邏輯</strong>，<br>不管你用在聊天、演講還是社群，<br>練起來的人在哪個場景都有份量。<br><strong>而變現要四塊肌肉一起出力</strong><br><strong>哪一塊快歸零，整條路就跟著打折</strong></div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div style="background:#FDF6EF;border-left:3px solid #C6603A;border-radius:0 12px 12px 0;padding:12px 14px;"><div style="font-size:15px;font-weight:600;color:#AF5433;margin-bottom:4px;">① 吸引肌肉（Attract）</div><div style="font-size:15px;color:#5A3A2A;line-height:1.7;margin-bottom:6px;">讓他想靠近你、想繼續聽你說</div><div style="font-size:15px;color:#993C1D;line-height:1.6;">❌ 吸引肌肉不夠：說了很多，對方點頭就走，沒有後續</div></div>
+      <div style="background:#DCE7DE;border-left:3px solid #6E8B77;border-radius:0 12px 12px 0;padding:12px 14px;"><div style="font-size:15px;font-weight:600;color:#5C7464;margin-bottom:4px;">② 信任肌肉（Trust）</div><div style="font-size:15px;color:#5A3A2A;line-height:1.7;margin-bottom:6px;">讓人覺得你懂他、願意說真心話</div><div style="font-size:15px;color:#993C1D;line-height:1.6;">❌ 信任肌肉不夠：對方喜歡你，但不願意掏錢，因為還沒有「被懂」的感覺</div></div>
+      <div style="background:#DDE6EE;border-left:3px solid #6E8CA8;border-radius:0 12px 12px 0;padding:12px 14px;"><div style="font-size:15px;font-weight:600;color:#54718D;margin-bottom:4px;">③ 專業肌肉（Professional）</div><div style="font-size:15px;color:#5A3A2A;line-height:1.7;margin-bottom:6px;">把你的專業說得讓對方真的聽懂，並且知道你能解決他的問題</div><div style="font-size:15px;color:#993C1D;line-height:1.6;">❌ 專業肌肉不夠：對方覺得「聽起來不錯」，但不確定有沒有用，遲遲不成交</div></div>
+      <div style="background:#F1E5CC;border-left:3px solid #C99A4E;border-radius:0 12px 12px 0;padding:12px 14px;"><div style="font-size:15px;font-weight:600;color:#8E682B;margin-bottom:4px;">④ 推進肌肉（Impact）</div><div style="font-size:15px;color:#5A3A2A;line-height:1.7;margin-bottom:6px;">讓人願意現在就採取行動</div><div style="font-size:15px;color:#993C1D;line-height:1.6;">❌ 推進肌肉不夠：前面三關都過了，對方最後說「我再想想」，然後就沒有然後了</div></div>
+    </div>
+  </div>
+</div>
+<div class="blk" data-id="說-3"><span class="btag">說-3</span>
+  <div class="card" style="background:#4A1B0C;border:none;margin-bottom:0;">
+    <div style="font-size:15px;color:rgba(255,255,255,0.55);margin-bottom:8px;">這個測驗會做什麼</div>
+    <div style="font-size:16px;color:#fff;line-height:1.8;">每塊肌肉再拆成 3 個小肌群，一共 <strong style="color:#E8C89A;">12 塊</strong>——測完你會看到哪幾塊撐著你、<strong style="color:#E8C89A;">哪三塊最薄</strong>，還有一條最省力的變現路徑。</div>
+    <div style="font-size:15px;color:rgba(255,255,255,0.65);line-height:1.7;margin-top:10px;">12 題只問<strong style="color:#E8C89A;">具體發生過的事</strong>（對方說了什麼、做了什麼），不問你覺得自己怎麼樣——想不出實例就選「沒做到」，那才測得準。</div>
+  </div>
+</div>
+<div class="blk" data-id="說-4"><span class="btag">說-4</span>
+  <button class="btnO">我準備好了，開始測驗 →</button>
+</div>
+
+<!-- ═════════ 畫面 3：16 題全展開 ═════════ -->
+<div class="scr-h">畫面 3｜答題頁（s-quiz）・16 題全展開<small>正式版一次只出一題＋進度條。這裡把 16 題全部攤開一頁一頁看：2 題暖身（不計分）→ 12 題肌肉題（1–5 錨點）→ 2 題背景（不計分）。</small></div>
+<div id="qhost"></div>
+
+<!-- ═════════ 畫面 4：留資頁 ═════════ -->
+<div class="scr-h">畫面 4｜留資頁（s-form）<small>測完才留資（先給價值再要資料）。可以不領取直接看結果——但拿得到 userId 時名單照送，進館才查得到人。</small></div>
+<div class="blk" data-id="資-1"><span class="btag">資-1</span>
+  <div class="card" style="margin-bottom:0;">
+    <div class="ftitle">測驗完成！</div>
+    <div class="fsub">填寫資料後，詳細的變現報告書會寄送到你的信箱。<br>（也可以選擇不領取，直接查看結果）</div>
+    <div class="field"><label>姓名</label><input type="text" placeholder="請輸入姓名" readonly></div>
+    <div class="field"><label>Email</label><input type="email" placeholder="請輸入 Email" readonly></div>
+    <div class="field"><label>職業／身份</label><select disabled><option>請選擇（業務／講師／創業者／上班族／學生／其他）</option></select></div>
+    <div class="btnrow" style="margin-top:14px;">
+      <button class="btnskip">不領取<br><span style="font-size:14px;opacity:.7">直接看結果</span></button>
+      <button class="btnrep">領取完整報告<br><span style="font-size:14px;opacity:.85">查看結果</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════ 畫面 5：結果頁 ═════════ -->
+<div class="scr-h">畫面 5｜結果頁（s-result）<small>分數＝示意樣本（A50／T83／P25／I50）。順序：潛力 → 座標＋雷達＋12格 → q-3 體格單 → 強項路徑 → 最弱三塊 → 進館 CTA → q-6 分享卡。</small></div>
+<div class="blk" data-id="果-1"><span class="btag">果-1</span>
+  <div class="card" style="text-align:center;margin-bottom:0;">
+    <div style="font-size:14px;color:#993C1D;background:#F0E3DB;border-radius:12px;padding:3px 12px;display:inline-block;margin-bottom:12px;">溝通變現能力診斷</div>
+    <div style="font-size:15px;color:#6E4A3C;margin-bottom:4px;">尚未解鎖潛力</div>
+    <div style="display:flex;align-items:baseline;justify-content:center;gap:4px;margin-bottom:4px;">
+      <div style="font-size:52px;font-weight:700;color:#C6603A;line-height:1;">612<span class="dq-mock">示意</span></div>
+      <div style="font-size:18px;color:#8A7266;font-weight:400;">/ 1000</div>
+    </div>
+    <div style="font-size:14px;color:#8A7266;">吸引 × 信任 × 專業 × 推進　4 大肌肉</div>
+  </div>
+</div>
+<div class="blk" data-id="果-2"><span class="btag">果-2</span>
+  <div class="card" style="margin-bottom:0;">
+    <div style="background:#fff;border:0.5px solid #E6DAD1;border-radius:12px;padding:12px;margin-bottom:14px;">
+      <div style="font-size:14px;color:#6E4A3C;margin-bottom:6px;">這組分數的座標<span class="dq-mock">示意</span></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
+        <span style="background:#F0E3DB;color:#6E4A3C;font-size:13px;border-radius:20px;padding:3px 10px;">認識</span>
+        <span style="background:#F0E3DB;color:#6E4A3C;font-size:13px;border-radius:20px;padding:3px 10px;">客戶</span>
+        <span style="background:#F0E3DB;color:#6E4A3C;font-size:13px;border-radius:20px;padding:3px 10px;">主動來問</span>
+      </div>
+      <div style="font-size:15px;color:#5A3A2A;line-height:1.8;">這次你評的是「自己找上門的客戶」——他已經在找解法了，門檻大半過了，接下來是比誰真的能解決。這種情境最吃 P 專業肌肉，收尾再靠 I 推進肌肉補臨門一腳。<br><br>你這塊是「專業肌肉 25 分」——這正是你面對這種對象特別吃力的原因。<br><br>（這題不算進分數。同一組分數換一種對象，難度會完全不同——這是你「對這種人」的分數，不是你的固定人格。）</div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:4px;margin-bottom:12px;">
+      <svg viewBox="0 0 260 240" width="260" height="240" style="max-width:100%;">
+        <polygon points="130,30 230,120 130,210 30,120" fill="none" stroke="#E6DAD1" stroke-width="1"/>
+        <polygon points="130,75 180,120 130,165 80,120" fill="none" stroke="#EFE5DC" stroke-width="1"/>
+        <polygon points="130,75 213,120 130,187 105,120" fill="rgba(198,96,58,.18)" stroke="#C6603A" stroke-width="2"/>
+        <circle cx="130" cy="75" r="4" fill="#C6603A"/><circle cx="213" cy="120" r="4" fill="#6E8B77"/><circle cx="130" cy="187" r="4" fill="#6E8CA8"/><circle cx="105" cy="120" r="4" fill="#C99A4E"/>
+        <text x="130" y="18" text-anchor="middle" font-size="13" fill="#AF5433" font-weight="700">吸引 50</text>
+        <text x="232" y="124" text-anchor="start" font-size="13" fill="#5C7464" font-weight="700">信任 83</text>
+        <text x="130" y="230" text-anchor="middle" font-size="13" fill="#54718D" font-weight="700">專業 25</text>
+        <text x="28" y="124" text-anchor="end" font-size="13" fill="#8E682B" font-weight="700">推進 50</text>
+      </svg>
+      <div style="font-size:14px;color:#6E4A3C;">點擊各塊肌肉查看分數<span class="dq-mock">示意</span></div>
+    </div>
+    <div id="sg-host" style="display:grid;grid-template-columns:1fr;gap:8px;"></div>
+  </div>
+</div>
+<div class="blk" data-id="果-3"><span class="btag">果-3</span>
+  <div class="dq-cd">
+    <div class="dq-sec">你的影響力體格單<span class="dq-mock">示意</span></div>
+    <div class="dq-dim"><div class="dq-dim-hd" style="color:#AF5433;">吸引肌肉<small>讓他想靠近</small><span class="dq-dim-v">3.4</span></div><div class="dq-dim-bar"><div class="dq-dim-bf" style="width:60%;background:#C6603A;"></div></div></div>
+    <div class="dq-dim"><div class="dq-dim-hd" style="color:#5C7464;">信任肌肉<small>讓他願意說</small><span class="dq-dim-v">4.1</span></div><div class="dq-dim-bar"><div class="dq-dim-bf" style="width:78%;background:#6E8B77;"></div></div></div>
+    <div class="dq-dim"><div class="dq-dim-hd" style="color:#54718D;">專業肌肉<small>讓他要找你</small><span class="dq-dim-v">2.9</span></div><div class="dq-dim-bar"><div class="dq-dim-bf" style="width:48%;background:#6E8CA8;"></div></div></div>
+    <div class="dq-dim"><div class="dq-dim-hd" style="color:#8E682B;">推進肌肉<small>讓他願意動</small><span class="dq-dim-v">2.4</span></div><div class="dq-dim-bar"><div class="dq-dim-bf" style="width:35%;background:#C99A4E;"></div></div></div>
+    <div class="dq-peek">
+      <div class="dq-peek-g">
+        <div class="dq-peek-c">讓他想聽</div><div class="dq-peek-c">讓他心動</div><div class="dq-peek-c">讓他放心</div>
+        <div class="dq-peek-c">讓他敢說</div><div class="dq-peek-c">讓他信你</div><div class="dq-peek-c">讓他懂你</div>
+        <div class="dq-peek-c">讓他服你</div><div class="dq-peek-c">讓他要你</div><div class="dq-peek-c">讓他行動</div>
+      </div>
+      <div class="dq-peek-ov">每塊大肌肉還能拆成 3 塊小肌群<br>——進健身房才全開</div>
+    </div>
+  </div>
+</div>
+<div class="blk" data-id="果-4"><span class="btag">果-4</span>
+  <div class="card" style="margin-bottom:0;">
+    <div style="font-size:14px;color:#6E4A3C;margin-bottom:10px;">你的強項組合 × 最省力變現路徑<span class="dq-mock">示意</span></div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;">
+      <span style="background:#5C7464;color:#fff;font-size:13px;border-radius:20px;padding:3px 10px;">信任肌肉</span>
+      <span style="background:#54718D;color:#fff;font-size:13px;border-radius:20px;padding:3px 10px;">專業肌肉</span>
+    </div>
+    <div style="font-size:18px;font-weight:700;margin-bottom:10px;line-height:1.5;">深度服務 × 口碑轉介紹循環</div>
+    <div style="font-size:14px;color:#6E4A3C;margin-bottom:6px;">你的溝通變現甜蜜路徑</div>
+    <div style="font-size:15px;color:#5A3A2A;line-height:1.9;margin-bottom:14px;white-space:pre-line;">① 先在現有人脈裡找第一批客戶，信任肌肉讓對方覺得你真的懂他
+② 專業肌肉撐住高單價，交付讓對方超滿意
+③ 主動請客戶介紹下一個人（客戶的吸引肌肉幫你做你做不到的事）
+④ 新客戶帶著信任進來，直接進入成交</div>
+    <div style="height:0.5px;background:#E6DAD1;margin-bottom:12px;"></div>
+    <div style="font-size:14px;color:#6E4A3C;margin-bottom:6px;">弱項不用補，用這個替代</div>
+    <div style="font-size:15px;color:#6E4A3C;line-height:1.9;white-space:pre-line;">吸引肌肉弱 → 不做冷流量，找吸引肌肉強的合作夥伴導流，你專攻後端成交和交付
+推進肌肉弱 → 諮詢結尾問「如果繼續，三個月後你想達到什麼？」讓對方自己描繪未來，自然說 yes
+走高客單，靠深度不靠量</div>
+  </div>
+</div>
+<div class="blk" data-id="果-5"><span class="btag">果-5</span>
+  <div class="card" style="border-color:#F0E3DB;margin-bottom:0;">
+    <div style="font-size:14px;color:#6E4A3C;margin-bottom:6px;">練起這塊肌肉，CP 值最高<span class="dq-mock">示意</span></div>
+    <div style="font-size:17px;font-weight:600;margin-bottom:6px;">專業肌肉（讓他要找你）</div>
+    <div style="font-size:15px;color:#6E4A3C;line-height:1.7;">專業肌肉決定對方願不願意付你高單價——如果對方覺得你說的東西「聽起來不錯但不確定有沒有用」，就不會成交。<br><br>你需要的是把你的能力用對方聽得懂的語言說出來。</div>
+    <div style="height:0.5px;background:#E6DAD1;margin:12px 0;"></div>
+    <div style="font-size:14px;color:#6E4A3C;margin-bottom:4px;">12 塊小肌群裡，你最薄的三塊</div>
+    <div class="w3row"><div class="nm">1　讓他有感</div><span class="tg" style="background:#54718D;">專業肌肉</span><div class="vv">1 / 5</div></div>
+    <div class="w3row"><div class="nm">2　讓他追問</div><span class="tg" style="background:#AF5433;">吸引肌肉</span><div class="vv">2 / 5</div></div>
+    <div class="w3row"><div class="nm">3　讓他放心</div><span class="tg" style="background:#54718D;">專業肌肉</span><div class="vv">2 / 5</div></div>
+    <div style="font-size:14px;color:#8A7266;line-height:1.6;margin-top:8px;">進館後就從這三塊開始練——不必四塊一起補。</div>
+  </div>
+</div>
+<div class="blk" data-id="果-6"><span class="btag">果-6</span>
+  <div class="card" style="background:#FDF6EF;border:0.5px solid #F0E3DB;margin-bottom:0;">
+    <div style="font-size:15px;color:#6E4A3C;line-height:1.8;margin-bottom:1rem;">對方喜歡你、也信任你，但不確定你能不能真的解決他的問題——這一關過不了，高單價就很難收。進健身房，把你的專業練成對方聽得懂的語言。</div>
+    <button class="btnO" style="margin-bottom:0;">進溝通健身房，開始練 →</button>
+  </div>
+</div>
+<div class="blk" data-id="果-7"><span class="btag">果-7</span>
+  <div class="dq-share">
+    <div class="dq-share-t">把體格單傳給一個朋友，<br>猜猜他哪塊最有感。</div>
+    <div class="dq-share-s">傳出去的那一刻，你已經在練吸引肌肉了。</div>
+    <a class="dq-share-b">傳給朋友<span class="dq-mock" style="background:rgba(74,27,12,.4);">示意</span></a>
+  </div>
+</div>
+
+</div><!-- /wrap -->
+
+<div class="expbar">
+  <span id="ncount">備註 0 則</span>
+  <button onclick="exportNotes()">匯出備註</button>
+</div>
+
+<script>
+/* ── 16 題全展開（照抄正式版 QS；1–5 錨點＝ANCHORS）── */
+var ANCHORS=["沒做到","偶爾，而且生硬","想到才做、時好時壞","多數情境做得到","穩定到自動化"];
+var QS=[
+  {text:"你期待透過提升「溝通變現能力」，能為你額外增加多少年收入？",label:"開始前先想想",opts:["多賺 20 萬以內","多賺 20～100 萬","多賺 100～300 萬","多賺 300 萬以上"]},
+  {text:"你最近一次是在對誰說話？（想一個具體的人，後面 12 題都以他為準）",label:"先設定對象",opts:["熟人或家人，隨口聊聊，他沒在找解法","認識但不熟的同輩，他沒在找解法","第一次見的陌生人，是我主動開口的","我邀約來的客戶，他願意聽但還沒需求","主動來找我的客戶，他正在找解法","位階比我高的主管或決策者，我要說服他"]},
+  {text:"在還不熟的場合，你主動先開口，用一句真心的稱讚讓他願意接話聊下去——不是只回你一句「謝謝」就結束。",label:"吸引肌肉｜讓他開口",opts:ANCHORS},
+  {text:"你講完自己在做什麼之後，他當場「哇」了一聲，主動追問「然後呢？」「你怎麼做到的？」——不是只點頭說「喔喔」。",label:"吸引肌肉｜讓他追問",opts:ANCHORS},
+  {text:"隔一個禮拜再遇到，他還記得你講過的故事、講得出你的轉折點，甚至能用一句話跟別人介紹你。",label:"吸引肌肉｜讓他記得",opts:ANCHORS},
+  {text:"你會先把自己心裡沒說出口的講出來——還在怕的、還沒做成的——講完之後，他也開始說他的。",label:"信任肌肉｜讓他敢說",opts:ANCHORS},
+  {text:"你一層一層問下去，最後他講出了你根本沒問到的事，是他自己想多說的。",label:"信任肌肉｜讓他交心",opts:ANCHORS},
+  {text:"你答應他的事，後來真的做到了，而且講得出結果或過程來佐證——不是只說「有啦我有記得」。",label:"信任肌肉｜讓他當真",opts:ANCHORS},
+  {text:"你帶他講出「現在在哪、想到哪」，兩邊的數字是他自己報的，然後在中間的落差挖出他原本沒說出口的卡點。",label:"專業肌肉｜讓他釐清",opts:ANCHORS},
+  {text:"你不是用講的——你當場讓他親自試一次或看一次，他秒懂，而且說得出「這真的有用」。",label:"專業肌肉｜讓他有感",opts:ANCHORS},
+  {text:"你搬出別人的見證、數據或第三方背書之後，他主動追問那個案例：「那個人後來怎麼樣？」",label:"專業肌肉｜讓他放心",opts:ANCHORS},
+  {text:"你帶他確認「他真正想要的結果」，最後他是用那個結果在複述——「所以我可以⋯⋯」，而不是複述你的方案內容。",label:"推進肌肉｜讓他想要",opts:ANCHORS},
+  {text:"你會主動問他還有什麼顧慮，把他心裡的擔心先問出來並回應——不是等他自己開口你才知道。",label:"推進肌肉｜讓他敢要",opts:ANCHORS},
+  {text:"聊完之後你拿到的是「他同意的具體下一步」——約好下次時間、他要準備什麼、或他答應去跟誰說——不是只有一句「再聯絡」。",label:"推進肌肉｜讓他答應",opts:ANCHORS},
+  {text:"你想要收入變多的項目，最多的客戶從哪裡來？",label:"客戶來源",opts:["朋友／舊客戶／商會介紹","認識的新朋友或陌生人","社群或網路找上門","受僱領薪，沒有自己的客戶"]},
+  {text:"你目前的年收入落在哪個區間？",label:"基本資料",opts:["0-60萬","60-120萬","120-300萬","300-1000萬","1000萬以上"]}
+];
+var qhost=document.getElementById("qhost");
+QS.forEach(function(q,i){
+  var pct=Math.round(i/16*100);
+  var blk=document.createElement("div");blk.className="blk";blk.setAttribute("data-id","題-"+(i+1));
+  var isAnchor=(q.opts===ANCHORS);
+  blk.innerHTML='<span class="btag">題-'+(i+1)+'</span>'
+    +'<div class="card" style="margin-bottom:0;">'
+    +'<div class="progtop"><span>第 '+(i+1)+' 題，共 16 題</span><span>'+pct+'%</span></div>'
+    +'<div class="progbar"><div class="progfill" style="width:'+pct+'%;"></div></div>'
+    +'<div class="qlabel">'+q.label+'</div>'
+    +'<div class="qtxt">'+q.text+'</div>'
+    +q.opts.map(function(o,j){return '<div class="opt">'+(isAnchor?'<span class="num">'+(j+1)+'</span>':'')+'<span>'+o+'</span></div>';}).join("")
+    +'<div class="btnN">下一題 →</div>'
+    +'</div>';
+  qhost.appendChild(blk);
+});
+
+/* ── 結果頁 score-grid（4 大肌肉卡＋小肌群五點燈・示意樣本）── */
+var SG=[
+  {n:"吸引肌肉",tc:"#AF5433",c:"#C6603A",v:50,ms:[["讓他開口",4],["讓他追問",2],["讓他記得",3]]},
+  {n:"信任肌肉",tc:"#5C7464",c:"#6E8B77",v:83,ms:[["讓他敢說",4],["讓他交心",5],["讓他當真",4]]},
+  {n:"專業肌肉",tc:"#54718D",c:"#6E8CA8",v:25,ms:[["讓他釐清",3],["讓他有感",1],["讓他放心",2]]},
+  {n:"推進肌肉",tc:"#8E682B",c:"#C99A4E",v:50,ms:[["讓他想要",3],["讓他敢要",2],["讓他答應",4]]}
+];
+var sgh=document.getElementById("sg-host");
+SG.forEach(function(d){
+  var card=document.createElement("div");
+  card.style.cssText="background:#fff;border:0.5px solid #E6DAD1;border-radius:12px;padding:12px 14px;";
+  var h='<div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px;">'
+    +'<div style="font-size:15px;font-weight:700;color:'+d.tc+';">'+d.n+'</div>'
+    +'<div style="font-size:19px;font-weight:700;color:'+d.tc+';">'+d.v+'</div></div>'
+    +'<div style="height:7px;border-radius:7px;background:#EFE5DC;overflow:hidden;margin-bottom:8px;"><div style="height:100%;width:'+d.v+'%;background:'+d.c+';border-radius:7px;"></div></div>';
+  d.ms.forEach(function(m){
+    var dots="";for(var i=1;i<=5;i++){dots+='<i style="background:'+(m[1]>=i?d.c:"#F0E3DB")+';"></i>';}
+    h+='<div class="mrow"><div class="mn">'+m[0]+'</div><div class="dots">'+dots+'</div><div class="mv">'+m[1]+'</div></div>';
+  });
+  card.innerHTML=h;sgh.appendChild(card);
+});
+
+/* ── 備註便利貼（同 member 精修模式：localStorage 綁版本號）── */
+var NK="quiz_allpages_notes_v1";
+function nLoad(){try{return JSON.parse(localStorage.getItem(NK)||"{}");}catch(e){return {};}}
+function nSave(k,t){try{var o=nLoad();if(t)o[k]=t;else delete o[k];localStorage.setItem(NK,JSON.stringify(o));nCount();}catch(e){}}
+function nCount(){var o=nLoad();var n=Object.keys(o).length;document.getElementById("ncount").textContent="備註 "+n+" 則";}
+var notes=nLoad();
+document.querySelectorAll(".blk[data-id]").forEach(function(blk){
+  var id=blk.getAttribute("data-id");
+  var note=document.createElement("div");
+  note.className="rv-note";note.contentEditable="true";
+  if(notes[id])note.textContent=notes[id];
+  note.addEventListener("input",function(){nSave(id,note.textContent.trim());});
+  blk.insertAdjacentElement("afterend",note);
+});
+var allNote=document.querySelector('[data-note="總"]');
+if(notes["總"])allNote.textContent=notes["總"];
+allNote.addEventListener("input",function(){nSave("總",allNote.textContent.trim());});
+nCount();
+function exportNotes(){
+  var o=nLoad();var keys=Object.keys(o);
+  if(!keys.length){alert("還沒有備註");return;}
+  var txt=keys.map(function(k){return "【"+k+"】"+o[k];}).join("\n");
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(function(){alert("已複製 "+keys.length+" 則備註，直接貼給 Claude 就行");},function(){prompt("全選複製：",txt);});
+  }else{prompt("全選複製：",txt);}
+}
+</script>
+</body>
+</html>
