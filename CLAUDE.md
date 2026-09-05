@@ -1,9 +1,9 @@
-# comconverttest — 溝通變現能力測驗
+# comconverttest — 溝通影響力健檢（引流測驗）
 
 > ↔ **企劃大腦**：本專案是產品「ATPI 測驗（引流品）」的執行。產品定義／商業模式見 `../../5-企劃與產品手冊/productkit`（核心概念真相＝`1-手冊（內部）/01-核心定義字典.md`）。
 
 ## 專案概覽
-單一 HTML 檔案的 LINE LIFF 測驗問卷，評估用戶的「溝通變現能力」並收集潛在客戶資料。
+單一 HTML 檔案的 LINE LIFF 測驗問卷（對外名：溝通影響力健檢／短名：影響力健檢），測 4 大肌肉 12 小肌群並收集潛在客戶資料。
 - **線上網址**：https://lightlovecommai-oss.github.io/comconverttest/
 - **Repo**：https://github.com/lightlovecommai-oss/comconverttest
 - **技術**：純 HTML + CSS + 原生 JS，無框架，整合 LINE LIFF SDK + Google Apps Script
@@ -78,7 +78,7 @@ ATPI 程式真相在 `../../4-溝通健身房/consult-workshop/atpi-core.js`，�
 - ~~Calendly 諮詢鈕（btn-consult）~~
 - ~~LINE 分享鈕（btn-share）＋ `shareQuiz()` ＋ `STRENGTH_INTRO`~~——分享卡的按鈕指回測驗本身，是迴圈不是出口
 
-唯一出口＝`btn-workshop` →「進溝通健身房，開始練 →」，帶 `?id=<LINE userId>`。
+唯一出口＝`btn-workshop` →「進影響力健身房 →」，帶 `?id=<LINE userId>`。
 ⚠️ 免費路人也要進得去：`consult-workshop/index.html` 已改成
 **在名單內但未開通 → `member.html`（會員模式）**，不再一律踢到 `showcase.html`。
 名單那一列是測驗寫的（Code.gs `action:"quiz"` 會 `ensureRosterRow_`），
@@ -99,10 +99,11 @@ ATPI 程式真相在 `../../4-溝通健身房/consult-workshop/atpi-core.js`，�
 - `ANCHORS` — 1–5 錨點選項（＝`EVAL_ANCHORS` 的精簡版）
 - `muscleScores` — **12 小肌群 1–5 原始分**，本次改版的中介層；`scores` 由它平均出來，體格基線也是它
 - `DIMS` — 4 大肌肉定義（name / desc / **color 原版 / textColor 深版**）
-- `CTX_OPTS` — 情境座標（G4）：不進計分，只判讀「這組分數是對誰的分數」，`key` ＝這種對象最先卡住的那塊肌肉
+- `CTX_OPTS` — 情境座標：不進計分，只判讀「這組分數是對誰的分數」，`key` ＝這種對象最先卡住的那塊肌肉。
+  🔄 2026-09-05 老師拍板收成**單軸「他有沒有在找解法」3 選項**（原距離×位階×需求多維交叉太難分析）；
+  試算表的 targetDistance／targetRank 欄保留但一律送空字串
 - `CTA_DESC` — 結果頁出口文案（依最弱那塊大肌肉；2026-09-01 起導向進館，不再導 Calendly）
-- `STRONG_DESC` — 各塊肌肉改進建議（⚠️ 目前沒有任何地方讀它，留著待用）
-- `INC_TITLES / INC_BEAT / INC_NEXT` — 收入等級對應文字（⚠️ 同上，目前未使用）
+- ~~`STRONG_DESC`／`INC_TITLES / INC_BEAT / INC_NEXT`~~ — 2026-09-05 已刪（從未被讀過＋文案停在作廢詞「溝通變現」）
 - `LIFF_ID` — LINE LIFF ID
 - `SHEET_API` — Google Apps Script API URL
 
