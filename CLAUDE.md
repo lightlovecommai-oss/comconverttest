@@ -43,7 +43,7 @@
 - 題幹＝把字典 12 格表的「一句話可觀察行為（週測問法）」改寫成情境選擇題，**問具體事例不問感覺**。
 - 選項＝1–5 錨點（`ANCHORS`，即 `EVAL_ANCHORS` 拿掉「過頭訊號」那半句），
   所以**測驗分無縫就是健身房的體格分基線，不用換算**。
-- 大肌肉分＝該維 3 小肌群平均 → 攤到 0–100（數值與舊版完全相同，換的是中介結構不是尺）。
+- 大肌肉分＝該維 3 小肌群平均 → **歸零換算**攤到 0–100（`pctFromEval`：(d−1)/4×100，1 分＝0 成；字典 2026-09-03 公式重帶參數，舊 d/5×100 作廢）。
 - 🚫 **加強版 19 題**（最弱那維再細測 3 格）＝**付款完成後**才做，不是購買前；**完整版 28 題**＝私教學員專用。
 
 ## atpi-core.js（跨專案共用・不要直接改本 repo 這份）
@@ -64,12 +64,14 @@ ATPI 程式真相在 `../../4-溝通健身房/consult-workshop/atpi-core.js`，�
 - `s-explain` — 測驗前說明：什麼是溝通變現 → 4 大肌肉逐塊說明 → 這個測驗會做什麼
 - `s-quiz` — 答題頁：逐題顯示，含進度條
 - `s-form` — 留資頁：姓名、Email、職業
-- `s-result` — 結果頁：情境座標判讀（CTX）→ SVG 雷達圖 → **4 大肌肉 × 12 小肌群分數** → 強項組合變現路徑 → 最大缺口＋**最弱三塊小肌群** → 進館
+- `s-result` — 結果頁（🔄 2026-09-05 依老師 demo 備註改版）：已解鎖影響潛力 → 情境座標判讀（CTX）→ SVG 雷達圖 → **體格單四條（真分數）＋12 格模糊偷看鉤子** → 最大缺口＋**最弱大肌肉的 3 塊小肌群** → 進館 CTA → 分享卡（示意）
 
-## 結果頁重要元素
+## 結果頁重要元素（🔄 2026-09-05）
+- 潛力數字＝**已解鎖**（`scores.potential`＝calcPotential 的 unlocked）；「尚未解鎖 1000−x」寫法作廢
 - 雷達圖：SVG 向量（非 canvas），實作在 `atpi-core.js` 的 `drawRadarSVG`，本檔只留 `drawRadar()` 薄包裝
-- 分數欄位：雷達圖下方**單欄 4 張卡**，每張＝大肌肉名 + 分數 + 進度條 + **它的 3 個小肌群（1–5 五點燈）**
-- 最弱三塊小肌群：`weakestMuscles(muscleScores,3)`，就是進館後的第一份課表
+- 分數區＝**體格單四條進度條**（`bs-v-*`／`bs-b-*`，0–100 與雷達同尺）；舊「單欄 4 卡＋12 小肌群五點燈」（score-grid）已下架——詳細解析留給健身房
+- 強項組合變現路徑卡已下架（文案還在 atpi-core 的 `COMBO_PATH`，改走 Email 報告、寄送待做）；`getCombo` 只拿 `wk`
+- 最弱三塊＝`musclesOfDim(wk)` 弱的排前面（**不再** `weakestMuscles(muscleScores,3)` 全域挑）＝進館後的第一份課表
 
 ## 出口只有一個　🔴 2026-09-01 老師拍板「分流取消」
 測完**全部進館**，不給第二個選項。已下架：
@@ -118,7 +120,7 @@ git push origin main
 - 跳到結果頁測試用（⚠️ 現在一定要餵 `muscleScores`，結果頁整頁靠 12 格畫）：
 ```js
 muscleScores={A1:4,A2:2,A3:3, T1:4,T2:5,T3:4, P1:3,P2:1,P3:2, I1:3,I2:2,I3:4};
-DORD.forEach(k=>scores[k]=Math.round(dimFromMuscles(muscleScores)[k]/5*100));
+DORD.forEach(k=>scores[k]=pctFromEval(dimFromMuscles(muscleScores)[k]));
 scores.potential=calcPotential(scores).unlocked;
 incIdx=1; goalIdx=2; srcIdx=0; ctxIdx=4;
 renderResult(); setTimeout(drawRadar, 200);
