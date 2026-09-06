@@ -131,16 +131,25 @@ html,body{background:#F7F1EC;font-family:"Noto Sans TC","PingFang TC",-apple-sys
 .dq-hero-s{font-size:14px;color:#6E4A3C;line-height:1.9;margin-top:10px;}
 .dq-hero-meta{display:flex;gap:14px;margin-top:14px;font-size:12.5px;color:#8A7266;}
 .dq-hero-meta b{color:#993C1D;}
-.dq-dim{margin-bottom:13px;}
-.dq-dim-hd{display:flex;align-items:baseline;gap:8px;font-size:14px;font-weight:700;}
-.dq-dim-hd small{font-weight:400;color:#8A7266;font-size:12px;}
-.dq-dim-v{margin-left:auto;font-size:15px;font-variant-numeric:tabular-nums;}
-.dq-dim-bar{height:8px;border-radius:8px;background:#EFE5DC;margin-top:6px;overflow:hidden;}
-.dq-dim-bf{height:100%;border-radius:8px;}
-.dq-peek{position:relative;margin-top:14px;border-radius:12px;overflow:hidden;}
-.dq-peek-g{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;filter:blur(3px);opacity:.55;}
-.dq-peek-c{background:#F7F1EC;border-radius:10px;padding:8px;font-size:11px;line-height:1.5;color:#4A1B0C;}
-.dq-peek-ov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#993C1D;text-align:center;line-height:1.7;}
+/* 統一能力值儀表板 標準態（規格＝consult-workshop/demo-muscle-card-v4.html v4.2）：
+   大肌肉列標真成數＋12 格「名字露、分數模糊」偷看鉤子——進健身房才全開 */
+.dq-dsec{margin-top:14px;padding-top:13px;border-top:1px dashed #E8DDD3;}
+.dq-dsec:first-child{margin-top:2px;padding-top:0;border-top:0;}
+.dq-dh{display:flex;align-items:center;gap:8px;margin:6px 0 7px;}
+.dq-dh-en{flex-shrink:0;font-size:10.5px;font-weight:900;letter-spacing:1.5px;}
+.dq-dh-zh{flex-shrink:0;font-size:13px;font-weight:700;color:#4A1B0C;}
+.dq-dh-bar{flex:1;height:7px;border-radius:4px;background:#EFE6DB;overflow:hidden;}
+.dq-dh-bar i{display:block;height:100%;border-radius:4px;}
+.dq-dh-v{flex-shrink:0;width:26px;text-align:right;font-size:12.5px;font-weight:700;font-variant-numeric:tabular-nums;}
+.dq-row3{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;}
+.dq-m{position:relative;background:#F7F1EC;border:1px solid #EFE6DB;border-radius:12px;padding:9px 10px 8px;min-width:0;}
+.dq-m-n{font-size:12.5px;font-weight:700;color:#4A1B0C;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.dq-m-n i{font-style:normal;font-size:10px;font-weight:800;margin-right:3px;}
+.dq-mbar{height:5px;border-radius:3px;background:#E8DDD3;margin:7px 0 6px;overflow:hidden;}
+.dq-mbar i{display:block;height:100%;border-radius:3px;}
+.dq-m-v{font-size:11px;font-weight:700;color:#8A7266;font-variant-numeric:tabular-nums;}
+.dq-m.peek .dq-mbar,.dq-m.peek .dq-m-v{filter:blur(3px);user-select:none;}
+.dq-bshint{margin-top:12px;font-size:12px;color:#8A7266;text-align:center;line-height:1.8;}
 .dq-map{position:relative;padding-left:26px;}
 .dq-map:before{content:"";position:absolute;left:8px;top:10px;bottom:10px;width:3px;border-radius:3px;background:linear-gradient(180deg,#C6603A,#6E8B77,#6E8CA8,#C99A4E);}
 .dq-stn{position:relative;padding:9px 0 9px 6px;}
@@ -333,22 +342,13 @@ html,body{background:#F7F1EC;font-family:"Noto Sans TC","PingFang TC",-apple-sys
          分數只留下面的體格單四條；小肌群逐格點亮留給健身房。 -->
   </div>
 
-  <!-- 體格單（2026-09-05 起接真分數）：四條進度條＋12 格模糊偷看鉤子——進健身房才全開 -->
+  <!-- 體格單＝統一能力值儀表板 標準態（2026-09-06 落地②）：
+       大肌肉列標真成數＋12 格名字露、分數模糊——進健身房才全開。JS 在 renderResult 渲染。 -->
   <div class="dq-blk"><span class="dq-tag">q-3</span>
     <div class="dq-cd">
       <div class="dq-sec">你的影響力體格單</div>
-      <div class="dq-dim"><div class="dq-dim-hd" style="color:#AF5433;">吸引肌肉<small>讓他想靠近</small><span class="dq-dim-v" id="bs-v-A">—</span></div><div class="dq-dim-bar"><div class="dq-dim-bf" id="bs-b-A" style="width:0%;background:#C6603A;transition:width .6s;"></div></div></div>
-      <div class="dq-dim"><div class="dq-dim-hd" style="color:#5C7464;">信任肌肉<small>讓他願意說</small><span class="dq-dim-v" id="bs-v-T">—</span></div><div class="dq-dim-bar"><div class="dq-dim-bf" id="bs-b-T" style="width:0%;background:#6E8B77;transition:width .6s;"></div></div></div>
-      <div class="dq-dim"><div class="dq-dim-hd" style="color:#54718D;">專業肌肉<small>讓他要找你</small><span class="dq-dim-v" id="bs-v-P">—</span></div><div class="dq-dim-bar"><div class="dq-dim-bf" id="bs-b-P" style="width:0%;background:#6E8CA8;transition:width .6s;"></div></div></div>
-      <div class="dq-dim"><div class="dq-dim-hd" style="color:#8E682B;">推進肌肉<small>讓他願意動</small><span class="dq-dim-v" id="bs-v-I">—</span></div><div class="dq-dim-bar"><div class="dq-dim-bf" id="bs-b-I" style="width:0%;background:#C99A4E;transition:width .6s;"></div></div></div>
-      <div class="dq-peek">
-        <div class="dq-peek-g">
-          <div class="dq-peek-c">讓他想聽</div><div class="dq-peek-c">讓他心動</div><div class="dq-peek-c">讓他放心</div>
-          <div class="dq-peek-c">讓他敢說</div><div class="dq-peek-c">讓他信你</div><div class="dq-peek-c">讓他懂你</div>
-          <div class="dq-peek-c">讓他服你</div><div class="dq-peek-c">讓他要你</div><div class="dq-peek-c">讓他行動</div>
-        </div>
-        <div class="dq-peek-ov">每塊大肌肉還能拆成 3 塊小肌群<br>——進健身房才全開</div>
-      </div>
+      <div id="bs-map"></div>
+      <div class="dq-bshint">每塊大肌肉拆成 3 塊小肌群——12 塊都量好了，進健身房才全開。</div>
     </div>
   </div>
 
@@ -571,12 +571,23 @@ function renderResult(){
     ctxBox.style.display="none";
   }
 
-  /* 第二區：體格單四條接真分數（2026-09-05【果-2】12 格詳細卡下架，這四條就是分數區）。
-     數字＝0–100（跟雷達、座標判讀同一把尺）；填色走 color 原版、數字色在 HTML 走 textColor 深版。 */
-  DORD.forEach(function(k){
-    document.getElementById("bs-v-"+k).textContent=scores[k];
-    document.getElementById("bs-b-"+k).style.width=Math.min(scores[k],100)+"%";
-  });
+  /* 第二區：統一能力值儀表板 標準態（2026-09-06 落地②，規格＝consult-workshop demo-muscle-card-v4）。
+     大肌肉列標＝0–100 真成數（跟雷達同一把尺）；12 格名字露、分數（1–5）模糊＝偷看鉤子。
+     填色走 color 原版、文字走 textColor 深版。 */
+  var BS_EN={A:"ATTRACT",T:"TRUST",P:"PROFESSIONAL",I:"IMPACT"};
+  document.getElementById("bs-map").innerHTML=DORD.map(function(k){
+    var head='<div class="dq-dh"><span class="dq-dh-en" style="color:'+DIMS[k].textColor+';">'+BS_EN[k]+'</span>'
+      +'<span class="dq-dh-zh">'+DIMS[k].name+'</span>'
+      +'<span class="dq-dh-bar"><i style="width:'+Math.min(scores[k],100)+'%;background:'+DIMS[k].color+';"></i></span>'
+      +'<span class="dq-dh-v" style="color:'+DIMS[k].textColor+';">'+scores[k]+'</span></div>';
+    var tiles=musclesOfDim(k).map(function(mkey){
+      var v=muscleScores[mkey]||0;
+      return '<div class="dq-m peek"><div class="dq-m-n"><i style="color:'+DIMS[k].textColor+';">'+mkey+'</i>'+MUSCLES[mkey].name+'</div>'
+        +'<div class="dq-mbar"><i style="width:'+Math.max(0,Math.round((v-1)/4*100))+'%;background:'+DIMS[k].color+';"></i></div>'
+        +'<div class="dq-m-v">'+v.toFixed(1)+'</div></div>';
+    }).join('');
+    return '<div class="dq-dsec">'+head+'<div class="dq-row3">'+tiles+'</div></div>';
+  }).join('');
 
   /* 第三區（強項組合路徑）2026-09-05【果-4】下架——文案留在 atpi-core.js COMBO_PATH，之後進 Email 報告。 */
 
