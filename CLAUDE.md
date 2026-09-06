@@ -101,7 +101,9 @@ ATPI 程式真相在 `../../4-溝通健身房/consult-workshop/atpi-core.js`，�
 - `DIMS` — 4 大肌肉定義（name / desc / **color 原版 / textColor 深版**）
 - `CTX_OPTS` — 情境座標：不進計分，只判讀「這組分數是對誰的分數」，`key` ＝這種對象最先卡住的那塊肌肉。
   🔄 2026-09-05 老師拍板收成**單軸「他有沒有在找解法」3 選項**（原距離×位階×需求多維交叉太難分析）；
-  試算表的 targetDistance／targetRank 欄保留但一律送空字串
+  試算表的 targetDistance／targetRank 欄保留但一律送空字串。
+  🔄 2026-09-06 題幹錨點改「**你想讓對方接受一個想法、或採取一個行動**的談話」（影響企圖錨點）——
+  原「有印象或滿意的談話」會選到閒聊場景（P/I 題根本沒發揮機會，測的變成場景不是肌肉）＋美化偏誤
 - `CTA_DESC` — 結果頁出口文案（依最弱那塊大肌肉；2026-09-01 起導向進館，不再導 Calendly）
 - ~~`STRONG_DESC`／`INC_TITLES / INC_BEAT / INC_NEXT`~~ — 2026-09-05 已刪（從未被讀過＋文案停在作廢詞「溝通變現」）
 - `LIFF_ID` — LINE LIFF ID
