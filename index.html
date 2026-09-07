@@ -764,26 +764,44 @@ async function initLiff(){
   }catch(e){localStorage.removeItem("cct_result_v3");}}
 }
 /* 分享卡 2026-09-07 老師拍板復活（9/01 下架理由是搶主 CTA，現在已退居結果頁最底）。
-   內容重寫對齊正典：影響力健檢／已解鎖（不用「尚未解鎖」赤字寫法）／暖版色票。
+   同日二改：視覺對齊測驗本體（深棕頭#4A1B0C＋暖米身#FDF6EF＋強項肌肉色左槓＝
+   說明頁卡片的 border-left 語彙）＋兩個內容任務——
+   ①稱讚轉發人（SHARE_PRAISE 依強項客製＋骨層句「想跟你一起變好」）：卡片是替他說話，
+     他分享出去要有面子，這才是轉發的動力；②鉤子「他的是XX，你的呢？」讓收到的人想測。
    在 LINE 外開：退回 navigator.share，再不行就複製連結——分享失敗不彈錯誤嚇人。 */
+var SHARE_PRAISE={
+  A:"他是那種一開口，大家就想聽下去的人。",
+  T:"他是那種大家願意把真心話留給他的人。",
+  P:"他是那種大家會說「這要問他」的人。",
+  I:"他是那種聽完他說話，你會真的想動起來的人。"};
 async function shareQuiz(){
   track("cta_click",{cta_id:"share_quiz"});
   var sk=DORD.slice().sort(function(a,b){return scores[b]-scores[a];})[0];
-  var altT="我的影響力強項是「"+DIMS[sk].name+"」——3 分鐘測你的影響力體格";
+  var altT="我的影響力強項是「"+DIMS[sk].name+"・"+DIMS[sk].desc.split("・")[1]+"」——你的是哪塊？3 分鐘測";
   try{
     if(typeof liff!=="undefined"&&liff.isApiAvailable&&liff.isApiAvailable("shareTargetPicker")){
       await liff.shareTargetPicker([{type:"flex",altText:altT,contents:{type:"bubble",
-        header:{type:"box",layout:"vertical",paddingAll:"lg",backgroundColor:"#4A1B0C",contents:[
-          {type:"text",text:"影響力健檢",color:"#F0E3DB",size:"sm",weight:"bold"},
-          {type:"text",text:"我的影響力強項",color:"#E8C89A",size:"xs",margin:"md"},
-          {type:"text",text:DIMS[sk].name+"・"+DIMS[sk].desc.split("・")[1],color:"#ffffff",size:"xl",weight:"bold",margin:"sm"},
-          {type:"text",text:"已解鎖影響力 "+scores.potential+" / 1000",color:"#F0E3DB",size:"sm",margin:"sm"}]},
-        body:{type:"box",layout:"vertical",spacing:"sm",paddingAll:"lg",contents:[
-          {type:"text",text:"影響力不是天賦，是 4 塊練得起來的肌肉——吸引、信任、專業、推進。",size:"sm",color:"#5A3A2A",wrap:true,lineSpacing:"6px"},
-          {type:"separator",margin:"lg"},
-          {type:"text",text:"你的強項是哪塊？3 分鐘測測看。",size:"sm",color:"#6E4A3C",wrap:true,margin:"lg"}]},
-        footer:{type:"box",layout:"vertical",paddingAll:"lg",contents:[
-          {type:"button",style:"primary",color:"#C6603A",action:{type:"uri",label:"測我的影響力體格 →",uri:QUIZ_URL}}]}}}]);
+        styles:{body:{backgroundColor:"#FDF6EF"},footer:{backgroundColor:"#FDF6EF"}},
+        header:{type:"box",layout:"vertical",paddingAll:"20px",backgroundColor:"#4A1B0C",contents:[
+          {type:"text",text:"ATPIFIT · 影響力健檢",color:"#C9A87A",size:"xxs",weight:"bold"},
+          {type:"text",text:"我的影響力強項",color:"#F0E3DB",size:"sm",margin:"lg"},
+          {type:"text",text:DIMS[sk].name,color:"#ffffff",size:"xxl",weight:"bold",margin:"xs"},
+          {type:"text",text:DIMS[sk].desc.split("・")[1],color:"#E8C89A",size:"md",margin:"xs"},
+          {type:"box",layout:"vertical",height:"6px",backgroundColor:"#FFFFFF33",cornerRadius:"3px",margin:"lg",contents:[
+            {type:"box",layout:"vertical",width:Math.max(4,Math.min(100,Math.round(scores.potential/10)))+"%",height:"6px",backgroundColor:"#E8C89A",cornerRadius:"3px",contents:[{type:"filler"}]}]},
+          {type:"text",text:"已解鎖影響力 "+scores.potential+" / 1000",color:"#F0E3DB",size:"xs",margin:"sm"}]},
+        body:{type:"box",layout:"vertical",paddingAll:"20px",contents:[
+          {type:"box",layout:"horizontal",spacing:"md",contents:[
+            {type:"box",layout:"vertical",width:"4px",backgroundColor:DIMS[sk].color,cornerRadius:"2px",contents:[{type:"filler"}]},
+            {type:"box",layout:"vertical",flex:1,contents:[
+              {type:"text",text:SHARE_PRAISE[sk],size:"sm",color:"#5A3A2A",wrap:true,lineSpacing:"5px"},
+              {type:"text",text:"這樣的人把測驗傳給你——是想跟你一起變好。",size:"sm",color:"#5A3A2A",wrap:true,lineSpacing:"5px",margin:"sm"}]}]},
+          {type:"separator",margin:"lg",color:"#E8DDD3"},
+          {type:"text",text:"影響力不是天賦，是 4 塊練得起來的肌肉——每個人都有最強的一塊。",size:"sm",color:"#6E4A3C",wrap:true,margin:"lg",lineSpacing:"5px"},
+          {type:"text",text:"他的是「"+DIMS[sk].name+"」，你的呢？",size:"md",weight:"bold",color:"#4A1B0C",wrap:true,margin:"md"}]},
+        footer:{type:"box",layout:"vertical",paddingAll:"20px",paddingTop:"none",contents:[
+          {type:"button",style:"primary",color:"#C6603A",action:{type:"uri",label:"3 分鐘，測我的強項 →",uri:QUIZ_URL}},
+          {type:"text",text:"免費 · 3 分鐘 · 不用留資料",size:"xxs",color:"#8A7266",align:"center",margin:"md"}]}}}]);
       return;
     }
   }catch(e){console.log("shareTargetPicker skip:",e);}
