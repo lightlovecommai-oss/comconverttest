@@ -297,6 +297,9 @@ html,body{background:#F7F1EC;font-family:"Noto Sans TC","PingFang TC",-apple-sys
   <div class="progbar"><div class="progfill" id="prog-fill" style="width:0%"></div></div>
   <div class="qlabel" id="q-label"></div>
   <div class="qtxt" id="q-text"></div>
+  <!-- 肌肉題常駐提示（renderQ 依 q.muscle 顯示）：一行解三件事——
+       題幹是敘述句所以要補「問題」本身；行為回憶提示＝自評膨脹的煞車；「沒機會做」也歸到選 1。 -->
+  <div id="q-hint" style="display:none;font-size:13.5px;color:#8A7266;line-height:1.7;margin:-6px 0 14px;">這樣的事，在你身上多常發生？——想不出實例，就誠實選「沒做到」。</div>
   <div id="opts-wrap"></div>
   <button class="btnN" id="btn-next">下一題 →</button>
 </div></div></div>
@@ -439,20 +442,22 @@ var QS=[
      新任務＝分群＋結果頁個人化，三選項對齊首頁三張身分卡（教學三大應用場景）。 */
   {text:"你最想在哪種場合，說話更有影響力？",dim:"CTX",label:"先選場景",opts:["職場與家人——說話有份量、有人聽","一對一銷售談合作——他主動問「怎麼跟你合作」","一對多演講帶團隊——一開口全場想聽"]},
 
+  /* ⭐ 2026-09-07 出題順序交錯（A→T→P→I 輪三圈），不再按肌肉分區連出：
+     同一維連三題會被自己的第一個答案錨定（三題變一題）＋分區排列把測驗意圖全露出來。
+     只是呈現順序——muscleScores 按 muscle 鍵存、rawAnswers 按 MORD 重排，資料層不受影響。 */
   {text:"在還不熟的場合，你主動開口聊，對方會接著聊下去——不是客套一兩句就結束。",dim:"A",muscle:"A1",label:"吸引肌肉｜讓他開口",opts:ANCHORS},
-  {text:"你講完自己在做什麼之後，他當場「哇」了一聲，主動追問「然後呢？」「你怎麼做到的？」——不是只點頭說「喔喔」。",dim:"A",muscle:"A2",label:"吸引肌肉｜讓他追問",opts:ANCHORS},
-  {text:"隔一個禮拜再遇到，他還記得你說過的故事，甚至能用一句話跟別人介紹你。",dim:"A",muscle:"A3",label:"吸引肌肉｜讓他記得",opts:ANCHORS},
-
   {text:"你會先講自己還沒做到、還在煩惱的事，講完之後，他也開始講他的。",dim:"T",muscle:"T1",label:"信任肌肉｜讓他敢說",opts:ANCHORS},
-  {text:"你一層一層問下去，最後他講出了你根本沒問到的事，是他自己想多說的。",dim:"T",muscle:"T2",label:"信任肌肉｜讓他交心",opts:ANCHORS},
-  {text:"你答應他的事，後來真的做到了，做到之後還會回頭跟他說結果——不是只說「有啦我有記得」。",dim:"T",muscle:"T3",label:"信任肌肉｜讓他當真",opts:ANCHORS},
-
   {text:"他跟你聊煩惱時，你會問「現在情況怎樣？」「想變成怎樣？」，然後點出中間真正卡住的地方——他聽完說「對⋯⋯就是這個」。",dim:"P",muscle:"P1",label:"專業肌肉｜讓他釐清",opts:ANCHORS},
-  {text:"與其解釋半天，你會直接做一次給他看、或讓他自己試一次，他馬上懂，還說得出「這真的有用」。",dim:"P",muscle:"P2",label:"專業肌肉｜讓他有感",opts:ANCHORS},
-  {text:"你舉了一個真實例子——誰做過、後來結果如何——他聽完主動追問：「那個人後來怎麼樣？」",dim:"P",muscle:"P3",label:"專業肌肉｜讓他放心",opts:ANCHORS},
-
   {text:"聊到最後，他自己說出「所以之後我就可以⋯⋯」——他嘴裡講的是他想要的樣子，不是你提供的東西。",dim:"I",muscle:"I1",label:"推進肌肉｜讓他想要",opts:ANCHORS},
+
+  {text:"你講完自己在做什麼之後，他當場「哇」了一聲，主動追問「然後呢？」「你怎麼做到的？」——不是只點頭說「喔喔」。",dim:"A",muscle:"A2",label:"吸引肌肉｜讓他追問",opts:ANCHORS},
+  {text:"你一層一層問下去，最後他講出了你根本沒問到的事，是他自己想多說的。",dim:"T",muscle:"T2",label:"信任肌肉｜讓他交心",opts:ANCHORS},
+  {text:"與其解釋半天，你會直接做一次給他看、或讓他自己試一次，他馬上懂，還說得出「這真的有用」。",dim:"P",muscle:"P2",label:"專業肌肉｜讓他有感",opts:ANCHORS},
   {text:"你會主動問他還有什麼顧慮，把他心裡的擔心先問出來、一個一個回——不是等他自己開口你才知道。",dim:"I",muscle:"I2",label:"推進肌肉｜讓他敢要",opts:ANCHORS},
+
+  {text:"隔一個禮拜再遇到，他還記得你說過的故事，甚至能用一句話跟別人介紹你。",dim:"A",muscle:"A3",label:"吸引肌肉｜讓他記得",opts:ANCHORS},
+  {text:"你答應他的事，後來真的做到了，做到之後還會回頭跟他說結果——不是只說「有啦我有記得」。",dim:"T",muscle:"T3",label:"信任肌肉｜讓他當真",opts:ANCHORS},
+  {text:"你舉了一個真實例子——誰做過、後來結果如何——他聽完主動追問：「那個人後來怎麼樣？」",dim:"P",muscle:"P3",label:"專業肌肉｜讓他放心",opts:ANCHORS},
   {text:"聊完之後你拿到的是「他同意的具體下一步」——約好下次時間、他要準備什麼、或他答應去跟誰說——不是只有一句「再聯絡」。",dim:"I",muscle:"I3",label:"推進肌肉｜讓他答應",opts:ANCHORS},
 
   {text:"你想要收入變多的項目，最多的客戶從哪裡來？",dim:"SRC",label:"客戶來源",opts:["朋友／舊客戶／商會介紹","認識的新朋友或陌生人","社群或網路找上門","受僱領薪，沒有自己的客戶"]},
@@ -524,6 +529,7 @@ function renderQ(){
   document.getElementById("prog-fill").style.width=pct+"%";
   document.getElementById("q-label").textContent=q.label;
   document.getElementById("q-text").textContent=q.text;
+  document.getElementById("q-hint").style.display=q.muscle?"block":"none";
   var wrap=document.getElementById("opts-wrap");
   wrap.innerHTML="";
   q.opts.forEach(function(o,i){
