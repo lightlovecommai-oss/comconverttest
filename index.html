@@ -397,7 +397,17 @@ html,body{background:#F7F1EC;font-family:"Noto Sans TC","PingFang TC",-apple-sys
      真相本體在 4-溝通健身房/consult-workshop/atpi-core.js，本檔是同步副本：
      要改定義改那邊，再跑 ./sync-atpi-core.sh --write 拉過來，不要直接編輯本檔的副本。 -->
 <script src="atpi-core.js"></script>
+<!-- 數位足跡共用件。同樣是同步副本，改邏輯改 consult-workshop/track.js。 -->
+<script src="track.js"></script>
 <script>
+/* track.js 沒載到時的空殼（部署空窗、CDN 被擋）。
+   低摩擦守則：追蹤壞掉絕不可以讓測驗跟著壞掉。 */
+if(typeof window.track!=="function"){
+  window.track=function(){};
+  window.setTrackUser=function(){};
+  window.trackPayload=function(){return {};};
+}
+
 var LIFF_ID="2010316474-UovQ1zhe";
 /* 名單直接寫進課程系統試算表「(引流.A)能力測驗」分頁（consult-workshop 的 Apps Script），
    讓課程 dashboard 的自評能即時讀到。送出時帶 action:"quiz"（見該 Code.gs doPost）。 */
@@ -550,7 +560,8 @@ var CTA_DESC={
   I:"前面都做對了，對方最後還是「我再想想」——差的只是臨門一腳。先練推進，把下一步約出來。"
 };
 function renderResult(){
-  var wk=getCombo(scores).wk;             // atpi-core.js：最弱維判定與健身房同一套（sorted/combo 隨【果-4】下架不再用）
+  var wk=getCombo(scores).wk;   // atpi-core.js：最弱維判定與健身房同一套（sorted/combo 隨【果-4】下架不再用）
+  track("result_view",{weakest_dim:wk,potential:scores.potential});
 
   // 第一區：已解鎖影響力（2026-09-05【果-1】：直接顯示 unlocked，不再顯示 1000−x 的「尚未解鎖」）
   document.getElementById("r-potential").textContent=scores.potential;
@@ -673,7 +684,7 @@ async function saveToSheet(){
      現在 Q1..Q12 ＝ 12 小肌群 A1..I3 的 1–5 原始分（照 MORD 順序，剛好 12 格），
      GOAL/SRC/INC/CTX 各自走自己的欄位，不再混進 Q 欄。 */
   var rawAnswers=MORD.map(function(m){return muscleScores[m]===undefined?"":muscleScores[m];}).join(",");
-  var payload={action:"quiz",userId:userId,displayName:displayName,pictureUrl:pictureUrl,name:formData.name,email:formData.email,job:formData.job,scoreA:scores.A,scoreT:scores.T,scoreP:scores.P,scoreI:scores.I,incomeLevel:INC_LABELS[incIdx]||"",goalIncome:GOAL_LABELS[goalIdx]||"",customerSource:optLabel("SRC",srcIdx),mainAbility:DIMS[sk].name,subAbility:DIMS[uk].name,rawAnswers:rawAnswers,targetContext:ctxLabel,targetDistance:"",targetRank:"",targetNeed:ctxObj?ctxObj.need:"",targetKeyMuscle:ctxObj?DIMS[ctxObj.key].name:"",timestamp:new Date().toISOString()};
+  var payload={action:"quiz",userId:userId,displayName:displayName,pictureUrl:pictureUrl,name:formData.name,email:formData.email,job:formData.job,scoreA:scores.A,scoreT:scores.T,scoreP:scores.P,scoreI:scores.I,incomeLevel:INC_LABELS[incIdx]||"",goalIncome:GOAL_LABELS[goalIdx]||"",customerSource:optLabel("SRC",srcIdx),mainAbility:DIMS[sk].name,subAbility:DIMS[uk].name,rawAnswers:rawAnswers,targetContext:ctxLabel,targetDistance:"",targetRank:"",targetNeed:ctxObj?ctxObj.need:"",targetKeyMuscle:ctxObj?DIMS[ctxObj.key].name:"",timestamp:new Date().toISOString(),track:trackPayload()};
   /* 用 text/plain 送出（簡單請求、不觸發 CORS 預檢），Apps Script 回應帶 access-control-allow-origin:*，
      所以可以移除 no-cors、真正讀到回應並確認寫入結果。失敗自動重試一次。 */
   var msgEl=document.getElementById("saving-msg");
@@ -708,6 +719,8 @@ async function initLiff(){
     if(liff.isLoggedIn()){
       var p=await liff.getProfile();
       userId=p.userId;displayName=p.displayName;pictureUrl=p.pictureUrl||"";
+      /* 一拿到身分就綁上，健身房那站才接得起同一個人的旅程 */
+      setTrackUser(userId);
     }
   }catch(e){console.log("LIFF skip:",e);}
   /* 快取 v3（含 12 小肌群）。舊的 v2 快取只有 4 維、沒有 muscleScores，
@@ -731,20 +744,25 @@ async function initLiff(){
    連帶移除：STRENGTH_INTRO（只有這張卡在用）。 */
 
 document.getElementById("btn-start").addEventListener("click",function(){
+  track("quiz_explain_view",{});
   show("s-explain");
 });
 document.getElementById("btn-explain-go").addEventListener("click",function(){
   cur=0;ans=[];muscleScores={};scores={A:0,T:0,P:0,I:0,potential:0};incIdx=0;goalIdx=0;srcIdx=0;ctxIdx=null;
+  track("quiz_start",{});
   show("s-quiz");renderQ();
 });
 document.getElementById("btn-next").addEventListener("click",function(){
   if(ans[cur]===undefined) return;
+  /* 逐題送，才看得出人是在第幾題離開的——這是題數要不要砍的唯一依據 */
+  track("quiz_question_answered",{question_index:cur+1,question_total:QS.length,muscle:QS[cur].muscle||QS[cur].dim||""});
   cur++;
   if(cur<QS.length){renderQ();}
-  else{calcScores();show("s-form");}
+  else{calcScores();track("quiz_complete",{});show("s-form");}
 });
 document.getElementById("btn-skip").addEventListener("click",function(){
   formData={name:"",email:"",job:""};
+  track("lead_skip",{});
   renderResult();
   /* 不留資料也要送：測完全部進館，進館的前提是開通名單有這個 userId、體測分頁有基線。
      只送分數與 LINE 身份，姓名/Email/職業留空——那是他選擇不給的，不偷塞。 */
@@ -758,6 +776,8 @@ document.getElementById("btn-rep").addEventListener("click",function(){
   if(!e||!e.includes("@")){alert("請填寫正確的 Email");return;}
   if(!j){alert("請選擇職業");return;}
   formData={name:n,email:e,job:j};
+  /* 只送「有沒有留」，姓名／Email／職業本身不進追蹤事件（規範 §6） */
+  track("lead_submit",{});
   renderResult();
   saveToSheet();
 });
@@ -765,9 +785,20 @@ document.getElementById("btn-rep").addEventListener("click",function(){
    唯一出口＝進健身房。userId 帶得過去健身房就能直接認人；在 LINE 外測驗拿不到 userId 時
    不要送 ?id=（會變成 ?id= 空值），讓健身房自己走 LIFF 登入那條。 */
 document.getElementById("btn-workshop").addEventListener("click",function(){
+  track("gym_enter_click",{has_line_id:!!userId});
   var base="https://app.atpifit.com/";
   location.href=userId?(base+"?id="+encodeURIComponent(userId)):base;
 });
+
+/* 中途離開：答到第幾題就走，是題目太多還是某一題卡住的唯一線索。
+   pagehide 比 beforeunload 可靠（手機切走 App 也會觸發）。 */
+window.addEventListener("pagehide",function(){
+  if(document.getElementById("s-quiz").classList.contains("active")){
+    track("quiz_abandon",{question_index:cur+1,question_total:QS.length});
+  }
+});
+
+track("quiz_view",{});
 
 /* 開場等待頁：LIFF 好了就收；3.5 秒保險絲——等待頁卡住比沒有等待頁糟 */
 function hideBoot(){var b=document.getElementById("boot");if(b)b.classList.add("hide");}
