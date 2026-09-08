@@ -293,8 +293,14 @@ function render(){
   scores.potential=calcPotential(scores).unlocked;
 
   var c=getCombo(scores), wk=c.wk, sk=c.sk;
-  var sc=parseInt(qs("sc"),10);
-  var scene=(sc>=0&&sc<SCENES.length)?SCENES[sc]:null;
+  /* sc= 收兩種寫法：索引（0–2，前端好給）或場景名（後端好給——Code.gs 手上只有
+     試算表的 targetNeed 字串，不必再維護一份順序對照表，順序改了也不會錯位）。 */
+  var sc=qs("sc"), scene=null;
+  if(sc){
+    var si=parseInt(sc,10);
+    scene=(!isNaN(si)&&SCENES[si])?SCENES[si]
+         :(SCENES.filter(function(s){return s.need===sc;})[0]||null);
+  }
   var name=qs("n").slice(0,20);
 
   document.getElementById("report").style.display="block";
