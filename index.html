@@ -3,17 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>溝通影響力健檢</title>
+<title>影響力健檢｜3 分鐘測出你的 4 大影響力肌肉</title>
+<meta name="description" content="影響力不是天賦，是肌肉。16 題免費健檢，測出你的吸引、信任、專業、推進四大影響力肌肉現在長什麼樣，以及先練哪塊最有感。影響力健身房 ATPIFit 出品。">
+<link rel="canonical" href="https://quiz.atpifit.com/">
 <meta name="theme-color" content="#E6DACF">
 <link rel="apple-touch-icon" href="icon3-180.png">
 <link rel="icon" type="image/png" href="icon3-192.png">
 <meta property="og:type" content="website">
-<meta property="og:title" content="溝通影響力健檢">
+<meta property="og:site_name" content="影響力健身房 ATPIFit">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:title" content="影響力健檢｜3 分鐘測出你的 4 大影響力肌肉">
 <meta property="og:description" content="影響力是肌肉，練了就有。16 題測出你的 4 大肌肉、12 小肌群現在長什麼樣。">
 <meta property="og:image" content="https://quiz.atpifit.com/og-image4.png">
 <meta property="og:url" content="https://quiz.atpifit.com/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://quiz.atpifit.com/og-image4.png">
+<!-- 跟主站共用同一個 Organization @id，Google 才知道這個子網域跟 atpifit.com 是同一個品牌。
+     真相＝0-官網/atpifit-web/src/layouts/BaseLayout.astro，改那邊要同步改這裡。 -->
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[
+{"@type":"Organization","@id":"https://atpifit.com/#organization","name":"影響力健身房","alternateName":["ATPIFit","影響力健身房 ATPIFit"],"url":"https://atpifit.com"},
+{"@type":"WebPage","@id":"https://quiz.atpifit.com/#webpage","url":"https://quiz.atpifit.com/","name":"影響力健檢","inLanguage":"zh-Hant-TW","isPartOf":{"@id":"https://atpifit.com/#website"},"publisher":{"@id":"https://atpifit.com/#organization"}}
+]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700;900&display=swap">
@@ -38,6 +48,8 @@ html,body{background:#F7F1EC;font-family:"Noto Sans TC","PingFang TC",-apple-sys
 .boot-t{font-size:19px;font-weight:700;color:#F7F1EC;margin-top:12px;line-height:1.6;}
 .boot-s{font-size:13px;color:rgba(247,241,236,.6);margin-top:8px;}
 .boot-dots{display:flex;justify-content:center;gap:12px;margin-top:26px;}
+.site-back{text-align:center;margin:26px 0 8px;}
+.site-back a{font-size:13px;color:#8A6A55;text-decoration:none;border-bottom:1px solid rgba(138,106,85,.3);padding-bottom:1px;}
 .boot-dots span{width:11px;height:11px;border-radius:50%;animation:bpulse 1.2s ease-in-out infinite;}
 @keyframes bpulse{0%,100%{transform:scale(.7);opacity:.45;}50%{transform:scale(1.15);opacity:1;}}
 @keyframes ldBreath{0%,100%{transform:scale(1);opacity:.82;}50%{transform:scale(1.06);opacity:1;}}
@@ -252,6 +264,11 @@ html,body{background:#F7F1EC;font-family:"Noto Sans TC","PingFang TC",-apple-sys
   </div>
 
   <button class="btnO" id="btn-start">開始測驗 →</button>
+
+  <!-- 唯一一條連回主站的連結。子網域沒有這條，Google 無從把它跟 atpifit.com 綁在一起。 -->
+  <div class="site-back">
+    <a href="https://atpifit.com/">影響力健身房 ATPIFit 官網</a>
+  </div>
 </div></div>
 
 <div id="s-explain" class="screen"><div class="wrap">
