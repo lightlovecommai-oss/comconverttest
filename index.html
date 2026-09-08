@@ -384,6 +384,14 @@ html,body{background:#F7F1EC;font-family:"Noto Sans TC","PingFang TC",-apple-sys
     <button class="btnO" id="btn-workshop" style="margin-bottom:0;">進影響力健身房 →</button>
   </div>
 
+  <!-- LINE 外開測驗（拿不到 userId）的救援入口（2026-09-08）：自願綁 LINE，不強制登入。
+       按下去走 liff.login() → 跳回來後 initLiff 的快取補送（cct_result_v3）會自動把整份結果寫進試算表。
+       有 userId 時整塊隱藏。次要鈕＝白底描邊，不跟上面的錢鈕搶。 -->
+  <div id="linesave-wrap" style="display:none;">
+    <button class="btnO" id="btn-linesave" style="background:#fff;color:#AF5433;border:1.5px solid #E8C89A;box-shadow:none;text-shadow:none;">用 LINE 保存我的結果</button>
+    <div style="font-size:12.5px;color:#8A7266;text-align:center;margin-bottom:8px;">保存後，進健身房不用重測，直接接上你的體格單。</div>
+  </div>
+
   <!-- q-6 分享卡（2026-09-07 老師拍板復活）：接回 LIFF shareTargetPicker 的 Flex 卡。
        9/01 下架的原因是它當時「跟進館搶主 CTA」——現在位置在結果頁最底、進館鈕之後，
        已經是次要出口；朋友收到連結從測驗開始本來就是對的（那是引流，不是迴圈）。
@@ -508,6 +516,7 @@ var GOAL_LABELS=["0-20萬","40-100萬","100-300萬","300萬以上"];
    scores 由它平均出來，送去健身房的體格基線也是它。 */
 var cur=0,ans=[],muscleScores={},scores={A:0,T:0,P:0,I:0,potential:0},incIdx=0,goalIdx=0,srcIdx=0,ctxIdx=null;
 var userId="",displayName="",pictureUrl="";
+var liffReady=false;   // liff.init 成功才能給「用 LINE 保存結果」鈕（LINE 外拿不到 userId 時的救援入口）
 var formData={name:"",email:"",job:""};
 
 function show(id){
@@ -657,6 +666,7 @@ function renderResult(){
   });
   document.getElementById("r-cta-desc").textContent=CTA_DESC[wk];
 
+  document.getElementById("linesave-wrap").style.display=(!userId&&liffReady)?"block":"none";
   show("s-result");
   setTimeout(drawRadar,100);
   /* 快取升到 v3：多存 muscleScores（12 格），舊的 v2 快取沒有這欄、格式也對不上，直接不讀。 */
@@ -741,6 +751,7 @@ async function initLiff(){
     s.src="https://static.line-scdn.net/liff/edge/2/sdk.js";
     await new Promise(function(resolve,reject){s.onload=resolve;s.onerror=reject;document.head.appendChild(s);});
     await liff.init({liffId:LIFF_ID});
+    liffReady=true;
     if(liff.isLoggedIn()){
       var p=await liff.getProfile();
       userId=p.userId;displayName=p.displayName;pictureUrl=p.pictureUrl||"";
@@ -857,11 +868,21 @@ document.getElementById("btn-share").addEventListener("click",function(ev){
 /* btn-consult（Calendly）已隨「分流取消」下架。主出口＝進健身房。
    userId 帶得過去健身房就能直接認人；在 LINE 外測驗拿不到 userId 時
    不要送 ?id=（會變成 ?id= 空值），讓健身房自己走 LIFF 登入那條。 */
+document.getElementById("btn-linesave").addEventListener("click",function(){
+  track("cta_click",{cta_id:"line_save_result"});
+  /* 跳 LINE 登入；回來後 initLiff 拿到 userId＋讀 cct_result_v3 → 自動補送整份結果 */
+  try{ liff.login(); }catch(e){ alert("LINE 登入開不起來，請改用 LINE 開啟測驗連結。"); }
+});
 document.getElementById("btn-workshop").addEventListener("click",function(){
   track("gym_enter_click",{has_line_id:!!userId});
-  /* from=quiz：讓健身房知道這個人是剛測完進來的，visitor 會用它接一句「剛測完？」 */
+  /* from=quiz：讓健身房知道這個人是剛測完進來的，visitor 會用它接一句「剛測完？」
+     沒有 userId（LINE 外測驗）時把 12 格分數夾在 ms= 帶過去——健身房入口在 LIFF 拿到身份的那一刻
+     會回頭補寫測驗列＋體格基線，這個人就不會斷在半路（2026-09-08）。 */
   var base="https://app.atpifit.com/";
-  location.href=userId?(base+"?id="+encodeURIComponent(userId)+"&from=quiz"):(base+"?from=quiz");
+  if(userId){ location.href=base+"?id="+encodeURIComponent(userId)+"&from=quiz"; return; }
+  var msOk=MORD.every(function(m){return muscleScores[m]>=1&&muscleScores[m]<=5;});
+  var ms=msOk?"&ms="+MORD.map(function(m){return muscleScores[m];}).join(","):"";
+  location.href=base+"?from=quiz"+ms;
 });
 
 /* 中途離開：答到第幾題就走，是題目太多還是某一題卡住的唯一線索。
