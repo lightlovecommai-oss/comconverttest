@@ -730,9 +730,6 @@ async function saveToSheet(){
     if(!r.ok) throw new Error("HTTP "+r.status);
     var d=await r.json().catch(function(){return {};});
     if(d.status!=="ok") throw new Error("bad status: "+(d.status||"unknown"));
-    /* 🛠 LaunChill debug（Cloud Logging 壞著時的臨時窗口）：把後端 sendToLaunChill_ 的結果彈出來看。
-       debug 完就把這段刪掉。 */
-    try{ if(d.launchill!==undefined) alert("LaunChill 結果：\n"+JSON.stringify(d.launchill,null,2)); }catch(e){}
     return d;
   }
   try{
