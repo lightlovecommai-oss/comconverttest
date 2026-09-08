@@ -203,9 +203,9 @@ html,body{background:#F7F1EC;font-family:"Noto Sans TC","PingFang TC",-apple-sys
   <div class="dq-blk" style="margin:6px 0 22px;"><span class="dq-tag">q-1</span>
     <!-- pill 已刪（2026-09-05 文案掃）：與正上方席位橫幅（館名＋健檢徽章＋免費60秒）整句重複 -->
     <div class="dq-hero-t">為什麼有些人一開口，<br>別人就<em>想聽</em>？</div>
-    <div class="dq-hero-s">不是天賦，是 <b>4 大影響力肌肉</b>——吸引、信任、專業、推進。測出你哪塊最有感，<b>今天就能用</b>。</div>
+    <div class="dq-hero-s">不是天賦，是 <b>4 大影響力肌肉</b>——吸引、信任、專業、推進。測出你先練哪塊最能提升影響力，<b>今天就能用</b>。</div>
     <!-- 2026-09-07 老師抓包：60 秒是會被體感打臉的承諾（16 題實測 3～4 分鐘）。全站改 3 分鐘。 -->
-    <div class="dq-hero-meta"><span>⏱ <b>3 分鐘</b></span><span>📱 不用留資料</span><span>🎁 測完先拿一句話</span></div>
+    <div class="dq-hero-meta"><span>⏱ <b>3 分鐘</b></span><span>📱 不用留資料</span><span>🎁 測完馬上知道怎麼提升影響力</span></div>
     <div class="dq-rule4"></div>
     <button class="dq-go" onclick="document.getElementById('btn-start').click()">開始測 →</button>
   </div>
@@ -285,7 +285,7 @@ html,body{background:#F7F1EC;font-family:"Noto Sans TC","PingFang TC",-apple-sys
   <div class="card" style="background:#4A1B0C;border:none;">
     <div style="font-size:15px;color:rgba(255,255,255,0.55);margin-bottom:8px;">這個測驗會做什麼</div>
     <div style="font-size:16px;color:#fff;line-height:1.8;">每塊肌肉再拆成 3 個小肌群，一共 <strong style="color:#E8C89A;">12 塊</strong>——測完你會拿到 4 塊肌肉的體格單，和<strong style="color:#E8C89A;">先練最有感的那 3 塊</strong>。</div>
-    <div style="font-size:15px;color:rgba(255,255,255,0.65);line-height:1.7;margin-top:10px;">16 題，肌肉題只問<strong style="color:#E8C89A;">具體發生過的事</strong>（對方說了什麼、做了什麼）——想不出實例就選「沒做到」，那才測得準。</div>
+    <div style="font-size:15px;color:rgba(255,255,255,0.65);line-height:1.7;margin-top:10px;">16 題影響力測驗，只問<strong style="color:#E8C89A;">具體發生過的事</strong>（對方說了什麼、做了什麼）——想不出實例就選「沒做到」，那才測得準。</div>
   </div>
 
   <button class="btnO" id="btn-explain-go">開始作答 →</button>
@@ -335,7 +335,8 @@ html,body{background:#F7F1EC;font-family:"Noto Sans TC","PingFang TC",-apple-sys
   <!-- 第二區：ATPI 四個分數 + 雷達圖 -->
   <div class="card">
     <div id="r-ctx-box" style="display:none;background:#fff;border:0.5px solid #E6DAD1;border-radius:12px;padding:12px;margin-bottom:14px;">
-      <div style="font-size:14px;color:#6E4A3C;margin-bottom:6px;">這組分數的座標</div>
+      <!-- 2026-09-08 老師拍板：舊標題「這組分數的座標」是 0907 已廢「錨定座標」版的殘留 -->
+      <div style="font-size:14px;color:#6E4A3C;margin-bottom:6px;">你選的場景</div>
       <div id="r-ctx-badges" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;"></div>
       <div id="r-ctx-read" style="font-size:15px;color:#5A3A2A;line-height:1.8;white-space:pre-line;"></div>
     </div>
@@ -612,8 +613,9 @@ function renderResult(){
       b.textContent=t;
       cb.appendChild(b);
     });
+    /* 標題改「你選的場景」後，開頭那句「你想練的場景：…」跟標題＋徽章三重複，砍掉 */
     document.getElementById("r-ctx-read").textContent=
-      "你想練的場景：「"+ctx.need+"」。\n\n在這個場景裡，先練「"+DIMS[wk].name+"」最有感——它現在的樣子通常是：\n"+ctx.sym[wk]+"\n\n下面的課表，就是從這塊開始排的。";
+      "在「"+ctx.need+"」這個場景裡，先練「"+DIMS[wk].name+"」最有感——它現在的樣子通常是：\n"+ctx.sym[wk]+"\n\n下面的課表，就是從這塊開始排的。";
     ctxBox.style.display="block";
   }else{
     ctxBox.style.display="none";
