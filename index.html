@@ -143,7 +143,6 @@ html,body{background:#F7F1EC;font-family:"Noto Sans TC","PingFang TC",-apple-sys
 /* ── 三頁大demo搬入（2026-09-04 老師指示：先把相近元素放一起，之後再整合）──
    dq- 前綴＝demo-quiz.html 搬進來的板塊（q-1 hero／q-3 MUSCLE MAP／q-5 地圖／q-6 分享卡）。 */
 .dq-blk{position:relative;margin-bottom:16px;}
-.dq-tag{position:absolute;top:-9px;right:0;font-size:10px;font-weight:700;letter-spacing:1px;color:#fff;background:#C99A4E;border-radius:10px;padding:2px 8px;z-index:5;}
 .dq-mock{font-size:10px;color:#fff;background:#8A7266;border-radius:8px;padding:1px 6px;margin-left:6px;vertical-align:2px;}
 .dq-pill{display:inline-block;font-size:12px;font-weight:700;letter-spacing:1px;color:#8a6a1e;background:#F3E7CF;border-radius:20px;padding:4px 12px;}
 .dq-cd{background:#fff;border-radius:16px;padding:17px 16px;box-shadow:0 2px 10px rgba(74,27,12,.05);}
@@ -187,10 +186,9 @@ html,body{background:#F7F1EC;font-family:"Noto Sans TC","PingFang TC",-apple-sys
 .dq-stn-t .dq-you{font-size:11px;color:#fff;background:#C6603A;border-radius:10px;padding:1px 8px;font-weight:700;}
 .dq-stn-s{font-size:12.5px;color:#8A7266;margin-top:3px;line-height:1.7;}
 .dq-stn a{color:#AF5433;font-weight:700;text-decoration:none;}
-.dq-share{background:#4A1B0C;border-radius:16px;padding:18px;color:#F7F1EC;text-align:center;}
-.dq-share-t{font-size:16px;font-weight:700;line-height:1.7;}
-.dq-share-s{font-size:12.5px;color:rgba(247,241,236,.6);margin-top:8px;line-height:1.7;}
-.dq-share-b{display:inline-block;margin-top:14px;background:#F7F1EC;color:#4A1B0C;border-radius:14px;padding:11px 26px;font-size:14px;font-weight:700;text-decoration:none;}
+/* 分享＝次要出口，收在 MUSCLE MAP 卡底當一行連結（舊的 .dq-share 深色大卡已下架）。 */
+.dq-sharelink{display:block;text-align:center;color:#AF5433;font-size:14px;font-weight:700;text-decoration:none;min-height:44px;line-height:44px;}
+.dq-sharenote{text-align:center;font-size:12.5px;color:#8A7266;line-height:1.7;padding-bottom:2px;}
 </style>
 </head>
 <body>
@@ -245,7 +243,7 @@ applyFontScale_(fontScaleNow_());
 <div id="s-intro" class="screen active"><div class="wrap">
 
   <!-- q-1 大demo搬入（2026-09-04）：好奇鉤子 hero——不先留資、60秒承諾、測完先拿一句 -->
-  <div class="dq-blk" style="margin:6px 0 22px;"><span class="dq-tag">q-1</span>
+  <div class="dq-blk" style="margin:6px 0 22px;">
     <!-- pill 已刪（2026-09-05 文案掃）：與正上方席位橫幅（館名＋健檢徽章＋免費60秒）整句重複 -->
     <div class="dq-hero-t">為什麼有些人一開口，<br>別人就<em>想聽</em>？</div>
     <div class="dq-hero-s">不是天賦，是 <b>4 大影響力肌肉</b>——吸引、信任、專業、推進。測出你先練哪塊最能提升影響力，<b>今天就能用</b>。</div>
@@ -273,28 +271,28 @@ applyFontScale_(fontScaleNow_());
     </div>
     <div style="background:#FDF6EF;border-left:3px solid #AF5433;border-radius:0 12px 12px 0;padding:11px 13px;">
       <div style="font-size:15px;font-weight:600;color:#AF5433;margin-bottom:2px;">講師・帶團隊的人</div>
-      <div style="font-size:15px;color:#5A3A2A;line-height:1.6;">一開口全場想聽，每個人覺得「這說的就是我」。</div>
+      <div style="font-size:15px;color:#5A3A2A;line-height:1.6;">一開口全場想聽，每個人覺得「這說的就是我」——同一場分享會，願意走下一步的人變多。</div>
     </div>
   </div>
   <div style="font-size:14px;font-weight:700;color:#6E4A3C;margin-bottom:8px;">3 分鐘後你會拿到</div>
   <div style="font-size:15px;color:#5A3A2A;line-height:2.1;">
-    <div>① 你的<b>影響力肌肉</b>——4 塊各幾分</div>
-    <div>② <b>先練哪塊最有感</b>——今天就能用</div>
-    <div>③ 留 Email 加送<b>完整影響力報告</b>（可跳過）</div>
+    <div>① 你的<b>影響力肌肉數值</b>——系統化拆解影響力</div>
+    <div>② <b>先練哪個影響力技巧</b>——今天就能用</div>
+    <div>③ 留 Email 加送<b>完整影響力報告</b></div>
   </div>
   </div>
   <!-- q-5 全貌感地圖（2026-09-05 老師指示搬到首頁）：你在這裡＋future pacing，
        連到三頁大demo（絕對網址，因為 demo 檔在 consult-workshop repo）。 -->
   <!-- 2026-09-05 老師備註【首-3】重做：每站＝一個名字＋一句「在那裡會得到什麼」，
        現在這站用暖底把「你在這裡」抬出來，後面三站當 future pacing。 -->
-  <div class="dq-blk"><span class="dq-tag">q-5</span>
+  <div class="dq-blk">
     <div class="dq-cd">
       <div class="dq-sec">影響力之路——每一站都有人陪你練</div>
       <div class="dq-map">
         <div class="dq-stn here" style="background:#FDF6EF;border-radius:12px;padding:10px 10px 10px 6px;"><div class="dq-stn-t">第 1 站・測影響力肌肉 <span class="dq-you">你在這裡</span></div><div class="dq-stn-s">3 分鐘，找到先練哪塊最有感</div></div>
         <div class="dq-stn n2"><div class="dq-stn-t">第 2 站・免費體驗</div><div class="dq-stn-s">每月分享會＋社群，先看別人怎麼練</div></div>
-        <div class="dq-stn n3"><div class="dq-stn-t">第 3 站・進健身房</div><div class="dq-stn-s">每天一招，12 塊小肌群逐塊點亮 → <a href="https://app.atpifit.com/demo-member.html">看會員的一天 →</a></div></div>
-        <div class="dq-stn n4"><div class="dq-stn-t">第 4 站・私人教練席</div><div class="dq-stn-s">教練看著你的每一筆紀錄，練進真實關係 → <a href="https://app.atpifit.com/demo-pro.html">看教練席 →</a></div></div>
+        <div class="dq-stn n3"><div class="dq-stn-t">第 3 站・進健身房</div><div class="dq-stn-s">每天一招，12 塊小肌群逐塊點亮</div></div>
+        <div class="dq-stn n4"><div class="dq-stn-t">第 4 站・私人教練席</div><div class="dq-stn-s">教練看著你的每一筆紀錄，練進真實關係</div></div>
       </div>
     </div>
   </div>
@@ -321,23 +319,23 @@ applyFontScale_(fontScaleNow_());
       </div>
       <div style="background:#DCE7DE;border-left:3px solid #6E8B77;border-radius:0 12px 12px 0;padding:11px 13px;">
         <div style="font-size:15px;font-weight:600;color:#5C7464;margin-bottom:2px;">信任肌肉——讓他願意說</div>
-        <div style="font-size:15px;color:#5A3A2A;line-height:1.6;">少了它：他喜歡你，但真心話和錢都留著。</div>
+        <div style="font-size:15px;color:#5A3A2A;line-height:1.6;">少了它：他可能喜歡你，但真心話和錢都留著。</div>
       </div>
       <div style="background:#DDE6EE;border-left:3px solid #6E8CA8;border-radius:0 12px 12px 0;padding:11px 13px;">
         <div style="font-size:15px;font-weight:600;color:#54718D;margin-bottom:2px;">專業肌肉——讓他要找你</div>
-        <div style="font-size:15px;color:#5A3A2A;line-height:1.6;">少了它：「聽起來不錯」，然後就沒有然後。</div>
+        <div style="font-size:15px;color:#5A3A2A;line-height:1.6;">少了它：「聽起來很專業」，然後就沒有然後。</div>
       </div>
       <div style="background:#F1E5CC;border-left:3px solid #C99A4E;border-radius:0 12px 12px 0;padding:11px 13px;">
         <div style="font-size:15px;font-weight:600;color:#8E682B;margin-bottom:2px;">推進肌肉——讓他願意動</div>
         <div style="font-size:15px;color:#5A3A2A;line-height:1.6;">少了它：最後一句永遠是「我再想想」。</div>
       </div>
     </div>
-    <div style="font-size:15px;color:#4A1B0C;line-height:1.7;margin-top:12px;"><strong>影響力要四塊一起出力</strong>——哪一塊快歸零，說再多都到不了對方心裡。</div>
+    <div style="font-size:15px;color:#4A1B0C;line-height:1.7;margin-top:12px;"><strong>影響力要四塊肌肉一起出力</strong>——哪一塊缺少，都很難創造影響力。</div>
   </div>
 
   <div class="card" style="background:#4A1B0C;border:none;">
     <div style="font-size:15px;color:rgba(255,255,255,0.55);margin-bottom:8px;">這個測驗會做什麼</div>
-    <div style="font-size:16px;color:#fff;line-height:1.8;">每塊肌肉再拆成 3 個小肌群，一共 <strong style="color:#E8C89A;">12 塊</strong>——測完你會拿到 4 塊肌肉的分數，和<strong style="color:#E8C89A;">先練最有感的那 3 塊</strong>。</div>
+    <div style="font-size:16px;color:#fff;line-height:1.8;">用你最常遇到的情境，量出你現在的影響力可以怎麼提升——<strong style="color:#E8C89A;">先提升哪塊肌肉最有感</strong>。</div>
     <div style="font-size:15px;color:rgba(255,255,255,0.65);line-height:1.7;margin-top:10px;">16 題影響力測驗，只問<strong style="color:#E8C89A;">具體發生過的事</strong>（對方說了什麼、做了什麼）——想不出實例就選「沒做到」，那才測得準。</div>
   </div>
 
@@ -408,10 +406,16 @@ applyFontScale_(fontScaleNow_());
   <!-- MUSCLE MAP：四頁共用同一個卡名（quiz／visitor／member／pro）。
        大肌肉排真成數＋12 小塊名字露、分數模糊——進健身房才全開。
        整張卡（含鎖頭字、展開鈕）都在 renderMuscleMap() 裡長出來。 -->
-  <div class="dq-blk"><span class="dq-tag">q-3</span>
+  <div class="dq-blk">
     <div class="dq-cd">
       <div class="dq-sec">MUSCLE MAP · <b>影響力肌肉</b></div>
       <div id="bs-map"></div>
+      <!-- 分享降級（2026-09-15 老師：頁尾三顆鈕不利於下一步）：分享從頁尾的深色大卡
+           收成這裡的一行連結——要傳出去的就是這張圖，放在圖旁邊比放在錢鈕旁邊合理，
+           而且頁尾就只剩一顆錢鈕（CTA 三層系統：一頁一顆漸層鈕）。 -->
+      <div style="height:0.5px;background:#E6DAD1;margin:10px 0 2px;"></div>
+      <a class="dq-sharelink" href="#" id="btn-share">把這張肌肉圖傳給一個朋友 →</a>
+      <div class="dq-sharenote">猜猜他哪塊最有感。傳出去的那一刻，你已經在練吸引肌肉了。</div>
     </div>
   </div>
 
@@ -427,7 +431,7 @@ applyFontScale_(fontScaleNow_());
     <div style="height:0.5px;background:#E6DAD1;margin:12px 0;"></div>
     <div id="r-weak3-title" style="font-size:14px;color:#6E4A3C;margin-bottom:4px;"></div>
     <div id="r-weak3"></div>
-    <div style="font-size:14px;color:#8A7266;line-height:1.6;margin-top:8px;">進館後就從這三塊開始練——先練最有感的，不必四塊一起顧。</div>
+    <div style="font-size:14px;color:#8A7266;line-height:1.6;margin-top:8px;">進館先練解鎖的那一塊就好——不必三塊一起顧，更不必四大肌肉一起顧。</div>
   </div>
 
   <!-- 第五區：下一步。⚠️ 2026-09-01 老師拍板「分流取消」＝只留一個出口（進館）。
@@ -441,27 +445,15 @@ applyFontScale_(fontScaleNow_());
          引號層同日拍板：只給品牌金句，大金引號＋署名（裝飾字符襯線、內文無襯線）。 -->
     <div style="margin:0 4px 1rem;"><span style="display:block;font-family:Georgia,'Times New Roman',serif;font-size:38px;color:#C99A4E;line-height:.7;">❝</span><div style="font-size:16px;color:#4A1B0C;line-height:2;font-weight:700;margin-top:4px;">影響力的盡頭不是成交，<br>是有人因為你變好。</div><div style="margin-top:2px;font-size:12.5px;color:#9c7f6f;text-align:right;letter-spacing:.08em;">—— 光頭</div></div>
     <button class="btnO" id="btn-workshop" style="margin-bottom:0;">進影響力健身房 →</button>
-  </div>
-
-  <!-- LINE 外開測驗（拿不到 userId）的救援入口（2026-09-08）：自願綁 LINE，不強制登入。
-       按下去走 liff.login() → 跳回來後 initLiff 的快取補送（cct_result_v3）會自動把整份結果寫進試算表。
-       有 userId 時整塊隱藏。次要鈕＝白底描邊，不跟上面的錢鈕搶。 -->
-  <div id="linesave-wrap" style="display:none;">
-    <button class="btnO" id="btn-linesave" style="background:#fff;color:#AF5433;border:1.5px solid #E8C89A;box-shadow:none;text-shadow:none;">用 LINE 保存我的結果</button>
-    <div style="font-size:12.5px;color:#8A7266;text-align:center;margin-bottom:8px;">保存後，進健身房不用重測，直接接上你的影響力肌肉。</div>
-  </div>
-
-  <!-- q-6 分享卡（2026-09-07 老師拍板復活）：接回 LIFF shareTargetPicker 的 Flex 卡。
-       9/01 下架的原因是它當時「跟進館搶主 CTA」——現在位置在結果頁最底、進館鈕之後，
-       已經是次要出口；朋友收到連結從測驗開始本來就是對的（那是引流，不是迴圈）。
-       舊卡文案整批作廢（溝通變現／尚未解鎖赤字寫法／舊色票），shareQuizCard() 全部重寫。 -->
-  <div class="dq-blk"><span class="dq-tag">q-6</span>
-    <div class="dq-share">
-      <div class="dq-share-t">把這張肌肉圖傳給一個朋友，<br>猜猜他哪塊最有感。</div>
-      <div class="dq-share-s">傳出去的那一刻，你已經在練吸引肌肉了。</div>
-      <a class="dq-share-b" href="#" id="btn-share">傳給朋友</a>
+    <!-- 「用 LINE 保存結果」從第二顆鈕降成一行字（2026-09-15）。
+         它本來就不是下一步，是 LINE 外開測驗時的保險絲；而且上面那顆鈕已經會把 12 格分數
+         用 ms= 夾帶過去，救援路徑不只這一條。有 userId 時整行隱藏。 -->
+    <div id="linesave-wrap" style="display:none;text-align:center;margin-top:12px;">
+      <a href="#" id="btn-linesave" style="font-size:13.5px;color:#AF5433;font-weight:700;text-decoration:underline;display:inline-block;min-height:44px;line-height:44px;">先用 LINE 保存我的結果</a>
+      <div style="font-size:12.5px;color:#8A7266;line-height:1.7;">保存後換手機、換瀏覽器都不用重測。</div>
     </div>
   </div>
+
   <div class="saving" id="saving-msg"></div>
 </div></div>
 
@@ -489,7 +481,9 @@ var QUIZ_URL="https://liff.line.me/2010316474-UovQ1zhe";
 /* 1–5 錨點：就是 atpi-core.js 的 EVAL_ANCHORS，只是把「過頭訊號」那半句拿掉——
    引流測驗從頭到尾沒教過什麼叫過頭訊號，寫進選項只會讓路人看不懂。
    刻度與語意完全相同，所以測驗分**無縫就是體格分基線**，不用任何換算。 */
-var ANCHORS=["沒做到","偶爾，而且生硬","想到才做、時好時壞","多數情境做得到","穩定到自動化"];
+/* ⚠️ 第 5 檔本檔用「總是發生」，不是館內的「穩定到自動化」（2026-09-15 老師：那個詞在測驗裡不莊重）。
+   刻度沒動，只換說法——測前用生活語言、進館才換館內語言（詞彙漸進導入）。 */
+var ANCHORS=["沒做到","偶爾，而且生硬","想到才做、時好時壞","多數情境做得到","總是發生"];
 
 /* ⭐ 2026-09-01 基礎版：第三軸從「場景（1對1／群體／社群）」換成「小肌群」——
    題數不變（還是 16 題），輸出從 4 格變 12 格，而且對齊字典「維度分＝該維 3 小肌群平均」。
@@ -507,7 +501,7 @@ var QS=[
      ①12 題題幹各自帶場景，不可能同一次談話；②1–5 錨點是跨情境頻率（「多數情境做得到」），
      對單一談話答不了；③結果頁判讀因此建立在假前提上、不知所云。
      新任務＝分群＋結果頁個人化，三選項對齊首頁三張身分卡（教學三大應用場景）。 */
-  {text:"你最想在哪種場合，說話更有影響力？",dim:"CTX",label:"先選場景",opts:["職場與家人——說話有份量、有人聽","一對一銷售談合作——他主動問「怎麼跟你合作」","一對多演講帶團隊——一開口全場想聽"]},
+  {text:"你最想在哪種場合，說話更有影響力？",dim:"CTX",label:"先選場景",opts:["職場與家人——說話有份量、有人聽","溝通．談判．合作（一對一）——他主動問「怎麼跟你合作」","上台分享．帶團隊（一對多）——一開口全場想聽，並且有下一步行動","經營自媒體 IP——讓看的人從陌生變成想找你"]},
 
   /* ⭐ 2026-09-07 出題順序交錯（A→T→P→I 輪三圈），不再按肌肉分區連出：
      同一維連三題會被自己的第一個答案錨定（三題變一題）＋分區排列把測驗意圖全露出來。
@@ -545,11 +539,18 @@ var CTX_OPTS=[
         T:"聊得很愉快，但預算、真正的顧慮他都留著。",
         P:"他說「聽起來不錯」，回去就沒消息了。",
         I:"都談到最後了，永遠差一句「好，就這樣做」。"}},
-  {need:"一對多演講",
+  {need:"上台分享．帶團隊",
    sym:{A:"開場三分鐘，台下開始滑手機。",
         T:"內容有料，但大家覺得「跟我沒關係」。",
         P:"講得都對，但沒人覺得非你不可。",
-        I:"聽完很感動，回家沒有人真的去做。"}}
+        I:"聽完很感動，回家沒有人真的去做。"}},
+  /* 2026-09-15 老師加的第四個場景：自媒體 IP。症狀一律寫成「看的人做了什麼／沒做什麼」，
+     跟前三組同一個寫法（可指認的對方反應，不是自我評價）。 */
+  {need:"經營自媒體 IP",
+   sym:{A:"內容發出去，滑過的人不會停下來。",
+        T:"有人看，但沒有人私訊你講他自己的事。",
+        P:"被說「很有料」，卻沒有人來問怎麼合作。",
+        I:"按讚收藏都有，然後沒有一個人真的行動。"}}
 ];
 /* 結果句真相＝productkit 01-核心定義字典「兩種語言」條（對外入口用結果句）。
    2026-09-01：P＝讓他要找你（前一版「讓他覺得有解」、再前一版「讓人覺得你很會」皆作廢）。
@@ -856,7 +857,10 @@ function renderResult(){
   // 第四區：最大缺口（維度層）＋ 它的 3 塊小肌群（2026-09-05【果-5】＝最弱那塊大肌肉的三塊，弱的排前面）
   document.getElementById("r-weak-name").textContent=DIMS[wk].name+"（"+DIMS[wk].desc.split("・")[1]+"）——現在先練這塊，最有感";
   document.getElementById("r-weak-desc").textContent=WEAK_DESC[wk];
-  document.getElementById("r-weak3-title").textContent=DIMS[wk].name+"的 3 塊小肌群——你的第一份課表";
+  /* 2026-09-15 老師更正：進館（參觀席）只解鎖 1 塊＝專屬招（visitor.html 是 2 塊地基＋1 專屬招），
+     另外 2 塊要成為會員才開。舊文案寫「這三塊就是你的第一份課表」是超收，
+     而且會讓人進館後發現對不上。改成照實講解鎖節奏——反正「還沒解鎖」本來就是這頁最大的鉤子。 */
+  document.getElementById("r-weak3-title").textContent=DIMS[wk].name+"的 3 塊小肌群——進館先解鎖第 1 塊";
   var w3=document.getElementById("r-weak3");
   w3.innerHTML="";
   var wkMuscles=musclesOfDim(wk).slice().sort(function(a,b){return (muscleScores[a]||0)-(muscleScores[b]||0);});
@@ -866,6 +870,11 @@ function renderResult(){
     row.style.cssText="display:flex;align-items:center;gap:8px;padding:5px 0;";
     var n=mk("div",null,(i+1)+"　"+MUSCLES[mkey].name);
     n.style.cssText="flex:1;font-size:15px;color:#5A3A2A;font-weight:500;";
+    var tag=mk("span",null,i===0?"進館解鎖":"會員解鎖");
+    tag.style.cssText="font-size:11px;font-weight:700;letter-spacing:.04em;border-radius:20px;padding:2px 8px;white-space:nowrap;"
+      +(i===0?"color:#fff;background:"+d.textColor+";":"color:#8A7266;background:#EFE6DB;");
+    n.appendChild(tag);
+    n.style.display="flex"; n.style.alignItems="center"; n.style.gap="7px";
     var dots=document.createElement("div");
     dots.style.cssText="display:flex;gap:4px;";
     for(var di=1;di<=5;di++){
@@ -1080,7 +1089,8 @@ document.getElementById("btn-share").addEventListener("click",function(ev){
 /* btn-consult（Calendly）已隨「分流取消」下架。主出口＝進健身房。
    userId 帶得過去健身房就能直接認人；在 LINE 外測驗拿不到 userId 時
    不要送 ?id=（會變成 ?id= 空值），讓健身房自己走 LIFF 登入那條。 */
-document.getElementById("btn-linesave").addEventListener("click",function(){
+document.getElementById("btn-linesave").addEventListener("click",function(ev){
+  ev.preventDefault();   // 已從 <button> 改成 <a href="#">，不擋會把頁面捲回頂
   track("cta_click",{cta_id:"line_save_result"});
   /* 跳 LINE 登入；回來後 initLiff 拿到 userId＋讀 cct_result_v3 → 自動補送整份結果 */
   try{ liff.login(); }catch(e){ alert("LINE 登入開不起來，請改用 LINE 開啟測驗連結。"); }
