@@ -39,6 +39,9 @@ META = {
                 "分數＝示意樣本，走的是正式公式（atpi-core.js）。MUSCLE MAP 這裡是收合態。"),
     "mapopen": ("畫面 5b｜MUSCLE MAP 展開",
                 "12 小塊：形狀是真的、分數糊掉＝進館才全開。這是 quiz 最大的鉤子。"),
+    "tie":     ("畫面 5c｜結果頁・平手版（同一張卡的另一種狀態）",
+                "上面那張是「三塊分數分得開」的樣子。這張是同分時的樣子：不編號、不硬排名次，"
+                "兩塊都掛「進館可選」，讓他自己挑。一題 1–5 整數，同分是常態不是例外。"),
 }
 
 # ── 1. 造一支會自己把每屏 DOM 吐出來的臨時檔 ─────────────────────────────────
@@ -92,6 +95,17 @@ window.addEventListener("load", function(){ setTimeout(function(){
 
     toggleMuscleMap();
     out.push({ key:"mapopen", html: document.getElementById("bs-map").closest(".dq-blk").outerHTML, extra:{} });
+
+    /* 平手版：示意樣本剛好三塊分得開，所以看不到平手的樣子。
+       這裡把最弱那維的其中兩塊壓成同分再 render 一次，只抓那張卡。 */
+    var wkDim = getCombo(scores).wk;
+    var wm = musclesOfDim(wkDim).slice().sort(function(a,b){ return muscleScores[a] - muscleScores[b]; });
+    /* 做成「兩塊平手、第三塊分得開」＝最常見的樣子。三塊全平會看不到並列與未解鎖同時出現。 */
+    muscleScores[wm[1]] = muscleScores[wm[0]];
+    if (muscleScores[wm[2]] - muscleScores[wm[0]] < 1) muscleScores[wm[2]] = Math.min(5, muscleScores[wm[0]] + 2);
+    renderResult();
+    drawRadar();
+    out.push({ key:"tie", html: document.getElementById("r-weak3").closest(".card").outerHTML, extra:{} });
   } catch (e) {
     out.push({ key:"__error", html: String(e && e.stack || e), extra:{} });
   }

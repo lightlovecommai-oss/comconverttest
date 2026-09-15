@@ -266,7 +266,7 @@ body.x-marks [data-edit]{outline-color:rgba(198,96,58,.38);}
   <!-- q-1 大demo搬入（2026-09-04）：好奇鉤子 hero——不先留資、60秒承諾、測完先拿一句 -->
   <div class="dq-blk" style="margin:6px 0 22px;">
     <!-- pill 已刪（2026-09-05 文案掃）：與正上方席位橫幅（館名＋健檢徽章＋免費60秒）整句重複 -->
-    <div class="dq-hero-t">為什麼有些人一開口，<br>別人就<em>想聽</em>？</div>
+    <div class="dq-hero-t">為什麼有些人一開口，<br>別人就<em>有行動</em>？</div>
     <div class="dq-hero-s">不是天賦，是 <b>4 大影響力肌肉</b>——吸引、信任、專業、推進。測出你先練哪塊最能提升影響力，<b>今天就能用</b>。</div>
     <!-- 2026-09-07 老師抓包：60 秒是會被體感打臉的承諾（16 題實測 3～4 分鐘）。全站改 3 分鐘。 -->
     <div class="dq-hero-meta"><span>⏱ <b>3 分鐘</b></span><span>📱 不用留資料</span><span>🎁 測完馬上知道怎麼提升影響力</span></div>
@@ -293,6 +293,11 @@ body.x-marks [data-edit]{outline-color:rgba(198,96,58,.38);}
     <div style="background:#FDF6EF;border-left:3px solid #AF5433;border-radius:0 12px 12px 0;padding:11px 13px;">
       <div style="font-size:15px;font-weight:600;color:#AF5433;margin-bottom:2px;">講師・帶團隊的人</div>
       <div style="font-size:15px;color:#5A3A2A;line-height:1.6;">一開口全場想聽，每個人覺得「這說的就是我」——同一場分享會，願意走下一步的人變多。</div>
+    </div>
+    <!-- 第四張＝對齊 CTX 第四個場景（自媒體 IP），2026-09-15 補。四張身分卡對四個場景，缺一張就會有人找不到自己。 -->
+    <div style="background:#FDF6EF;border-left:3px solid #AF5433;border-radius:0 12px 12px 0;padding:11px 13px;">
+      <div style="font-size:15px;font-weight:600;color:#AF5433;margin-bottom:2px;">經營自媒體・個人品牌</div>
+      <div style="font-size:15px;color:#5A3A2A;line-height:1.6;">看的人從滑過去，變成停下來、私訊你、想找你。</div>
     </div>
   </div>
   <div style="font-size:14px;font-weight:700;color:#6E4A3C;margin-bottom:8px;">3 分鐘後你會拿到</div>
@@ -356,7 +361,7 @@ body.x-marks [data-edit]{outline-color:rgba(198,96,58,.38);}
   <div class="card" style="background:#4A1B0C;border:none;">
     <div style="font-size:15px;color:rgba(255,255,255,0.55);margin-bottom:8px;">這個測驗會做什麼</div>
     <div style="font-size:16px;color:#fff;line-height:1.8;">用你最常遇到的情境，量出你現在的影響力可以怎麼提升——<strong style="color:#E8C89A;">先提升哪塊肌肉最有感</strong>。</div>
-    <div style="font-size:15px;color:rgba(255,255,255,0.65);line-height:1.7;margin-top:10px;">16 題影響力測驗，只問<strong style="color:#E8C89A;">具體發生過的事</strong>（對方說了什麼、做了什麼）——想不出實例就選「沒做到」，那才測得準。</div>
+    <div style="font-size:15px;color:rgba(255,255,255,0.65);line-height:1.7;margin-top:10px;">16 題影響力測驗，只問<strong style="color:#E8C89A;">具體發生過的事</strong>（對方說了什麼、做了什麼）——想不出實例就選「幾乎不會」，那才測得準。</div>
   </div>
 
   <button class="btnO" id="explain__btn-explain-go">開始作答 →</button>
@@ -369,7 +374,13 @@ body.x-marks [data-edit]{outline-color:rgba(198,96,58,.38);}
   <div class="qtxt" id="q1__q-text">你期待透過提升「影響力」，能為你額外增加多少年收入？</div>
   <!-- 肌肉題常駐提示（renderQ 依 q.muscle 顯示）：一行解三件事——
        題幹是敘述句所以要補「問題」本身；行為回憶提示＝自評膨脹的煞車；「沒機會做」也歸到選 1。 -->
-  <div id="q1__q-hint" style="display:none;font-size:13.5px;color:#8A7266;line-height:1.7;margin:-6px 0 14px;">這樣的事，在你身上多常發生？——想不出實例，就誠實選「沒做到」。</div>
+  <!-- 這一行同時扛三件事，少一件就會有系統性偏誤，不要為了短而刪：
+       ①「當你遇到這種場合時」＝條件化。有些題的場合本來就少見（剛認識／隔一兩週再見面／談到要不要買），
+         不條件化的話，答低分的人分不出是「做不到」還是「沒機會」——那量到的是機會不是能力。
+       ②「意思到了就算」＝擋字面派。題目裡的引號台詞是為了畫面感，字面派沒聽過那一句就選低分＝系統性低估。
+         這句話放這裡一次就好，不要每題加註，否則題目又被撐長。
+       ③「想不出實例就選最低」＝擋灌水。全 12 題正向計分，不擋會整體墊高。 -->
+  <div id="q1__q-hint" style="display:none;font-size:13.5px;color:#8A7266;line-height:1.7;margin:-6px 0 14px;">當你遇到這種場合時，這件事多常發生？意思到了就算，不必跟例句一模一樣；想不出實例就誠實選「幾乎不會」。</div>
   <div id="q1__opts-wrap"><button class="opt"><div class="odot">1</div><span class="otxt">多賺 20 萬以內</span></button><button class="opt"><div class="odot">2</div><span class="otxt">多賺 20～100 萬</span></button><button class="opt"><div class="odot">3</div><span class="otxt">多賺 100～300 萬</span></button><button class="opt"><div class="odot">4</div><span class="otxt">多賺 300 萬以上</span></button></div>
   <!-- 2026-09-11「選了就走」改版：下一題鈕退役，點選項即前進，只留回頭路 -->
   <button class="qprev hide" id="q1__btn-prev">← 上一題</button>
@@ -381,7 +392,13 @@ body.x-marks [data-edit]{outline-color:rgba(198,96,58,.38);}
   <div class="qtxt" id="q2__q-text">你最想在哪種場合，說話更有影響力？</div>
   <!-- 肌肉題常駐提示（renderQ 依 q.muscle 顯示）：一行解三件事——
        題幹是敘述句所以要補「問題」本身；行為回憶提示＝自評膨脹的煞車；「沒機會做」也歸到選 1。 -->
-  <div id="q2__q-hint" style="display:none;font-size:13.5px;color:#8A7266;line-height:1.7;margin:-6px 0 14px;">這樣的事，在你身上多常發生？——想不出實例，就誠實選「沒做到」。</div>
+  <!-- 這一行同時扛三件事，少一件就會有系統性偏誤，不要為了短而刪：
+       ①「當你遇到這種場合時」＝條件化。有些題的場合本來就少見（剛認識／隔一兩週再見面／談到要不要買），
+         不條件化的話，答低分的人分不出是「做不到」還是「沒機會」——那量到的是機會不是能力。
+       ②「意思到了就算」＝擋字面派。題目裡的引號台詞是為了畫面感，字面派沒聽過那一句就選低分＝系統性低估。
+         這句話放這裡一次就好，不要每題加註，否則題目又被撐長。
+       ③「想不出實例就選最低」＝擋灌水。全 12 題正向計分，不擋會整體墊高。 -->
+  <div id="q2__q-hint" style="display:none;font-size:13.5px;color:#8A7266;line-height:1.7;margin:-6px 0 14px;">當你遇到這種場合時，這件事多常發生？意思到了就算，不必跟例句一模一樣；想不出實例就誠實選「幾乎不會」。</div>
   <div id="q2__opts-wrap"><button class="opt"><div class="odot">1</div><span class="otxt">職場與家人——說話有份量、有人聽</span></button><button class="opt"><div class="odot">2</div><span class="otxt">溝通．談判．合作（一對一）——他主動問「怎麼跟你合作」</span></button><button class="opt"><div class="odot">3</div><span class="otxt">上台分享．帶團隊（一對多）——一開口全場想聽，並且有下一步行動</span></button><button class="opt"><div class="odot">4</div><span class="otxt">經營自媒體 IP——讓看的人從陌生變成想找你</span></button></div>
   <!-- 2026-09-11「選了就走」改版：下一題鈕退役，點選項即前進，只留回頭路 -->
   <button class="qprev" id="q2__btn-prev">← 上一題</button>
@@ -390,11 +407,17 @@ body.x-marks [data-edit]{outline-color:rgba(198,96,58,.38);}
   <div class="progtop"><span id="q3__q-counter">第 3 題，共 16 題</span></div>
   <div class="progslices" id="q3__prog-slices"><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(198, 96, 58);"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
   <div class="qlabel" id="q3__q-label" style="color: rgb(175, 84, 51); background: rgba(198, 96, 58, 0.133);">吸引肌肉｜讓他開口</div>
-  <div class="qtxt" id="q3__q-text">在還不熟的場合，你主動開口聊，對方會接著聊下去——不是客套一兩句就結束。</div>
+  <div class="qtxt" id="q3__q-text">剛認識、還不熟的場合：你開口之後，對方會接著聊下去——不是客套一兩句就結束。</div>
   <!-- 肌肉題常駐提示（renderQ 依 q.muscle 顯示）：一行解三件事——
        題幹是敘述句所以要補「問題」本身；行為回憶提示＝自評膨脹的煞車；「沒機會做」也歸到選 1。 -->
-  <div id="q3__q-hint" style="display: block; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">這樣的事，在你身上多常發生？——想不出實例，就誠實選「沒做到」。</div>
-  <div id="q3__opts-wrap"><div class="degrow"><button class="degw" aria-label="沒做到"><span class="degc" style="height: 20px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="偶爾，而且生硬"><span class="degc" style="height: 37px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="想到才做、時好時壞"><span class="degc" style="height: 54px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="多數情境做得到"><span class="degc" style="height: 71px; background: rgb(198, 96, 58); border-color: rgb(198, 96, 58); box-shadow: rgba(198, 96, 58, 0.333) 0px 3px 10px;"></span></button><button class="degw" aria-label="總是發生"><span class="degc" style="height: 88px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button></div><div class="deglbls"><span>沒做到</span><span>總是發生</span></div><div class="degcap" id="q3__deg-cap" style="color: rgb(175, 84, 51);">多數情境做得到</div></div>
+  <!-- 這一行同時扛三件事，少一件就會有系統性偏誤，不要為了短而刪：
+       ①「當你遇到這種場合時」＝條件化。有些題的場合本來就少見（剛認識／隔一兩週再見面／談到要不要買），
+         不條件化的話，答低分的人分不出是「做不到」還是「沒機會」——那量到的是機會不是能力。
+       ②「意思到了就算」＝擋字面派。題目裡的引號台詞是為了畫面感，字面派沒聽過那一句就選低分＝系統性低估。
+         這句話放這裡一次就好，不要每題加註，否則題目又被撐長。
+       ③「想不出實例就選最低」＝擋灌水。全 12 題正向計分，不擋會整體墊高。 -->
+  <div id="q3__q-hint" style="display: block; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">當你遇到這種場合時，這件事多常發生？意思到了就算，不必跟例句一模一樣；想不出實例就誠實選「幾乎不會」。</div>
+  <div id="q3__opts-wrap"><div class="degrow"><button class="degw" aria-label="幾乎不會"><span class="degc" style="height: 20px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="偶爾"><span class="degc" style="height: 37px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="一半一半"><span class="degc" style="height: 54px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="多數時候"><span class="degc" style="height: 71px; background: rgb(198, 96, 58); border-color: rgb(198, 96, 58); box-shadow: rgba(198, 96, 58, 0.333) 0px 3px 10px;"></span></button><button class="degw" aria-label="幾乎每次"><span class="degc" style="height: 88px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button></div><div class="deglbls"><span>幾乎不會</span><span>幾乎每次</span></div><div class="degcap" id="q3__deg-cap" style="color: rgb(175, 84, 51);">多數時候</div></div>
   <!-- 2026-09-11「選了就走」改版：下一題鈕退役，點選項即前進，只留回頭路 -->
   <button class="qprev" id="q3__btn-prev">← 上一題</button>
 </div></div></div><aside class="x-side"><div class="x-sh">在這裡寫你要怎麼改</div><textarea class="x-note" data-key="q3" placeholder="這一屏想改什麼？直接寫（自動存）"></textarea><div class="x-diff" data-key="q3"></div></aside></section>
@@ -402,11 +425,17 @@ body.x-marks [data-edit]{outline-color:rgba(198,96,58,.38);}
   <div class="progtop"><span id="q4__q-counter">第 4 題，共 16 題</span></div>
   <div class="progslices" id="q4__prog-slices"><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(110, 139, 119);"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
   <div class="qlabel" id="q4__q-label" style="color: rgb(92, 116, 100); background: rgba(110, 139, 119, 0.133);">信任肌肉｜讓他敢說</div>
-  <div class="qtxt" id="q4__q-text">你會先講自己還沒做到、還在煩惱的事，講完之後，他也開始講他的。</div>
+  <div class="qtxt" id="q4__q-text">當你講了自己還沒做到的事，對方也會跟著講他的——他的難處、他還在卡的地方。</div>
   <!-- 肌肉題常駐提示（renderQ 依 q.muscle 顯示）：一行解三件事——
        題幹是敘述句所以要補「問題」本身；行為回憶提示＝自評膨脹的煞車；「沒機會做」也歸到選 1。 -->
-  <div id="q4__q-hint" style="display: block; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">這樣的事，在你身上多常發生？——想不出實例，就誠實選「沒做到」。</div>
-  <div id="q4__opts-wrap"><div class="degrow"><button class="degw" aria-label="沒做到"><span class="degc" style="height: 20px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="偶爾，而且生硬"><span class="degc" style="height: 37px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="想到才做、時好時壞"><span class="degc" style="height: 54px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="多數情境做得到"><span class="degc" style="height: 71px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="總是發生"><span class="degc" style="height: 88px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button></div><div class="deglbls"><span>沒做到</span><span>總是發生</span></div><div class="degcap" id="q4__deg-cap" style="color: rgb(92, 116, 100);"></div></div>
+  <!-- 這一行同時扛三件事，少一件就會有系統性偏誤，不要為了短而刪：
+       ①「當你遇到這種場合時」＝條件化。有些題的場合本來就少見（剛認識／隔一兩週再見面／談到要不要買），
+         不條件化的話，答低分的人分不出是「做不到」還是「沒機會」——那量到的是機會不是能力。
+       ②「意思到了就算」＝擋字面派。題目裡的引號台詞是為了畫面感，字面派沒聽過那一句就選低分＝系統性低估。
+         這句話放這裡一次就好，不要每題加註，否則題目又被撐長。
+       ③「想不出實例就選最低」＝擋灌水。全 12 題正向計分，不擋會整體墊高。 -->
+  <div id="q4__q-hint" style="display: block; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">當你遇到這種場合時，這件事多常發生？意思到了就算，不必跟例句一模一樣；想不出實例就誠實選「幾乎不會」。</div>
+  <div id="q4__opts-wrap"><div class="degrow"><button class="degw" aria-label="幾乎不會"><span class="degc" style="height: 20px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="偶爾"><span class="degc" style="height: 37px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="一半一半"><span class="degc" style="height: 54px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="多數時候"><span class="degc" style="height: 71px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="幾乎每次"><span class="degc" style="height: 88px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button></div><div class="deglbls"><span>幾乎不會</span><span>幾乎每次</span></div><div class="degcap" id="q4__deg-cap" style="color: rgb(92, 116, 100);"></div></div>
   <!-- 2026-09-11「選了就走」改版：下一題鈕退役，點選項即前進，只留回頭路 -->
   <button class="qprev" id="q4__btn-prev">← 上一題</button>
 </div></div></div><aside class="x-side"><div class="x-sh">在這裡寫你要怎麼改</div><textarea class="x-note" data-key="q4" placeholder="這一屏想改什麼？直接寫（自動存）"></textarea><div class="x-diff" data-key="q4"></div></aside></section>
@@ -414,11 +443,17 @@ body.x-marks [data-edit]{outline-color:rgba(198,96,58,.38);}
   <div class="progtop"><span id="q5__q-counter">第 5 題，共 16 題</span></div>
   <div class="progslices" id="q5__prog-slices"><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(110, 140, 168);"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
   <div class="qlabel" id="q5__q-label" style="color: rgb(84, 113, 141); background: rgba(110, 140, 168, 0.133);">專業肌肉｜讓他釐清</div>
-  <div class="qtxt" id="q5__q-text">他跟你聊煩惱時，你會問「現在情況怎樣？」「想變成怎樣？」，然後點出中間真正卡住的地方——他聽完說「對⋯⋯就是這個」。</div>
+  <div class="qtxt" id="q5__q-text">對方講完他卡住的地方，你回應之後，他會說「對，就是這個」。</div>
   <!-- 肌肉題常駐提示（renderQ 依 q.muscle 顯示）：一行解三件事——
        題幹是敘述句所以要補「問題」本身；行為回憶提示＝自評膨脹的煞車；「沒機會做」也歸到選 1。 -->
-  <div id="q5__q-hint" style="display: block; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">這樣的事，在你身上多常發生？——想不出實例，就誠實選「沒做到」。</div>
-  <div id="q5__opts-wrap"><div class="degrow"><button class="degw" aria-label="沒做到"><span class="degc" style="height: 20px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="偶爾，而且生硬"><span class="degc" style="height: 37px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="想到才做、時好時壞"><span class="degc" style="height: 54px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="多數情境做得到"><span class="degc" style="height: 71px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="總是發生"><span class="degc" style="height: 88px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button></div><div class="deglbls"><span>沒做到</span><span>總是發生</span></div><div class="degcap" id="q5__deg-cap" style="color: rgb(84, 113, 141);"></div></div>
+  <!-- 這一行同時扛三件事，少一件就會有系統性偏誤，不要為了短而刪：
+       ①「當你遇到這種場合時」＝條件化。有些題的場合本來就少見（剛認識／隔一兩週再見面／談到要不要買），
+         不條件化的話，答低分的人分不出是「做不到」還是「沒機會」——那量到的是機會不是能力。
+       ②「意思到了就算」＝擋字面派。題目裡的引號台詞是為了畫面感，字面派沒聽過那一句就選低分＝系統性低估。
+         這句話放這裡一次就好，不要每題加註，否則題目又被撐長。
+       ③「想不出實例就選最低」＝擋灌水。全 12 題正向計分，不擋會整體墊高。 -->
+  <div id="q5__q-hint" style="display: block; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">當你遇到這種場合時，這件事多常發生？意思到了就算，不必跟例句一模一樣；想不出實例就誠實選「幾乎不會」。</div>
+  <div id="q5__opts-wrap"><div class="degrow"><button class="degw" aria-label="幾乎不會"><span class="degc" style="height: 20px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="偶爾"><span class="degc" style="height: 37px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="一半一半"><span class="degc" style="height: 54px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="多數時候"><span class="degc" style="height: 71px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="幾乎每次"><span class="degc" style="height: 88px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button></div><div class="deglbls"><span>幾乎不會</span><span>幾乎每次</span></div><div class="degcap" id="q5__deg-cap" style="color: rgb(84, 113, 141);"></div></div>
   <!-- 2026-09-11「選了就走」改版：下一題鈕退役，點選項即前進，只留回頭路 -->
   <button class="qprev" id="q5__btn-prev">← 上一題</button>
 </div></div></div><aside class="x-side"><div class="x-sh">在這裡寫你要怎麼改</div><textarea class="x-note" data-key="q5" placeholder="這一屏想改什麼？直接寫（自動存）"></textarea><div class="x-diff" data-key="q5"></div></aside></section>
@@ -426,11 +461,17 @@ body.x-marks [data-edit]{outline-color:rgba(198,96,58,.38);}
   <div class="progtop"><span id="q6__q-counter">第 6 題，共 16 題</span></div>
   <div class="progslices" id="q6__prog-slices"><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(201, 154, 78);"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
   <div class="qlabel" id="q6__q-label" style="color: rgb(142, 104, 43); background: rgba(201, 154, 78, 0.133);">推進肌肉｜讓他想要</div>
-  <div class="qtxt" id="q6__q-text">聊到最後，他自己說出「所以之後我就可以⋯⋯」——他嘴裡講的是他想要的樣子，不是你提供的東西。</div>
+  <div class="qtxt" id="q6__q-text">聊完之後，對方會自己說出他想變成什麼樣子——「我也想要那樣」「那我就可以⋯⋯」。</div>
   <!-- 肌肉題常駐提示（renderQ 依 q.muscle 顯示）：一行解三件事——
        題幹是敘述句所以要補「問題」本身；行為回憶提示＝自評膨脹的煞車；「沒機會做」也歸到選 1。 -->
-  <div id="q6__q-hint" style="display: block; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">這樣的事，在你身上多常發生？——想不出實例，就誠實選「沒做到」。</div>
-  <div id="q6__opts-wrap"><div class="degrow"><button class="degw" aria-label="沒做到"><span class="degc" style="height: 20px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="偶爾，而且生硬"><span class="degc" style="height: 37px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="想到才做、時好時壞"><span class="degc" style="height: 54px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="多數情境做得到"><span class="degc" style="height: 71px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="總是發生"><span class="degc" style="height: 88px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button></div><div class="deglbls"><span>沒做到</span><span>總是發生</span></div><div class="degcap" id="q6__deg-cap" style="color: rgb(142, 104, 43);"></div></div>
+  <!-- 這一行同時扛三件事，少一件就會有系統性偏誤，不要為了短而刪：
+       ①「當你遇到這種場合時」＝條件化。有些題的場合本來就少見（剛認識／隔一兩週再見面／談到要不要買），
+         不條件化的話，答低分的人分不出是「做不到」還是「沒機會」——那量到的是機會不是能力。
+       ②「意思到了就算」＝擋字面派。題目裡的引號台詞是為了畫面感，字面派沒聽過那一句就選低分＝系統性低估。
+         這句話放這裡一次就好，不要每題加註，否則題目又被撐長。
+       ③「想不出實例就選最低」＝擋灌水。全 12 題正向計分，不擋會整體墊高。 -->
+  <div id="q6__q-hint" style="display: block; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">當你遇到這種場合時，這件事多常發生？意思到了就算，不必跟例句一模一樣；想不出實例就誠實選「幾乎不會」。</div>
+  <div id="q6__opts-wrap"><div class="degrow"><button class="degw" aria-label="幾乎不會"><span class="degc" style="height: 20px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="偶爾"><span class="degc" style="height: 37px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="一半一半"><span class="degc" style="height: 54px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="多數時候"><span class="degc" style="height: 71px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="幾乎每次"><span class="degc" style="height: 88px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button></div><div class="deglbls"><span>幾乎不會</span><span>幾乎每次</span></div><div class="degcap" id="q6__deg-cap" style="color: rgb(142, 104, 43);"></div></div>
   <!-- 2026-09-11「選了就走」改版：下一題鈕退役，點選項即前進，只留回頭路 -->
   <button class="qprev" id="q6__btn-prev">← 上一題</button>
 </div></div></div><aside class="x-side"><div class="x-sh">在這裡寫你要怎麼改</div><textarea class="x-note" data-key="q6" placeholder="這一屏想改什麼？直接寫（自動存）"></textarea><div class="x-diff" data-key="q6"></div></aside></section>
@@ -438,11 +479,17 @@ body.x-marks [data-edit]{outline-color:rgba(198,96,58,.38);}
   <div class="progtop"><span id="q7__q-counter">第 7 題，共 16 題</span></div>
   <div class="progslices" id="q7__prog-slices"><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(198, 96, 58);"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
   <div class="qlabel" id="q7__q-label" style="color: rgb(175, 84, 51); background: rgba(198, 96, 58, 0.133);">吸引肌肉｜讓他追問</div>
-  <div class="qtxt" id="q7__q-text">你講完自己在做什麼之後，他當場「哇」了一聲，主動追問「然後呢？」「你怎麼做到的？」——不是只點頭說「喔喔」。</div>
+  <div class="qtxt" id="q7__q-text">別人問「你在做什麼？」你回答完，對方會追問「然後呢？」「你怎麼做到的？」——不是只點頭說「喔喔」。</div>
   <!-- 肌肉題常駐提示（renderQ 依 q.muscle 顯示）：一行解三件事——
        題幹是敘述句所以要補「問題」本身；行為回憶提示＝自評膨脹的煞車；「沒機會做」也歸到選 1。 -->
-  <div id="q7__q-hint" style="display: block; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">這樣的事，在你身上多常發生？——想不出實例，就誠實選「沒做到」。</div>
-  <div id="q7__opts-wrap"><div class="degrow"><button class="degw" aria-label="沒做到"><span class="degc" style="height: 20px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="偶爾，而且生硬"><span class="degc" style="height: 37px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="想到才做、時好時壞"><span class="degc" style="height: 54px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="多數情境做得到"><span class="degc" style="height: 71px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="總是發生"><span class="degc" style="height: 88px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button></div><div class="deglbls"><span>沒做到</span><span>總是發生</span></div><div class="degcap" id="q7__deg-cap" style="color: rgb(175, 84, 51);"></div></div>
+  <!-- 這一行同時扛三件事，少一件就會有系統性偏誤，不要為了短而刪：
+       ①「當你遇到這種場合時」＝條件化。有些題的場合本來就少見（剛認識／隔一兩週再見面／談到要不要買），
+         不條件化的話，答低分的人分不出是「做不到」還是「沒機會」——那量到的是機會不是能力。
+       ②「意思到了就算」＝擋字面派。題目裡的引號台詞是為了畫面感，字面派沒聽過那一句就選低分＝系統性低估。
+         這句話放這裡一次就好，不要每題加註，否則題目又被撐長。
+       ③「想不出實例就選最低」＝擋灌水。全 12 題正向計分，不擋會整體墊高。 -->
+  <div id="q7__q-hint" style="display: block; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">當你遇到這種場合時，這件事多常發生？意思到了就算，不必跟例句一模一樣；想不出實例就誠實選「幾乎不會」。</div>
+  <div id="q7__opts-wrap"><div class="degrow"><button class="degw" aria-label="幾乎不會"><span class="degc" style="height: 20px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="偶爾"><span class="degc" style="height: 37px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="一半一半"><span class="degc" style="height: 54px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="多數時候"><span class="degc" style="height: 71px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="幾乎每次"><span class="degc" style="height: 88px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button></div><div class="deglbls"><span>幾乎不會</span><span>幾乎每次</span></div><div class="degcap" id="q7__deg-cap" style="color: rgb(175, 84, 51);"></div></div>
   <!-- 2026-09-11「選了就走」改版：下一題鈕退役，點選項即前進，只留回頭路 -->
   <button class="qprev" id="q7__btn-prev">← 上一題</button>
 </div></div></div><aside class="x-side"><div class="x-sh">在這裡寫你要怎麼改</div><textarea class="x-note" data-key="q7" placeholder="這一屏想改什麼？直接寫（自動存）"></textarea><div class="x-diff" data-key="q7"></div></aside></section>
@@ -450,11 +497,17 @@ body.x-marks [data-edit]{outline-color:rgba(198,96,58,.38);}
   <div class="progtop"><span id="q8__q-counter">第 8 題，共 16 題</span></div>
   <div class="progslices" id="q8__prog-slices"><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(110, 139, 119);"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
   <div class="qlabel" id="q8__q-label" style="color: rgb(92, 116, 100); background: rgba(110, 139, 119, 0.133);">信任肌肉｜讓他交心</div>
-  <div class="qtxt" id="q8__q-text">你一層一層問下去，最後他講出了你根本沒問到的事，是他自己想多說的。</div>
+  <div class="qtxt" id="q8__q-text">你問了之後，對方講出來的比你問的還多——連你沒問到的都說了。</div>
   <!-- 肌肉題常駐提示（renderQ 依 q.muscle 顯示）：一行解三件事——
        題幹是敘述句所以要補「問題」本身；行為回憶提示＝自評膨脹的煞車；「沒機會做」也歸到選 1。 -->
-  <div id="q8__q-hint" style="display: block; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">這樣的事，在你身上多常發生？——想不出實例，就誠實選「沒做到」。</div>
-  <div id="q8__opts-wrap"><div class="degrow"><button class="degw" aria-label="沒做到"><span class="degc" style="height: 20px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="偶爾，而且生硬"><span class="degc" style="height: 37px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="想到才做、時好時壞"><span class="degc" style="height: 54px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="多數情境做得到"><span class="degc" style="height: 71px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="總是發生"><span class="degc" style="height: 88px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button></div><div class="deglbls"><span>沒做到</span><span>總是發生</span></div><div class="degcap" id="q8__deg-cap" style="color: rgb(92, 116, 100);"></div></div>
+  <!-- 這一行同時扛三件事，少一件就會有系統性偏誤，不要為了短而刪：
+       ①「當你遇到這種場合時」＝條件化。有些題的場合本來就少見（剛認識／隔一兩週再見面／談到要不要買），
+         不條件化的話，答低分的人分不出是「做不到」還是「沒機會」——那量到的是機會不是能力。
+       ②「意思到了就算」＝擋字面派。題目裡的引號台詞是為了畫面感，字面派沒聽過那一句就選低分＝系統性低估。
+         這句話放這裡一次就好，不要每題加註，否則題目又被撐長。
+       ③「想不出實例就選最低」＝擋灌水。全 12 題正向計分，不擋會整體墊高。 -->
+  <div id="q8__q-hint" style="display: block; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">當你遇到這種場合時，這件事多常發生？意思到了就算，不必跟例句一模一樣；想不出實例就誠實選「幾乎不會」。</div>
+  <div id="q8__opts-wrap"><div class="degrow"><button class="degw" aria-label="幾乎不會"><span class="degc" style="height: 20px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="偶爾"><span class="degc" style="height: 37px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="一半一半"><span class="degc" style="height: 54px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="多數時候"><span class="degc" style="height: 71px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="幾乎每次"><span class="degc" style="height: 88px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button></div><div class="deglbls"><span>幾乎不會</span><span>幾乎每次</span></div><div class="degcap" id="q8__deg-cap" style="color: rgb(92, 116, 100);"></div></div>
   <!-- 2026-09-11「選了就走」改版：下一題鈕退役，點選項即前進，只留回頭路 -->
   <button class="qprev" id="q8__btn-prev">← 上一題</button>
 </div></div></div><aside class="x-side"><div class="x-sh">在這裡寫你要怎麼改</div><textarea class="x-note" data-key="q8" placeholder="這一屏想改什麼？直接寫（自動存）"></textarea><div class="x-diff" data-key="q8"></div></aside></section>
@@ -462,11 +515,17 @@ body.x-marks [data-edit]{outline-color:rgba(198,96,58,.38);}
   <div class="progtop"><span id="q9__q-counter">第 9 題，共 16 題</span></div>
   <div class="progslices" id="q9__prog-slices"><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(110, 140, 168);"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
   <div class="qlabel" id="q9__q-label" style="color: rgb(84, 113, 141); background: rgba(110, 140, 168, 0.133);">專業肌肉｜讓他有感</div>
-  <div class="qtxt" id="q9__q-text">與其解釋半天，你會直接做一次給他看、或讓他自己試一次，他馬上懂，還說得出「這真的有用」。</div>
+  <div class="qtxt" id="q9__q-text">你當場做一次給對方看，他會說「這真的有用」——不是「聽起來很厲害」。</div>
   <!-- 肌肉題常駐提示（renderQ 依 q.muscle 顯示）：一行解三件事——
        題幹是敘述句所以要補「問題」本身；行為回憶提示＝自評膨脹的煞車；「沒機會做」也歸到選 1。 -->
-  <div id="q9__q-hint" style="display: block; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">這樣的事，在你身上多常發生？——想不出實例，就誠實選「沒做到」。</div>
-  <div id="q9__opts-wrap"><div class="degrow"><button class="degw" aria-label="沒做到"><span class="degc" style="height: 20px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="偶爾，而且生硬"><span class="degc" style="height: 37px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="想到才做、時好時壞"><span class="degc" style="height: 54px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="多數情境做得到"><span class="degc" style="height: 71px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="總是發生"><span class="degc" style="height: 88px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button></div><div class="deglbls"><span>沒做到</span><span>總是發生</span></div><div class="degcap" id="q9__deg-cap" style="color: rgb(84, 113, 141);"></div></div>
+  <!-- 這一行同時扛三件事，少一件就會有系統性偏誤，不要為了短而刪：
+       ①「當你遇到這種場合時」＝條件化。有些題的場合本來就少見（剛認識／隔一兩週再見面／談到要不要買），
+         不條件化的話，答低分的人分不出是「做不到」還是「沒機會」——那量到的是機會不是能力。
+       ②「意思到了就算」＝擋字面派。題目裡的引號台詞是為了畫面感，字面派沒聽過那一句就選低分＝系統性低估。
+         這句話放這裡一次就好，不要每題加註，否則題目又被撐長。
+       ③「想不出實例就選最低」＝擋灌水。全 12 題正向計分，不擋會整體墊高。 -->
+  <div id="q9__q-hint" style="display: block; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">當你遇到這種場合時，這件事多常發生？意思到了就算，不必跟例句一模一樣；想不出實例就誠實選「幾乎不會」。</div>
+  <div id="q9__opts-wrap"><div class="degrow"><button class="degw" aria-label="幾乎不會"><span class="degc" style="height: 20px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="偶爾"><span class="degc" style="height: 37px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="一半一半"><span class="degc" style="height: 54px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="多數時候"><span class="degc" style="height: 71px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="幾乎每次"><span class="degc" style="height: 88px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button></div><div class="deglbls"><span>幾乎不會</span><span>幾乎每次</span></div><div class="degcap" id="q9__deg-cap" style="color: rgb(84, 113, 141);"></div></div>
   <!-- 2026-09-11「選了就走」改版：下一題鈕退役，點選項即前進，只留回頭路 -->
   <button class="qprev" id="q9__btn-prev">← 上一題</button>
 </div></div></div><aside class="x-side"><div class="x-sh">在這裡寫你要怎麼改</div><textarea class="x-note" data-key="q9" placeholder="這一屏想改什麼？直接寫（自動存）"></textarea><div class="x-diff" data-key="q9"></div></aside></section>
@@ -474,11 +533,17 @@ body.x-marks [data-edit]{outline-color:rgba(198,96,58,.38);}
   <div class="progtop"><span id="q10__q-counter">第 10 題，共 16 題</span></div>
   <div class="progslices" id="q10__prog-slices"><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(201, 154, 78);"></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
   <div class="qlabel" id="q10__q-label" style="color: rgb(142, 104, 43); background: rgba(201, 154, 78, 0.133);">推進肌肉｜讓他敢要</div>
-  <div class="qtxt" id="q10__q-text">你會主動問他還有什麼顧慮，把他心裡的擔心先問出來、一個一個回——不是等他自己開口你才知道。</div>
+  <div class="qtxt" id="q10__q-text">談到要不要做、要不要買的時候，對方會把顧慮直接講出來——錢、時間、還在猶豫什麼，不是丟一句「再看看」。</div>
   <!-- 肌肉題常駐提示（renderQ 依 q.muscle 顯示）：一行解三件事——
        題幹是敘述句所以要補「問題」本身；行為回憶提示＝自評膨脹的煞車；「沒機會做」也歸到選 1。 -->
-  <div id="q10__q-hint" style="display: block; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">這樣的事，在你身上多常發生？——想不出實例，就誠實選「沒做到」。</div>
-  <div id="q10__opts-wrap"><div class="degrow"><button class="degw" aria-label="沒做到"><span class="degc" style="height: 20px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="偶爾，而且生硬"><span class="degc" style="height: 37px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="想到才做、時好時壞"><span class="degc" style="height: 54px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="多數情境做得到"><span class="degc" style="height: 71px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="總是發生"><span class="degc" style="height: 88px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button></div><div class="deglbls"><span>沒做到</span><span>總是發生</span></div><div class="degcap" id="q10__deg-cap" style="color: rgb(142, 104, 43);"></div></div>
+  <!-- 這一行同時扛三件事，少一件就會有系統性偏誤，不要為了短而刪：
+       ①「當你遇到這種場合時」＝條件化。有些題的場合本來就少見（剛認識／隔一兩週再見面／談到要不要買），
+         不條件化的話，答低分的人分不出是「做不到」還是「沒機會」——那量到的是機會不是能力。
+       ②「意思到了就算」＝擋字面派。題目裡的引號台詞是為了畫面感，字面派沒聽過那一句就選低分＝系統性低估。
+         這句話放這裡一次就好，不要每題加註，否則題目又被撐長。
+       ③「想不出實例就選最低」＝擋灌水。全 12 題正向計分，不擋會整體墊高。 -->
+  <div id="q10__q-hint" style="display: block; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">當你遇到這種場合時，這件事多常發生？意思到了就算，不必跟例句一模一樣；想不出實例就誠實選「幾乎不會」。</div>
+  <div id="q10__opts-wrap"><div class="degrow"><button class="degw" aria-label="幾乎不會"><span class="degc" style="height: 20px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="偶爾"><span class="degc" style="height: 37px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="一半一半"><span class="degc" style="height: 54px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="多數時候"><span class="degc" style="height: 71px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="幾乎每次"><span class="degc" style="height: 88px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button></div><div class="deglbls"><span>幾乎不會</span><span>幾乎每次</span></div><div class="degcap" id="q10__deg-cap" style="color: rgb(142, 104, 43);"></div></div>
   <!-- 2026-09-11「選了就走」改版：下一題鈕退役，點選項即前進，只留回頭路 -->
   <button class="qprev" id="q10__btn-prev">← 上一題</button>
 </div></div></div><aside class="x-side"><div class="x-sh">在這裡寫你要怎麼改</div><textarea class="x-note" data-key="q10" placeholder="這一屏想改什麼？直接寫（自動存）"></textarea><div class="x-diff" data-key="q10"></div></aside></section>
@@ -486,11 +551,17 @@ body.x-marks [data-edit]{outline-color:rgba(198,96,58,.38);}
   <div class="progtop"><span id="q11__q-counter">第 11 題，共 16 題</span></div>
   <div class="progslices" id="q11__prog-slices"><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(198, 96, 58);"></i><i></i><i></i><i></i><i></i><i></i></div>
   <div class="qlabel" id="q11__q-label" style="color: rgb(175, 84, 51); background: rgba(198, 96, 58, 0.133);">吸引肌肉｜讓他記得</div>
-  <div class="qtxt" id="q11__q-text">隔一個禮拜再遇到，他還記得你說過的故事，甚至能用一句話跟別人介紹你。</div>
+  <div class="qtxt" id="q11__q-text">隔一兩個禮拜再見到面，對方還說得出你的特點——不是只剩模糊的印象。</div>
   <!-- 肌肉題常駐提示（renderQ 依 q.muscle 顯示）：一行解三件事——
        題幹是敘述句所以要補「問題」本身；行為回憶提示＝自評膨脹的煞車；「沒機會做」也歸到選 1。 -->
-  <div id="q11__q-hint" style="display: block; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">這樣的事，在你身上多常發生？——想不出實例，就誠實選「沒做到」。</div>
-  <div id="q11__opts-wrap"><div class="degrow"><button class="degw" aria-label="沒做到"><span class="degc" style="height: 20px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="偶爾，而且生硬"><span class="degc" style="height: 37px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="想到才做、時好時壞"><span class="degc" style="height: 54px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="多數情境做得到"><span class="degc" style="height: 71px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="總是發生"><span class="degc" style="height: 88px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button></div><div class="deglbls"><span>沒做到</span><span>總是發生</span></div><div class="degcap" id="q11__deg-cap" style="color: rgb(175, 84, 51);"></div></div>
+  <!-- 這一行同時扛三件事，少一件就會有系統性偏誤，不要為了短而刪：
+       ①「當你遇到這種場合時」＝條件化。有些題的場合本來就少見（剛認識／隔一兩週再見面／談到要不要買），
+         不條件化的話，答低分的人分不出是「做不到」還是「沒機會」——那量到的是機會不是能力。
+       ②「意思到了就算」＝擋字面派。題目裡的引號台詞是為了畫面感，字面派沒聽過那一句就選低分＝系統性低估。
+         這句話放這裡一次就好，不要每題加註，否則題目又被撐長。
+       ③「想不出實例就選最低」＝擋灌水。全 12 題正向計分，不擋會整體墊高。 -->
+  <div id="q11__q-hint" style="display: block; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">當你遇到這種場合時，這件事多常發生？意思到了就算，不必跟例句一模一樣；想不出實例就誠實選「幾乎不會」。</div>
+  <div id="q11__opts-wrap"><div class="degrow"><button class="degw" aria-label="幾乎不會"><span class="degc" style="height: 20px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="偶爾"><span class="degc" style="height: 37px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="一半一半"><span class="degc" style="height: 54px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="多數時候"><span class="degc" style="height: 71px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="幾乎每次"><span class="degc" style="height: 88px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button></div><div class="deglbls"><span>幾乎不會</span><span>幾乎每次</span></div><div class="degcap" id="q11__deg-cap" style="color: rgb(175, 84, 51);"></div></div>
   <!-- 2026-09-11「選了就走」改版：下一題鈕退役，點選項即前進，只留回頭路 -->
   <button class="qprev" id="q11__btn-prev">← 上一題</button>
 </div></div></div><aside class="x-side"><div class="x-sh">在這裡寫你要怎麼改</div><textarea class="x-note" data-key="q11" placeholder="這一屏想改什麼？直接寫（自動存）"></textarea><div class="x-diff" data-key="q11"></div></aside></section>
@@ -498,11 +569,17 @@ body.x-marks [data-edit]{outline-color:rgba(198,96,58,.38);}
   <div class="progtop"><span id="q12__q-counter">第 12 題，共 16 題</span></div>
   <div class="progslices" id="q12__prog-slices"><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(110, 139, 119);"></i><i></i><i></i><i></i><i></i></div>
   <div class="qlabel" id="q12__q-label" style="color: rgb(92, 116, 100); background: rgba(110, 139, 119, 0.133);">信任肌肉｜讓他當真</div>
-  <div class="qtxt" id="q12__q-text">你答應他的事，後來真的做到了，做到之後還會回頭跟他說結果——不是只說「有啦我有記得」。</div>
+  <div class="qtxt" id="q12__q-text">你答應的事後來都做到了——所以有重要的事，對方會直接找你，不是找別人。</div>
   <!-- 肌肉題常駐提示（renderQ 依 q.muscle 顯示）：一行解三件事——
        題幹是敘述句所以要補「問題」本身；行為回憶提示＝自評膨脹的煞車；「沒機會做」也歸到選 1。 -->
-  <div id="q12__q-hint" style="display: block; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">這樣的事，在你身上多常發生？——想不出實例，就誠實選「沒做到」。</div>
-  <div id="q12__opts-wrap"><div class="degrow"><button class="degw" aria-label="沒做到"><span class="degc" style="height: 20px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="偶爾，而且生硬"><span class="degc" style="height: 37px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="想到才做、時好時壞"><span class="degc" style="height: 54px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="多數情境做得到"><span class="degc" style="height: 71px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="總是發生"><span class="degc" style="height: 88px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button></div><div class="deglbls"><span>沒做到</span><span>總是發生</span></div><div class="degcap" id="q12__deg-cap" style="color: rgb(92, 116, 100);"></div></div>
+  <!-- 這一行同時扛三件事，少一件就會有系統性偏誤，不要為了短而刪：
+       ①「當你遇到這種場合時」＝條件化。有些題的場合本來就少見（剛認識／隔一兩週再見面／談到要不要買），
+         不條件化的話，答低分的人分不出是「做不到」還是「沒機會」——那量到的是機會不是能力。
+       ②「意思到了就算」＝擋字面派。題目裡的引號台詞是為了畫面感，字面派沒聽過那一句就選低分＝系統性低估。
+         這句話放這裡一次就好，不要每題加註，否則題目又被撐長。
+       ③「想不出實例就選最低」＝擋灌水。全 12 題正向計分，不擋會整體墊高。 -->
+  <div id="q12__q-hint" style="display: block; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">當你遇到這種場合時，這件事多常發生？意思到了就算，不必跟例句一模一樣；想不出實例就誠實選「幾乎不會」。</div>
+  <div id="q12__opts-wrap"><div class="degrow"><button class="degw" aria-label="幾乎不會"><span class="degc" style="height: 20px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="偶爾"><span class="degc" style="height: 37px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="一半一半"><span class="degc" style="height: 54px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="多數時候"><span class="degc" style="height: 71px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="幾乎每次"><span class="degc" style="height: 88px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button></div><div class="deglbls"><span>幾乎不會</span><span>幾乎每次</span></div><div class="degcap" id="q12__deg-cap" style="color: rgb(92, 116, 100);"></div></div>
   <!-- 2026-09-11「選了就走」改版：下一題鈕退役，點選項即前進，只留回頭路 -->
   <button class="qprev" id="q12__btn-prev">← 上一題</button>
 </div></div></div><aside class="x-side"><div class="x-sh">在這裡寫你要怎麼改</div><textarea class="x-note" data-key="q12" placeholder="這一屏想改什麼？直接寫（自動存）"></textarea><div class="x-diff" data-key="q12"></div></aside></section>
@@ -510,11 +587,17 @@ body.x-marks [data-edit]{outline-color:rgba(198,96,58,.38);}
   <div class="progtop"><span id="q13__q-counter">第 13 題，共 16 題</span></div>
   <div class="progslices" id="q13__prog-slices"><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(110, 140, 168);"></i><i></i><i></i><i></i></div>
   <div class="qlabel" id="q13__q-label" style="color: rgb(84, 113, 141); background: rgba(110, 140, 168, 0.133);">專業肌肉｜讓他放心</div>
-  <div class="qtxt" id="q13__q-text">你舉了一個真實例子——誰做過、後來結果如何——他聽完主動追問：「那個人後來怎麼樣？」</div>
+  <div class="qtxt" id="q13__q-text">你講了一個真實案例——誰做過、後來結果如何——對方會追問「那個人後來怎麼樣？」</div>
   <!-- 肌肉題常駐提示（renderQ 依 q.muscle 顯示）：一行解三件事——
        題幹是敘述句所以要補「問題」本身；行為回憶提示＝自評膨脹的煞車；「沒機會做」也歸到選 1。 -->
-  <div id="q13__q-hint" style="display: block; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">這樣的事，在你身上多常發生？——想不出實例，就誠實選「沒做到」。</div>
-  <div id="q13__opts-wrap"><div class="degrow"><button class="degw" aria-label="沒做到"><span class="degc" style="height: 20px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="偶爾，而且生硬"><span class="degc" style="height: 37px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="想到才做、時好時壞"><span class="degc" style="height: 54px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="多數情境做得到"><span class="degc" style="height: 71px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="總是發生"><span class="degc" style="height: 88px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button></div><div class="deglbls"><span>沒做到</span><span>總是發生</span></div><div class="degcap" id="q13__deg-cap" style="color: rgb(84, 113, 141);"></div></div>
+  <!-- 這一行同時扛三件事，少一件就會有系統性偏誤，不要為了短而刪：
+       ①「當你遇到這種場合時」＝條件化。有些題的場合本來就少見（剛認識／隔一兩週再見面／談到要不要買），
+         不條件化的話，答低分的人分不出是「做不到」還是「沒機會」——那量到的是機會不是能力。
+       ②「意思到了就算」＝擋字面派。題目裡的引號台詞是為了畫面感，字面派沒聽過那一句就選低分＝系統性低估。
+         這句話放這裡一次就好，不要每題加註，否則題目又被撐長。
+       ③「想不出實例就選最低」＝擋灌水。全 12 題正向計分，不擋會整體墊高。 -->
+  <div id="q13__q-hint" style="display: block; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">當你遇到這種場合時，這件事多常發生？意思到了就算，不必跟例句一模一樣；想不出實例就誠實選「幾乎不會」。</div>
+  <div id="q13__opts-wrap"><div class="degrow"><button class="degw" aria-label="幾乎不會"><span class="degc" style="height: 20px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="偶爾"><span class="degc" style="height: 37px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="一半一半"><span class="degc" style="height: 54px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="多數時候"><span class="degc" style="height: 71px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="幾乎每次"><span class="degc" style="height: 88px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button></div><div class="deglbls"><span>幾乎不會</span><span>幾乎每次</span></div><div class="degcap" id="q13__deg-cap" style="color: rgb(84, 113, 141);"></div></div>
   <!-- 2026-09-11「選了就走」改版：下一題鈕退役，點選項即前進，只留回頭路 -->
   <button class="qprev" id="q13__btn-prev">← 上一題</button>
 </div></div></div><aside class="x-side"><div class="x-sh">在這裡寫你要怎麼改</div><textarea class="x-note" data-key="q13" placeholder="這一屏想改什麼？直接寫（自動存）"></textarea><div class="x-diff" data-key="q13"></div></aside></section>
@@ -522,11 +605,17 @@ body.x-marks [data-edit]{outline-color:rgba(198,96,58,.38);}
   <div class="progtop"><span id="q14__q-counter">第 14 題，共 16 題</span></div>
   <div class="progslices" id="q14__prog-slices"><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(201, 154, 78);"></i><i></i><i></i></div>
   <div class="qlabel" id="q14__q-label" style="color: rgb(142, 104, 43); background: rgba(201, 154, 78, 0.133);">推進肌肉｜讓他答應</div>
-  <div class="qtxt" id="q14__q-text">聊完之後你拿到的是「他同意的具體下一步」——約好下次時間、他要準備什麼、或他答應去跟誰說——不是只有一句「再聯絡」。</div>
+  <div class="qtxt" id="q14__q-text">這場對話結束前，對方會跟你講定下一步什麼時候做——不是一句「再聯絡」。</div>
   <!-- 肌肉題常駐提示（renderQ 依 q.muscle 顯示）：一行解三件事——
        題幹是敘述句所以要補「問題」本身；行為回憶提示＝自評膨脹的煞車；「沒機會做」也歸到選 1。 -->
-  <div id="q14__q-hint" style="display: block; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">這樣的事，在你身上多常發生？——想不出實例，就誠實選「沒做到」。</div>
-  <div id="q14__opts-wrap"><div class="degrow"><button class="degw" aria-label="沒做到"><span class="degc" style="height: 20px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="偶爾，而且生硬"><span class="degc" style="height: 37px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="想到才做、時好時壞"><span class="degc" style="height: 54px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="多數情境做得到"><span class="degc" style="height: 71px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="總是發生"><span class="degc" style="height: 88px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button></div><div class="deglbls"><span>沒做到</span><span>總是發生</span></div><div class="degcap" id="q14__deg-cap" style="color: rgb(142, 104, 43);"></div></div>
+  <!-- 這一行同時扛三件事，少一件就會有系統性偏誤，不要為了短而刪：
+       ①「當你遇到這種場合時」＝條件化。有些題的場合本來就少見（剛認識／隔一兩週再見面／談到要不要買），
+         不條件化的話，答低分的人分不出是「做不到」還是「沒機會」——那量到的是機會不是能力。
+       ②「意思到了就算」＝擋字面派。題目裡的引號台詞是為了畫面感，字面派沒聽過那一句就選低分＝系統性低估。
+         這句話放這裡一次就好，不要每題加註，否則題目又被撐長。
+       ③「想不出實例就選最低」＝擋灌水。全 12 題正向計分，不擋會整體墊高。 -->
+  <div id="q14__q-hint" style="display: block; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">當你遇到這種場合時，這件事多常發生？意思到了就算，不必跟例句一模一樣；想不出實例就誠實選「幾乎不會」。</div>
+  <div id="q14__opts-wrap"><div class="degrow"><button class="degw" aria-label="幾乎不會"><span class="degc" style="height: 20px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="偶爾"><span class="degc" style="height: 37px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="一半一半"><span class="degc" style="height: 54px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="多數時候"><span class="degc" style="height: 71px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="幾乎每次"><span class="degc" style="height: 88px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button></div><div class="deglbls"><span>幾乎不會</span><span>幾乎每次</span></div><div class="degcap" id="q14__deg-cap" style="color: rgb(142, 104, 43);"></div></div>
   <!-- 2026-09-11「選了就走」改版：下一題鈕退役，點選項即前進，只留回頭路 -->
   <button class="qprev" id="q14__btn-prev">← 上一題</button>
 </div></div></div><aside class="x-side"><div class="x-sh">在這裡寫你要怎麼改</div><textarea class="x-note" data-key="q14" placeholder="這一屏想改什麼？直接寫（自動存）"></textarea><div class="x-diff" data-key="q14"></div></aside></section>
@@ -537,7 +626,13 @@ body.x-marks [data-edit]{outline-color:rgba(198,96,58,.38);}
   <div class="qtxt" id="q15__q-text">你想要收入變多的項目，最多的客戶從哪裡來？</div>
   <!-- 肌肉題常駐提示（renderQ 依 q.muscle 顯示）：一行解三件事——
        題幹是敘述句所以要補「問題」本身；行為回憶提示＝自評膨脹的煞車；「沒機會做」也歸到選 1。 -->
-  <div id="q15__q-hint" style="display: none; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">這樣的事，在你身上多常發生？——想不出實例，就誠實選「沒做到」。</div>
+  <!-- 這一行同時扛三件事，少一件就會有系統性偏誤，不要為了短而刪：
+       ①「當你遇到這種場合時」＝條件化。有些題的場合本來就少見（剛認識／隔一兩週再見面／談到要不要買），
+         不條件化的話，答低分的人分不出是「做不到」還是「沒機會」——那量到的是機會不是能力。
+       ②「意思到了就算」＝擋字面派。題目裡的引號台詞是為了畫面感，字面派沒聽過那一句就選低分＝系統性低估。
+         這句話放這裡一次就好，不要每題加註，否則題目又被撐長。
+       ③「想不出實例就選最低」＝擋灌水。全 12 題正向計分，不擋會整體墊高。 -->
+  <div id="q15__q-hint" style="display: none; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">當你遇到這種場合時，這件事多常發生？意思到了就算，不必跟例句一模一樣；想不出實例就誠實選「幾乎不會」。</div>
   <div id="q15__opts-wrap"><button class="opt"><div class="odot">1</div><span class="otxt">朋友／舊客戶／商會介紹</span></button><button class="opt"><div class="odot">2</div><span class="otxt">認識的新朋友或陌生人</span></button><button class="opt"><div class="odot">3</div><span class="otxt">社群或網路找上門</span></button><button class="opt"><div class="odot">4</div><span class="otxt">受僱領薪，沒有自己的客戶</span></button></div>
   <!-- 2026-09-11「選了就走」改版：下一題鈕退役，點選項即前進，只留回頭路 -->
   <button class="qprev" id="q15__btn-prev">← 上一題</button>
@@ -549,7 +644,13 @@ body.x-marks [data-edit]{outline-color:rgba(198,96,58,.38);}
   <div class="qtxt" id="q16__q-text">你目前的年收入落在哪個區間？</div>
   <!-- 肌肉題常駐提示（renderQ 依 q.muscle 顯示）：一行解三件事——
        題幹是敘述句所以要補「問題」本身；行為回憶提示＝自評膨脹的煞車；「沒機會做」也歸到選 1。 -->
-  <div id="q16__q-hint" style="display: none; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">這樣的事，在你身上多常發生？——想不出實例，就誠實選「沒做到」。</div>
+  <!-- 這一行同時扛三件事，少一件就會有系統性偏誤，不要為了短而刪：
+       ①「當你遇到這種場合時」＝條件化。有些題的場合本來就少見（剛認識／隔一兩週再見面／談到要不要買），
+         不條件化的話，答低分的人分不出是「做不到」還是「沒機會」——那量到的是機會不是能力。
+       ②「意思到了就算」＝擋字面派。題目裡的引號台詞是為了畫面感，字面派沒聽過那一句就選低分＝系統性低估。
+         這句話放這裡一次就好，不要每題加註，否則題目又被撐長。
+       ③「想不出實例就選最低」＝擋灌水。全 12 題正向計分，不擋會整體墊高。 -->
+  <div id="q16__q-hint" style="display: none; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">當你遇到這種場合時，這件事多常發生？意思到了就算，不必跟例句一模一樣；想不出實例就誠實選「幾乎不會」。</div>
   <div id="q16__opts-wrap"><button class="opt"><div class="odot">1</div><span class="otxt">0-60萬</span></button><button class="opt"><div class="odot">2</div><span class="otxt">60-120萬</span></button><button class="opt"><div class="odot">3</div><span class="otxt">120-300萬</span></button><button class="opt"><div class="odot">4</div><span class="otxt">300-1000萬</span></button><button class="opt"><div class="odot">5</div><span class="otxt">1000萬以上</span></button></div>
   <!-- 2026-09-11「選了就走」改版：下一題鈕退役，點選項即前進，只留回頭路 -->
   <button class="qprev" id="q16__btn-prev">← 上一題</button>
@@ -585,23 +686,15 @@ body.x-marks [data-edit]{outline-color:rgba(198,96,58,.38);}
     <div style="font-size:14px;color:#8A7266;">吸引 × 信任 × 專業 × 推進　4 大肌肉</div>
   </div>
 
-  <!-- 第二區：ATPI 四個分數 + 雷達圖 -->
-  <div class="card">
-    <div id="result__r-ctx-box" style="display: block; background: rgb(255, 255, 255); border: 0.5px solid rgb(230, 218, 209); border-radius: 12px; padding: 12px; margin-bottom: 14px;">
-      <!-- 2026-09-08 老師拍板：舊標題「這組分數的座標」是 0907 已廢「錨定座標」版的殘留 -->
-      <div style="font-size:14px;color:#6E4A3C;margin-bottom:6px;">你選的場景</div>
-      <div id="result__r-ctx-badges" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;"><span style="background: rgb(240, 227, 219); color: rgb(110, 74, 60); font-size: 13px; border-radius: 20px; padding: 3px 10px;">一對一銷售</span></div>
-      <div id="result__r-ctx-read" style="font-size:15px;color:#5A3A2A;line-height:1.8;white-space:pre-line;">在「一對一銷售」這個場景裡，先練「專業肌肉」最有感——它現在的樣子通常是：
-他說「聽起來不錯」，回去就沒消息了。
-
-下面的課表，就是從這塊開始排的。</div>
-    </div>
-    <div class="chartbox" style="flex-direction:column;align-items:center;gap:4px;border:none;padding:0;margin-bottom:.25rem;">
-      <svg id="result__radar" viewBox="-14 0 288 270" width="288" height="270" style="max-width:100%;" xmlns="http://www.w3.org/2000/svg"><polygon points="130,117.5 152.5,140 130,162.5 107.5,140" fill="none" stroke="rgba(168,128,96,0.18)" stroke-width="0.8"></polygon><polygon points="130,95 175,140 130,185 85,140" fill="none" stroke="rgba(168,128,96,0.18)" stroke-width="0.8"></polygon><polygon points="130,72.5 197.5,140 130,207.5 62.5,140" fill="none" stroke="rgba(168,128,96,0.18)" stroke-width="0.8"></polygon><polygon points="130,50 220,140 130,230 40,140" fill="rgba(240,228,218,0.4)" stroke="rgba(168,128,96,0.18)" stroke-width="0.8"></polygon><line x1="130" y1="140" x2="130" y2="50" stroke="rgba(168,128,96,0.15)" stroke-width="0.8"></line><line x1="130" y1="140" x2="220" y2="140" stroke="rgba(168,128,96,0.15)" stroke-width="0.8"></line><line x1="130" y1="140" x2="130" y2="230" stroke="rgba(168,128,96,0.15)" stroke-width="0.8"></line><line x1="130" y1="140" x2="40" y2="140" stroke="rgba(168,128,96,0.15)" stroke-width="0.8"></line><polygon points="130,95 197.5,140 130,162.5 85,140" fill="rgba(198,96,58,0.15)" stroke="#C6603A" stroke-width="2" stroke-linejoin="round"></polygon><g id="result__radar-tip" opacity="0" style="pointer-events:none;"><rect rx="8" ry="8" fill="#2d1f0f" height="26"></rect><text font-size="12" font-weight="600" fill="#fff" text-anchor="middle" dominant-baseline="middle" font-family="-apple-system,sans-serif"></text></g><circle cx="130" cy="95" r="14" fill="transparent" style="cursor:pointer;"></circle><circle cx="130" cy="95" r="5" fill="#C6603A" stroke="#fff" stroke-width="1.5" style="pointer-events:none;"></circle><circle cx="197.5" cy="140" r="14" fill="transparent" style="cursor:pointer;"></circle><circle cx="197.5" cy="140" r="5" fill="#6E8B77" stroke="#fff" stroke-width="1.5" style="pointer-events:none;"></circle><circle cx="130" cy="162.5" r="14" fill="transparent" style="cursor:pointer;"></circle><circle cx="130" cy="162.5" r="5" fill="#6E8CA8" stroke="#fff" stroke-width="1.5" style="pointer-events:none;"></circle><circle cx="85" cy="140" r="14" fill="transparent" style="cursor:pointer;"></circle><circle cx="85" cy="140" r="5" fill="#C99A4E" stroke="#fff" stroke-width="1.5" style="pointer-events:none;"></circle><text x="130" y="28" font-size="12" font-weight="500" fill="#AF5433" text-anchor="middle" dominant-baseline="middle" font-family="-apple-system,sans-serif">吸引肌肉</text><text x="242" y="140" font-size="12" font-weight="500" fill="#5C7464" text-anchor="middle" dominant-baseline="middle" font-family="-apple-system,sans-serif">信任肌肉</text><text x="130" y="252" font-size="12" font-weight="500" fill="#54718D" text-anchor="middle" dominant-baseline="middle" font-family="-apple-system,sans-serif">專業肌肉</text><text x="18" y="140" font-size="12" font-weight="500" fill="#8E682B" text-anchor="middle" dominant-baseline="middle" font-family="-apple-system,sans-serif">推進肌肉</text></svg>
-    </div>
-    <!-- 2026-09-05 老師備註【果-2】：12 格詳細卡（score-grid）下架——詳細解析不是測驗的目的，
-         分數只留下面 MUSCLE MAP 的四大肌肉排；小肌群逐格點亮留給健身房。 -->
-  </div>
+  <!-- 第二區已整併（2026-09-15 老師：「上面的雷達圖可以不用了，因為跟下面的分數圖重複」）。
+       雷達圖與 MUSCLE MAP 的四大肌肉薄片排畫的是同一組 ATPI 四個分數＝同一份資料畫兩次。
+       留薄片、拿掉雷達的理由有三個：
+       ①薄片是品牌視覺語言（24-品牌視覺識別系統 §3.9），雷達是通用圖表；
+       ②薄片同時扛得起「四大肌肉」與「12 小肌群」兩層，雷達只能畫四個軸；
+       ③雷達的四個軸高度相關（都用「對方的反應」當指標，位階／情境優勢會同時墊高四軸），
+         所以雷達的**形狀**其實不可靠，只有高度有意義——薄片講高度，不會讓人去讀形狀。
+       這張卡拿掉之後，場景判讀（原 r-ctx-box）不另外開卡，改併進下面的「先練這塊」卡，
+       讓「痛 → 解法」連著讀。 -->
 
   <!-- MUSCLE MAP：四頁共用同一個卡名（quiz／visitor／member／pro）。
        大肌肉排真成數＋12 小塊名字露、分數模糊——進健身房才全開。
@@ -609,7 +702,7 @@ body.x-marks [data-edit]{outline-color:rgba(198,96,58,.38);}
   <div class="dq-blk">
     <div class="dq-cd">
       <div class="dq-sec">MUSCLE MAP · <b>影響力肌肉</b></div>
-      <div id="result__bs-map"><div class="slw" style="--sg:21px;"><div class="slv"><span style="color:#8A7266;">50</span><span style="color:#8A7266;">75</span><span style="color:#54718D;">25</span><span style="color:#8A7266;">50</span></div><div class="srow"><div class="sl past" style="height:72px;background:#F4E1D9;"></div><div class="sl past" style="height:96px;background:#DCE7DE;"></div><div class="sl now" style="height:48px;background:#6E8CA8;box-shadow:0 2px 8px #6E8CA844;"></div><div class="sl past" style="height:72px;background:#F1E5CC;"></div></div><div class="slbl"><span class=""><i style="color:#AF5433;">ATTRACT</i>吸引</span><span class=""><i style="color:#5C7464;">TRUST</i>信任</span><span class=""><i style="color:#54718D;">PROFESSIONAL</i>專業</span><span class=""><i style="color:#8E682B;">IMPACT</i>推進</span></div></div><div class="dq-wallnote">實色＝先練這塊最有感・淡色＝已經量過。</div><button class="dq-walltg">每塊再拆成 3 小塊，看這 12 塊 ▾</button></div>
+      <div id="result__bs-map"><div class="slw" style="--sg:21px;"><div class="slv"><span style="color:#8A7266;">50</span><span style="color:#8A7266;">75</span><span style="color:#54718D;">25</span><span style="color:#8A7266;">50</span></div><div class="srow"><div class="sl past" style="height:72px;background:#F4E1D9;"></div><div class="sl past" style="height:96px;background:#DCE7DE;"></div><div class="sl now" style="height:48px;background:#6E8CA8;box-shadow:0 2px 8px #6E8CA844;"></div><div class="sl past" style="height:72px;background:#F1E5CC;"></div></div><div class="slbl"><span class=""><i style="color:#AF5433;">ATTRACT</i>吸引</span><span class=""><i style="color:#5C7464;">TRUST</i>信任</span><span class=""><i style="color:#54718D;">PROFESSIONAL</i>專業</span><span class=""><i style="color:#8E682B;">IMPACT</i>推進</span></div></div><div class="dq-wallnote">實色＝先練這塊最有感・淡色＝已經量過。<br>0–100 是你在量表上的位置，不是跟別人比的名次。</div><button class="dq-walltg">每塊再拆成 3 小塊，看這 12 塊 ▾</button></div>
       <!-- 分享降級（2026-09-15 老師：頁尾三顆鈕不利於下一步）：分享從頁尾的深色大卡
            收成這裡的一行連結——要傳出去的就是這張圖，放在圖旁邊比放在錢鈕旁邊合理，
            而且頁尾就只剩一顆錢鈕（CTA 三層系統：一頁一顆漸層鈕）。 -->
@@ -625,6 +718,13 @@ body.x-marks [data-edit]{outline-color:rgba(198,96,58,.38);}
   <!-- 第四區：最大缺口（大肌肉層）＋ 它的 3 塊小肌群（進館後的第一份課表）
        2026-09-05 老師備註【果-5】：三塊不再全域挑最低，一律＝最弱那塊大肌肉的 3 塊——就是挑他最弱的大肌肉。 -->
   <div class="card" style="border-color:#F0E3DB;">
+    <!-- 痛 → 解法，同一張卡連著讀（2026-09-15）：
+         ①你現在看到的（sym，他認得的畫面）②多數人會怎麼修（CTX_MIS，誤區）③其實卡在哪（肌肉）。
+         不掛場景標籤——老師：「不用特別點名一對一銷售」，用畫面讓他自己對號。 -->
+    <div id="result__r-ctx-box" style="display: block; background: rgb(253, 246, 239); border-radius: 12px; padding: 12px 13px; margin-bottom: 14px;">
+      <div id="result__r-ctx-sym" style="font-size:16px;font-weight:600;color:#4A1B0C;line-height:1.65;margin-bottom:8px;">他說「聽起來不錯」，回去就沒消息了。</div>
+      <div id="result__r-ctx-mis" style="font-size:14.5px;color:#6E4A3C;line-height:1.75;">多數人會把簡報做得更完整——但他回去沒消息，多半不是資訊不夠，是他沒把你講的接到自己身上。</div>
+    </div>
     <div style="font-size:14px;color:#6E4A3C;margin-bottom:6px;">練起這塊肌肉，CP 值最高</div>
     <div id="result__r-weak-name" style="font-size:17px;font-weight:600;color:#4A1B0C;margin-bottom:6px;">專業肌肉（讓他要找你）——現在先練這塊，最有感</div>
     <div id="result__r-weak-desc" style="font-size:15px;color:#6E4A3C;line-height:1.7;white-space:pre-line;">專業肌肉決定他會不會指名找你——他說「聽起來不錯」，但還不確定你能不能解決他的問題，就會回去想想，然後沒有然後。
@@ -633,7 +733,7 @@ body.x-marks [data-edit]{outline-color:rgba(198,96,58,.38);}
     <div style="height:0.5px;background:#E6DAD1;margin:12px 0;"></div>
     <div id="result__r-weak3-title" style="font-size:14px;color:#6E4A3C;margin-bottom:4px;">專業肌肉的 3 塊小肌群——進館先解鎖第 1 塊</div>
     <div id="result__r-weak3"><div style="display: flex; align-items: center; gap: 8px; padding: 5px 0px;"><div style="flex: 1 1 0%; font-size: 15px; color: rgb(90, 58, 42); font-weight: 500; display: flex; align-items: center; gap: 7px;">1　讓他放心<span style="font-size: 11px; font-weight: 700; letter-spacing: 0.04em; border-radius: 20px; padding: 2px 8px; white-space: nowrap; color: rgb(255, 255, 255); background: rgb(84, 113, 141);">進館解鎖</span></div><div style="display: flex; gap: 4px;"><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(110, 140, 168);"></div><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(240, 227, 219);"></div><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(240, 227, 219);"></div><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(240, 227, 219);"></div><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(240, 227, 219);"></div></div><div style="font-size: 14px; color: rgb(110, 74, 60); width: 44px; text-align: right;">1 / 5</div></div><div style="display: flex; align-items: center; gap: 8px; padding: 5px 0px;"><div style="flex: 1 1 0%; font-size: 15px; color: rgb(90, 58, 42); font-weight: 500; display: flex; align-items: center; gap: 7px;">2　讓他釐清<span style="font-size: 11px; font-weight: 700; letter-spacing: 0.04em; border-radius: 20px; padding: 2px 8px; white-space: nowrap; color: rgb(138, 114, 102); background: rgb(239, 230, 219);">會員解鎖</span></div><div style="display: flex; gap: 4px;"><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(110, 140, 168);"></div><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(110, 140, 168);"></div><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(240, 227, 219);"></div><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(240, 227, 219);"></div><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(240, 227, 219);"></div></div><div style="font-size: 14px; color: rgb(110, 74, 60); width: 44px; text-align: right;">2 / 5</div></div><div style="display: flex; align-items: center; gap: 8px; padding: 5px 0px;"><div style="flex: 1 1 0%; font-size: 15px; color: rgb(90, 58, 42); font-weight: 500; display: flex; align-items: center; gap: 7px;">3　讓他有感<span style="font-size: 11px; font-weight: 700; letter-spacing: 0.04em; border-radius: 20px; padding: 2px 8px; white-space: nowrap; color: rgb(138, 114, 102); background: rgb(239, 230, 219);">會員解鎖</span></div><div style="display: flex; gap: 4px;"><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(110, 140, 168);"></div><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(110, 140, 168);"></div><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(110, 140, 168);"></div><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(240, 227, 219);"></div><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(240, 227, 219);"></div></div><div style="font-size: 14px; color: rgb(110, 74, 60); width: 44px; text-align: right;">3 / 5</div></div></div>
-    <div style="font-size:14px;color:#8A7266;line-height:1.6;margin-top:8px;">進館先練解鎖的那一塊就好——不必三塊一起顧，更不必四大肌肉一起顧。</div>
+    <div id="result__r-weak3-foot" style="font-size:14px;color:#8A7266;line-height:1.6;margin-top:8px;">進館先練解鎖的那一塊就好——不必三塊一起顧，更不必四大肌肉一起顧。</div>
   </div>
 
   <!-- 第五區：下一步。⚠️ 2026-09-01 老師拍板「分流取消」＝只留一個出口（進館）。
@@ -661,7 +761,7 @@ body.x-marks [data-edit]{outline-color:rgba(198,96,58,.38);}
 <section class="x-row" data-key="mapopen"><div class="x-left"><div class="x-cap"><b>畫面 5b｜MUSCLE MAP 展開</b><span>12 小塊：形狀是真的、分數糊掉＝進館才全開。這是 quiz 最大的鉤子。</span></div><div class="x-frame" data-key="mapopen"><div class="dq-blk">
     <div class="dq-cd">
       <div class="dq-sec">MUSCLE MAP · <b>影響力肌肉</b></div>
-      <div id="mapopen__bs-map"><div class="slw" style="--sg:21px;"><div class="slv"><span style="color:#8A7266;">50</span><span style="color:#8A7266;">75</span><span style="color:#54718D;">25</span><span style="color:#8A7266;">50</span></div><div class="srow"><div class="sl past" style="height:72px;background:#F4E1D9;"></div><div class="sl past" style="height:96px;background:#DCE7DE;"></div><div class="sl now" style="height:48px;background:#6E8CA8;box-shadow:0 2px 8px #6E8CA844;"></div><div class="sl past" style="height:72px;background:#F1E5CC;"></div></div><div class="slbl"><span class=""><i style="color:#AF5433;">ATTRACT</i>吸引</span><span class=""><i style="color:#5C7464;">TRUST</i>信任</span><span class=""><i style="color:#54718D;">PROFESSIONAL</i>專業</span><span class=""><i style="color:#8E682B;">IMPACT</i>推進</span></div></div><div class="dq-wallnote">實色＝先練這塊最有感・淡色＝已經量過。</div><div class="dq-bshint">🔒 形狀是真的，分數鎖著——進影響力健身房才全開。</div><div class="dq-subrow"><div class="dq-sec" style="margin-bottom:8px;"><span style="color:#AF5433;">ATTRACT</span> · <b>吸引肌肉・3 小塊</b></div><div class="slw fog" style="--sg:16px;"><div class="slv"><span style="color:#8A7266;">3.0</span><span style="color:#8A7266;">4.0</span><span style="color:#8A7266;">2.0</span></div><div class="srow"><div class="sl past" style="height:53px;background:#F4E1D9;"></div><div class="sl past" style="height:71px;background:#F4E1D9;"></div><div class="sl past" style="height:36px;background:#F4E1D9;"></div></div><div class="slbl"><span class=""><i style="color:#AF5433;">A1</i>讓他開口</span><span class=""><i style="color:#AF5433;">A2</i>讓他追問</span><span class=""><i style="color:#AF5433;">A3</i>讓他記得</span></div></div></div><div class="dq-subrow"><div class="dq-sec" style="margin-bottom:8px;"><span style="color:#5C7464;">TRUST</span> · <b>信任肌肉・3 小塊</b></div><div class="slw fog" style="--sg:19px;"><div class="slv"><span style="color:#8A7266;">4.0</span><span style="color:#8A7266;">5.0</span><span style="color:#8A7266;">3.0</span></div><div class="srow"><div class="sl past" style="height:71px;background:#DCE7DE;"></div><div class="sl past" style="height:88px;background:#DCE7DE;"></div><div class="sl past" style="height:53px;background:#DCE7DE;"></div></div><div class="slbl"><span class=""><i style="color:#5C7464;">T1</i>讓他敢說</span><span class=""><i style="color:#5C7464;">T2</i>讓他交心</span><span class=""><i style="color:#5C7464;">T3</i>讓他當真</span></div></div></div><div class="dq-subrow"><div class="dq-sec" style="margin-bottom:8px;"><span style="color:#54718D;">PROFESSIONAL</span> · <b>專業肌肉・3 小塊</b></div><div class="slw fog" style="--sg:12px;"><div class="slv"><span style="color:#8A7266;">2.0</span><span style="color:#8A7266;">3.0</span><span style="color:#8A7266;">1.0</span></div><div class="srow"><div class="sl past" style="height:36px;background:#DDE6EE;"></div><div class="sl past" style="height:53px;background:#DDE6EE;"></div><div class="sl past" style="height:18px;background:#DDE6EE;"></div></div><div class="slbl"><span class=""><i style="color:#54718D;">P1</i>讓他釐清</span><span class=""><i style="color:#54718D;">P2</i>讓他有感</span><span class=""><i style="color:#54718D;">P3</i>讓他放心</span></div></div></div><div class="dq-subrow"><div class="dq-sec" style="margin-bottom:8px;"><span style="color:#8E682B;">IMPACT</span> · <b>推進肌肉・3 小塊</b></div><div class="slw fog" style="--sg:16px;"><div class="slv"><span style="color:#8A7266;">3.0</span><span style="color:#8A7266;">4.0</span><span style="color:#8A7266;">2.0</span></div><div class="srow"><div class="sl past" style="height:53px;background:#F1E5CC;"></div><div class="sl past" style="height:71px;background:#F1E5CC;"></div><div class="sl past" style="height:36px;background:#F1E5CC;"></div></div><div class="slbl"><span class=""><i style="color:#8E682B;">I1</i>讓他想要</span><span class=""><i style="color:#8E682B;">I2</i>讓他敢要</span><span class=""><i style="color:#8E682B;">I3</i>讓他答應</span></div></div></div><button class="dq-walltg">收合 ▴</button></div>
+      <div id="mapopen__bs-map"><div class="slw" style="--sg:21px;"><div class="slv"><span style="color:#8A7266;">50</span><span style="color:#8A7266;">75</span><span style="color:#54718D;">25</span><span style="color:#8A7266;">50</span></div><div class="srow"><div class="sl past" style="height:72px;background:#F4E1D9;"></div><div class="sl past" style="height:96px;background:#DCE7DE;"></div><div class="sl now" style="height:48px;background:#6E8CA8;box-shadow:0 2px 8px #6E8CA844;"></div><div class="sl past" style="height:72px;background:#F1E5CC;"></div></div><div class="slbl"><span class=""><i style="color:#AF5433;">ATTRACT</i>吸引</span><span class=""><i style="color:#5C7464;">TRUST</i>信任</span><span class=""><i style="color:#54718D;">PROFESSIONAL</i>專業</span><span class=""><i style="color:#8E682B;">IMPACT</i>推進</span></div></div><div class="dq-wallnote">實色＝先練這塊最有感・淡色＝已經量過。<br>0–100 是你在量表上的位置，不是跟別人比的名次。</div><div class="dq-bshint">🔒 形狀是真的，分數鎖著——進影響力健身房才全開。</div><div class="dq-subrow"><div class="dq-sec" style="margin-bottom:8px;"><span style="color:#AF5433;">ATTRACT</span> · <b>吸引肌肉・3 小塊</b></div><div class="slw fog" style="--sg:16px;"><div class="slv"><span style="color:#8A7266;">3.0</span><span style="color:#8A7266;">4.0</span><span style="color:#8A7266;">2.0</span></div><div class="srow"><div class="sl past" style="height:53px;background:#F4E1D9;"></div><div class="sl past" style="height:71px;background:#F4E1D9;"></div><div class="sl past" style="height:36px;background:#F4E1D9;"></div></div><div class="slbl"><span class=""><i style="color:#AF5433;">A1</i>讓他開口</span><span class=""><i style="color:#AF5433;">A2</i>讓他追問</span><span class=""><i style="color:#AF5433;">A3</i>讓他記得</span></div></div></div><div class="dq-subrow"><div class="dq-sec" style="margin-bottom:8px;"><span style="color:#5C7464;">TRUST</span> · <b>信任肌肉・3 小塊</b></div><div class="slw fog" style="--sg:19px;"><div class="slv"><span style="color:#8A7266;">4.0</span><span style="color:#8A7266;">5.0</span><span style="color:#8A7266;">3.0</span></div><div class="srow"><div class="sl past" style="height:71px;background:#DCE7DE;"></div><div class="sl past" style="height:88px;background:#DCE7DE;"></div><div class="sl past" style="height:53px;background:#DCE7DE;"></div></div><div class="slbl"><span class=""><i style="color:#5C7464;">T1</i>讓他敢說</span><span class=""><i style="color:#5C7464;">T2</i>讓他交心</span><span class=""><i style="color:#5C7464;">T3</i>讓他當真</span></div></div></div><div class="dq-subrow"><div class="dq-sec" style="margin-bottom:8px;"><span style="color:#54718D;">PROFESSIONAL</span> · <b>專業肌肉・3 小塊</b></div><div class="slw fog" style="--sg:12px;"><div class="slv"><span style="color:#8A7266;">2.0</span><span style="color:#8A7266;">3.0</span><span style="color:#8A7266;">1.0</span></div><div class="srow"><div class="sl past" style="height:36px;background:#DDE6EE;"></div><div class="sl past" style="height:53px;background:#DDE6EE;"></div><div class="sl past" style="height:18px;background:#DDE6EE;"></div></div><div class="slbl"><span class=""><i style="color:#54718D;">P1</i>讓他釐清</span><span class=""><i style="color:#54718D;">P2</i>讓他有感</span><span class=""><i style="color:#54718D;">P3</i>讓他放心</span></div></div></div><div class="dq-subrow"><div class="dq-sec" style="margin-bottom:8px;"><span style="color:#8E682B;">IMPACT</span> · <b>推進肌肉・3 小塊</b></div><div class="slw fog" style="--sg:16px;"><div class="slv"><span style="color:#8A7266;">3.0</span><span style="color:#8A7266;">4.0</span><span style="color:#8A7266;">2.0</span></div><div class="srow"><div class="sl past" style="height:53px;background:#F1E5CC;"></div><div class="sl past" style="height:71px;background:#F1E5CC;"></div><div class="sl past" style="height:36px;background:#F1E5CC;"></div></div><div class="slbl"><span class=""><i style="color:#8E682B;">I1</i>讓他想要</span><span class=""><i style="color:#8E682B;">I2</i>讓他敢要</span><span class=""><i style="color:#8E682B;">I3</i>讓他答應</span></div></div></div><button class="dq-walltg">收合 ▴</button></div>
       <!-- 分享降級（2026-09-15 老師：頁尾三顆鈕不利於下一步）：分享從頁尾的深色大卡
            收成這裡的一行連結——要傳出去的就是這張圖，放在圖旁邊比放在錢鈕旁邊合理，
            而且頁尾就只剩一顆錢鈕（CTA 三層系統：一頁一顆漸層鈕）。 -->
@@ -670,11 +770,29 @@ body.x-marks [data-edit]{outline-color:rgba(198,96,58,.38);}
       <div class="dq-sharenote">猜猜他哪塊最有感。傳出去的那一刻，你已經在練吸引肌肉了。</div>
     </div>
   </div></div></div><aside class="x-side"><div class="x-sh">在這裡寫你要怎麼改</div><textarea class="x-note" data-key="mapopen" placeholder="這一屏想改什麼？直接寫（自動存）"></textarea><div class="x-diff" data-key="mapopen"></div></aside></section>
+<section class="x-row" data-key="tie"><div class="x-left"><div class="x-cap"><b>畫面 5c｜結果頁・平手版（同一張卡的另一種狀態）</b><span>上面那張是「三塊分數分得開」的樣子。這張是同分時的樣子：不編號、不硬排名次，兩塊都掛「進館可選」，讓他自己挑。一題 1–5 整數，同分是常態不是例外。</span></div><div class="x-frame" data-key="tie"><div class="card" style="border-color:#F0E3DB;">
+    <!-- 痛 → 解法，同一張卡連著讀（2026-09-15）：
+         ①你現在看到的（sym，他認得的畫面）②多數人會怎麼修（CTX_MIS，誤區）③其實卡在哪（肌肉）。
+         不掛場景標籤——老師：「不用特別點名一對一銷售」，用畫面讓他自己對號。 -->
+    <div id="tie__r-ctx-box" style="display: block; background: rgb(253, 246, 239); border-radius: 12px; padding: 12px 13px; margin-bottom: 14px;">
+      <div id="tie__r-ctx-sym" style="font-size:16px;font-weight:600;color:#4A1B0C;line-height:1.65;margin-bottom:8px;">他說「聽起來不錯」，回去就沒消息了。</div>
+      <div id="tie__r-ctx-mis" style="font-size:14.5px;color:#6E4A3C;line-height:1.75;">多數人會把簡報做得更完整——但他回去沒消息，多半不是資訊不夠，是他沒把你講的接到自己身上。</div>
+    </div>
+    <div style="font-size:14px;color:#6E4A3C;margin-bottom:6px;">練起這塊肌肉，CP 值最高</div>
+    <div id="tie__r-weak-name" style="font-size:17px;font-weight:600;color:#4A1B0C;margin-bottom:6px;">專業肌肉（讓他要找你）——現在先練這塊，最有感</div>
+    <div id="tie__r-weak-desc" style="font-size:15px;color:#6E4A3C;line-height:1.7;white-space:pre-line;">專業肌肉決定他會不會指名找你——他說「聽起來不錯」，但還不確定你能不能解決他的問題，就會回去想想，然後沒有然後。
+
+你需要的是把你的本事，用他聽得懂的話說出來，讓他認定「這要問你」。</div>
+    <div style="height:0.5px;background:#E6DAD1;margin:12px 0;"></div>
+    <div id="tie__r-weak3-title" style="font-size:14px;color:#6E4A3C;margin-bottom:4px;">專業肌肉的 3 塊小肌群——有 2 塊一樣低，進館先解鎖 1 塊（你挑）</div>
+    <div id="tie__r-weak3"><div style="display: flex; align-items: center; gap: 8px; padding: 5px 0px;"><div style="flex: 1 1 0%; font-size: 15px; color: rgb(90, 58, 42); font-weight: 500; display: flex; align-items: center; gap: 7px;">讓他釐清<span style="font-size: 11px; font-weight: 700; letter-spacing: 0.04em; border-radius: 20px; padding: 2px 8px; white-space: nowrap; color: rgb(255, 255, 255); background: rgb(84, 113, 141);">進館可選</span></div><div style="display: flex; gap: 4px;"><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(110, 140, 168);"></div><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(240, 227, 219);"></div><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(240, 227, 219);"></div><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(240, 227, 219);"></div><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(240, 227, 219);"></div></div><div style="font-size: 14px; color: rgb(110, 74, 60); width: 44px; text-align: right;">1 / 5</div></div><div style="display: flex; align-items: center; gap: 8px; padding: 5px 0px;"><div style="flex: 1 1 0%; font-size: 15px; color: rgb(90, 58, 42); font-weight: 500; display: flex; align-items: center; gap: 7px;">讓他放心<span style="font-size: 11px; font-weight: 700; letter-spacing: 0.04em; border-radius: 20px; padding: 2px 8px; white-space: nowrap; color: rgb(255, 255, 255); background: rgb(84, 113, 141);">進館可選</span></div><div style="display: flex; gap: 4px;"><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(110, 140, 168);"></div><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(240, 227, 219);"></div><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(240, 227, 219);"></div><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(240, 227, 219);"></div><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(240, 227, 219);"></div></div><div style="font-size: 14px; color: rgb(110, 74, 60); width: 44px; text-align: right;">1 / 5</div></div><div style="display: flex; align-items: center; gap: 8px; padding: 5px 0px;"><div style="flex: 1 1 0%; font-size: 15px; color: rgb(90, 58, 42); font-weight: 500; display: flex; align-items: center; gap: 7px;">讓他有感<span style="font-size: 11px; font-weight: 700; letter-spacing: 0.04em; border-radius: 20px; padding: 2px 8px; white-space: nowrap; color: rgb(138, 114, 102); background: rgb(239, 230, 219);">會員解鎖</span></div><div style="display: flex; gap: 4px;"><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(110, 140, 168);"></div><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(110, 140, 168);"></div><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(110, 140, 168);"></div><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(240, 227, 219);"></div><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(240, 227, 219);"></div></div><div style="font-size: 14px; color: rgb(110, 74, 60); width: 44px; text-align: right;">3 / 5</div></div></div>
+    <div id="tie__r-weak3-foot" style="font-size:14px;color:#8A7266;line-height:1.6;margin-top:8px;">分數一樣低就是一樣低，我們不幫你硬排名次——挑你比較常遇到那個場合的先練。一次一塊就好。</div>
+  </div></div></div><aside class="x-side"><div class="x-sh">在這裡寫你要怎麼改</div><textarea class="x-note" data-key="tie" placeholder="這一屏想改什麼？直接寫（自動存）"></textarea><div class="x-diff" data-key="tie"></div></aside></section>
 
 <script>
-/* 版本號綁畫面內容（39b17a84）：index.html 一改、重跑產生器，key 就換，
+/* 版本號綁畫面內容（58785314）：index.html 一改、重跑產生器，key 就換，
    舊草稿不會蓋在對不上的新畫面上。 */
-var LSKEY = "cctdemo_39b17a84";
+var LSKEY = "cctdemo_58785314";
 /* BUTTON 不排除——CTA 的字最需要改。抓下來的 DOM 已由產生器拔掉 onclick，點下去不會亂跑。 */
 var SKIP = new Set(["SCRIPT","STYLE","SVG","PATH","CIRCLE","LINE","POLYGON","INPUT","TEXTAREA","BR","OPTION","SELECT"]);
 var store = [];
@@ -745,7 +863,7 @@ function refresh(){
 
 /* 匯出＝直接進剪貼簿的純文字，這樣可以貼回對話，不用再傳檔案 */
 function report(){
-  var lines = ["# quiz demo 修改（版本 39b17a84）"];
+  var lines = ["# quiz demo 修改（版本 58785314）"];
   document.querySelectorAll(".x-row").forEach(function(row){
     var key = row.dataset.key;
     var title = row.querySelector(".x-cap b").textContent;

@@ -245,7 +245,7 @@ applyFontScale_(fontScaleNow_());
   <!-- q-1 大demo搬入（2026-09-04）：好奇鉤子 hero——不先留資、60秒承諾、測完先拿一句 -->
   <div class="dq-blk" style="margin:6px 0 22px;">
     <!-- pill 已刪（2026-09-05 文案掃）：與正上方席位橫幅（館名＋健檢徽章＋免費60秒）整句重複 -->
-    <div class="dq-hero-t">為什麼有些人一開口，<br>別人就<em>想聽</em>？</div>
+    <div class="dq-hero-t">為什麼有些人一開口，<br>別人就<em>有行動</em>？</div>
     <div class="dq-hero-s">不是天賦，是 <b>4 大影響力肌肉</b>——吸引、信任、專業、推進。測出你先練哪塊最能提升影響力，<b>今天就能用</b>。</div>
     <!-- 2026-09-07 老師抓包：60 秒是會被體感打臉的承諾（16 題實測 3～4 分鐘）。全站改 3 分鐘。 -->
     <div class="dq-hero-meta"><span>⏱ <b>3 分鐘</b></span><span>📱 不用留資料</span><span>🎁 測完馬上知道怎麼提升影響力</span></div>
@@ -272,6 +272,11 @@ applyFontScale_(fontScaleNow_());
     <div style="background:#FDF6EF;border-left:3px solid #AF5433;border-radius:0 12px 12px 0;padding:11px 13px;">
       <div style="font-size:15px;font-weight:600;color:#AF5433;margin-bottom:2px;">講師・帶團隊的人</div>
       <div style="font-size:15px;color:#5A3A2A;line-height:1.6;">一開口全場想聽，每個人覺得「這說的就是我」——同一場分享會，願意走下一步的人變多。</div>
+    </div>
+    <!-- 第四張＝對齊 CTX 第四個場景（自媒體 IP），2026-09-15 補。四張身分卡對四個場景，缺一張就會有人找不到自己。 -->
+    <div style="background:#FDF6EF;border-left:3px solid #AF5433;border-radius:0 12px 12px 0;padding:11px 13px;">
+      <div style="font-size:15px;font-weight:600;color:#AF5433;margin-bottom:2px;">經營自媒體・個人品牌</div>
+      <div style="font-size:15px;color:#5A3A2A;line-height:1.6;">看的人從滑過去，變成停下來、私訊你、想找你。</div>
     </div>
   </div>
   <div style="font-size:14px;font-weight:700;color:#6E4A3C;margin-bottom:8px;">3 分鐘後你會拿到</div>
@@ -336,7 +341,7 @@ applyFontScale_(fontScaleNow_());
   <div class="card" style="background:#4A1B0C;border:none;">
     <div style="font-size:15px;color:rgba(255,255,255,0.55);margin-bottom:8px;">這個測驗會做什麼</div>
     <div style="font-size:16px;color:#fff;line-height:1.8;">用你最常遇到的情境，量出你現在的影響力可以怎麼提升——<strong style="color:#E8C89A;">先提升哪塊肌肉最有感</strong>。</div>
-    <div style="font-size:15px;color:rgba(255,255,255,0.65);line-height:1.7;margin-top:10px;">16 題影響力測驗，只問<strong style="color:#E8C89A;">具體發生過的事</strong>（對方說了什麼、做了什麼）——想不出實例就選「沒做到」，那才測得準。</div>
+    <div style="font-size:15px;color:rgba(255,255,255,0.65);line-height:1.7;margin-top:10px;">16 題影響力測驗，只問<strong style="color:#E8C89A;">具體發生過的事</strong>（對方說了什麼、做了什麼）——想不出實例就選「幾乎不會」，那才測得準。</div>
   </div>
 
   <button class="btnO" id="btn-explain-go">開始作答 →</button>
@@ -350,7 +355,13 @@ applyFontScale_(fontScaleNow_());
   <div class="qtxt" id="q-text"></div>
   <!-- 肌肉題常駐提示（renderQ 依 q.muscle 顯示）：一行解三件事——
        題幹是敘述句所以要補「問題」本身；行為回憶提示＝自評膨脹的煞車；「沒機會做」也歸到選 1。 -->
-  <div id="q-hint" style="display:none;font-size:13.5px;color:#8A7266;line-height:1.7;margin:-6px 0 14px;">這樣的事，在你身上多常發生？——想不出實例，就誠實選「沒做到」。</div>
+  <!-- 這一行同時扛三件事，少一件就會有系統性偏誤，不要為了短而刪：
+       ①「當你遇到這種場合時」＝條件化。有些題的場合本來就少見（剛認識／隔一兩週再見面／談到要不要買），
+         不條件化的話，答低分的人分不出是「做不到」還是「沒機會」——那量到的是機會不是能力。
+       ②「意思到了就算」＝擋字面派。題目裡的引號台詞是為了畫面感，字面派沒聽過那一句就選低分＝系統性低估。
+         這句話放這裡一次就好，不要每題加註，否則題目又被撐長。
+       ③「想不出實例就選最低」＝擋灌水。全 12 題正向計分，不擋會整體墊高。 -->
+  <div id="q-hint" style="display:none;font-size:13.5px;color:#8A7266;line-height:1.7;margin:-6px 0 14px;">當你遇到這種場合時，這件事多常發生？意思到了就算，不必跟例句一模一樣；想不出實例就誠實選「幾乎不會」。</div>
   <div id="opts-wrap"></div>
   <!-- 2026-09-11「選了就走」改版：下一題鈕退役，點選項即前進，只留回頭路 -->
   <button class="qprev hide" id="btn-prev">← 上一題</button>
@@ -388,20 +399,15 @@ applyFontScale_(fontScaleNow_());
     <div style="font-size:14px;color:#8A7266;">吸引 × 信任 × 專業 × 推進　4 大肌肉</div>
   </div>
 
-  <!-- 第二區：ATPI 四個分數 + 雷達圖 -->
-  <div class="card">
-    <div id="r-ctx-box" style="display:none;background:#fff;border:0.5px solid #E6DAD1;border-radius:12px;padding:12px;margin-bottom:14px;">
-      <!-- 2026-09-08 老師拍板：舊標題「這組分數的座標」是 0907 已廢「錨定座標」版的殘留 -->
-      <div style="font-size:14px;color:#6E4A3C;margin-bottom:6px;">你選的場景</div>
-      <div id="r-ctx-badges" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;"></div>
-      <div id="r-ctx-read" style="font-size:15px;color:#5A3A2A;line-height:1.8;white-space:pre-line;"></div>
-    </div>
-    <div class="chartbox" style="flex-direction:column;align-items:center;gap:4px;border:none;padding:0;margin-bottom:.25rem;">
-      <svg id="radar" viewBox="-14 0 288 270" width="288" height="270" style="max-width:100%;" xmlns="http://www.w3.org/2000/svg"></svg>
-    </div>
-    <!-- 2026-09-05 老師備註【果-2】：12 格詳細卡（score-grid）下架——詳細解析不是測驗的目的，
-         分數只留下面 MUSCLE MAP 的四大肌肉排；小肌群逐格點亮留給健身房。 -->
-  </div>
+  <!-- 第二區已整併（2026-09-15 老師：「上面的雷達圖可以不用了，因為跟下面的分數圖重複」）。
+       雷達圖與 MUSCLE MAP 的四大肌肉薄片排畫的是同一組 ATPI 四個分數＝同一份資料畫兩次。
+       留薄片、拿掉雷達的理由有三個：
+       ①薄片是品牌視覺語言（24-品牌視覺識別系統 §3.9），雷達是通用圖表；
+       ②薄片同時扛得起「四大肌肉」與「12 小肌群」兩層，雷達只能畫四個軸；
+       ③雷達的四個軸高度相關（都用「對方的反應」當指標，位階／情境優勢會同時墊高四軸），
+         所以雷達的**形狀**其實不可靠，只有高度有意義——薄片講高度，不會讓人去讀形狀。
+       這張卡拿掉之後，場景判讀（原 r-ctx-box）不另外開卡，改併進下面的「先練這塊」卡，
+       讓「痛 → 解法」連著讀。 -->
 
   <!-- MUSCLE MAP：四頁共用同一個卡名（quiz／visitor／member／pro）。
        大肌肉排真成數＋12 小塊名字露、分數模糊——進健身房才全開。
@@ -425,13 +431,20 @@ applyFontScale_(fontScaleNow_());
   <!-- 第四區：最大缺口（大肌肉層）＋ 它的 3 塊小肌群（進館後的第一份課表）
        2026-09-05 老師備註【果-5】：三塊不再全域挑最低，一律＝最弱那塊大肌肉的 3 塊——就是挑他最弱的大肌肉。 -->
   <div class="card" style="border-color:#F0E3DB;">
+    <!-- 痛 → 解法，同一張卡連著讀（2026-09-15）：
+         ①你現在看到的（sym，他認得的畫面）②多數人會怎麼修（CTX_MIS，誤區）③其實卡在哪（肌肉）。
+         不掛場景標籤——老師：「不用特別點名一對一銷售」，用畫面讓他自己對號。 -->
+    <div id="r-ctx-box" style="display:none;background:#FDF6EF;border-radius:12px;padding:12px 13px;margin-bottom:14px;">
+      <div id="r-ctx-sym" style="font-size:16px;font-weight:600;color:#4A1B0C;line-height:1.65;margin-bottom:8px;"></div>
+      <div id="r-ctx-mis" style="font-size:14.5px;color:#6E4A3C;line-height:1.75;"></div>
+    </div>
     <div style="font-size:14px;color:#6E4A3C;margin-bottom:6px;">練起這塊肌肉，CP 值最高</div>
     <div id="r-weak-name" style="font-size:17px;font-weight:600;color:#4A1B0C;margin-bottom:6px;"></div>
     <div id="r-weak-desc" style="font-size:15px;color:#6E4A3C;line-height:1.7;white-space:pre-line;"></div>
     <div style="height:0.5px;background:#E6DAD1;margin:12px 0;"></div>
     <div id="r-weak3-title" style="font-size:14px;color:#6E4A3C;margin-bottom:4px;"></div>
     <div id="r-weak3"></div>
-    <div style="font-size:14px;color:#8A7266;line-height:1.6;margin-top:8px;">進館先練解鎖的那一塊就好——不必三塊一起顧，更不必四大肌肉一起顧。</div>
+    <div id="r-weak3-foot" style="font-size:14px;color:#8A7266;line-height:1.6;margin-top:8px;"></div>
   </div>
 
   <!-- 第五區：下一步。⚠️ 2026-09-01 老師拍板「分流取消」＝只留一個出口（進館）。
@@ -481,9 +494,14 @@ var QUIZ_URL="https://liff.line.me/2010316474-UovQ1zhe";
 /* 1–5 錨點：就是 atpi-core.js 的 EVAL_ANCHORS，只是把「過頭訊號」那半句拿掉——
    引流測驗從頭到尾沒教過什麼叫過頭訊號，寫進選項只會讓路人看不懂。
    刻度與語意完全相同，所以測驗分**無縫就是體格分基線**，不用任何換算。 */
-/* ⚠️ 第 5 檔本檔用「總是發生」，不是館內的「穩定到自動化」（2026-09-15 老師：那個詞在測驗裡不莊重）。
-   刻度沒動，只換說法——測前用生活語言、進館才換館內語言（詞彙漸進導入）。 */
-var ANCHORS=["沒做到","偶爾，而且生硬","想到才做、時好時壞","多數情境做得到","總是發生"];
+/* ⚠️ 2026-09-15 改成**單一頻率階梯**（本檔限定，館內 EVAL_ANCHORS 不動）。
+   舊錨點是 沒做到／偶爾，而且生硬／想到才做、時好時壞／多數情境做得到／總是發生，
+   第 2、3 檔各自混了兩個維度——頻率（偶爾／想到才做）＋品質（生硬／時好時壞）。
+   後果：做得很頻繁但很生硬的人**無處可歸**，會隨機落在 2 或 3＝純噪音。
+   而且刻度不等距（1→2 從不到偶爾的心理距離遠大於 4→5），兩者卻都算一分。
+   現在整條只講頻率，品質那條線不放在刻度裡——要量品質就另外出題。
+   順帶解決了「穩定到自動化」不莊重（老師語）的問題，這版更白話。 */
+var ANCHORS=["幾乎不會","偶爾","一半一半","多數時候","幾乎每次"];
 
 /* ⭐ 2026-09-01 基礎版：第三軸從「場景（1對1／群體／社群）」換成「小肌群」——
    題數不變（還是 16 題），輸出從 4 格變 12 格，而且對齊字典「維度分＝該維 3 小肌群平均」。
@@ -506,20 +524,31 @@ var QS=[
   /* ⭐ 2026-09-07 出題順序交錯（A→T→P→I 輪三圈），不再按肌肉分區連出：
      同一維連三題會被自己的第一個答案錨定（三題變一題）＋分區排列把測驗意圖全露出來。
      只是呈現順序——muscleScores 按 muscle 鍵存、rawAnswers 按 MORD 重排，資料層不受影響。 */
-  {text:"在還不熟的場合，你主動開口聊，對方會接著聊下去——不是客套一兩句就結束。",dim:"A",muscle:"A1",label:"吸引肌肉｜讓他開口",opts:ANCHORS},
-  {text:"你會先講自己還沒做到、還在煩惱的事，講完之後，他也開始講他的。",dim:"T",muscle:"T1",label:"信任肌肉｜讓他敢說",opts:ANCHORS},
-  {text:"他跟你聊煩惱時，你會問「現在情況怎樣？」「想變成怎樣？」，然後點出中間真正卡住的地方——他聽完說「對⋯⋯就是這個」。",dim:"P",muscle:"P1",label:"專業肌肉｜讓他釐清",opts:ANCHORS},
-  {text:"聊到最後，他自己說出「所以之後我就可以⋯⋯」——他嘴裡講的是他想要的樣子，不是你提供的東西。",dim:"I",muscle:"I1",label:"推進肌肉｜讓他想要",opts:ANCHORS},
+  /* ⭐ 2026-09-15 老師定調兩件事，兩件要一起看才不會走偏：
+     ①「主要是評測對方，自己要做的動作能省略就省略」——舊題幹是「你做了 X → 他有 Y 反應」，
+       前半的 X 是技巧步驟（你先示弱／你一層一層問／你主動問顧慮），等於在題目裡教招，
+       而且會把答案綁在「我有沒有照這個做法做」。改成主詞是對方、只留看得見的那一個反應。
+     ②「多補些場景，讓人更明瞭所在的場景；我們不求一對多場景，因為就是看到習慣」——
+       所以場景要寫死、寫具體（第一次見面／談到要不要做／這場對話結束前），
+       不為了讓一對多也答得了而把題目寫成空話。量的是**習慣的頻率**，
+       受測者從他真的有的情境去回想就好，1–5 錨點本來就是跨情境頻率。
+     ⚠️ 場景 ≠ 技巧：場景答「什麼時候」，技巧答「你要怎麼做」。只准寫前者。
+     ⚠️ 信度／效度沒動到的地方：12 個構念、muscle 鍵、1–5 錨點、交錯出題順序都不變；
+        一題一個可觀察指標，不要再塞第二個行為進去（會變雙管題，信度殺手）。 */
+  {text:"剛認識、還不熟的場合：你開口之後，對方會接著聊下去——不是客套一兩句就結束。",dim:"A",muscle:"A1",label:"吸引肌肉｜讓他開口",opts:ANCHORS},
+  {text:"當你講了自己還沒做到的事，對方也會跟著講他的——他的難處、他還在卡的地方。",dim:"T",muscle:"T1",label:"信任肌肉｜讓他敢說",opts:ANCHORS},
+  {text:"對方講完他卡住的地方，你回應之後，他會說「對，就是這個」。",dim:"P",muscle:"P1",label:"專業肌肉｜讓他釐清",opts:ANCHORS},
+  {text:"聊完之後，對方會自己說出他想變成什麼樣子——「我也想要那樣」「那我就可以⋯⋯」。",dim:"I",muscle:"I1",label:"推進肌肉｜讓他想要",opts:ANCHORS},
 
-  {text:"你講完自己在做什麼之後，他當場「哇」了一聲，主動追問「然後呢？」「你怎麼做到的？」——不是只點頭說「喔喔」。",dim:"A",muscle:"A2",label:"吸引肌肉｜讓他追問",opts:ANCHORS},
-  {text:"你一層一層問下去，最後他講出了你根本沒問到的事，是他自己想多說的。",dim:"T",muscle:"T2",label:"信任肌肉｜讓他交心",opts:ANCHORS},
-  {text:"與其解釋半天，你會直接做一次給他看、或讓他自己試一次，他馬上懂，還說得出「這真的有用」。",dim:"P",muscle:"P2",label:"專業肌肉｜讓他有感",opts:ANCHORS},
-  {text:"你會主動問他還有什麼顧慮，把他心裡的擔心先問出來、一個一個回——不是等他自己開口你才知道。",dim:"I",muscle:"I2",label:"推進肌肉｜讓他敢要",opts:ANCHORS},
+  {text:"別人問「你在做什麼？」你回答完，對方會追問「然後呢？」「你怎麼做到的？」——不是只點頭說「喔喔」。",dim:"A",muscle:"A2",label:"吸引肌肉｜讓他追問",opts:ANCHORS},
+  {text:"你問了之後，對方講出來的比你問的還多——連你沒問到的都說了。",dim:"T",muscle:"T2",label:"信任肌肉｜讓他交心",opts:ANCHORS},
+  {text:"你當場做一次給對方看，他會說「這真的有用」——不是「聽起來很厲害」。",dim:"P",muscle:"P2",label:"專業肌肉｜讓他有感",opts:ANCHORS},
+  {text:"談到要不要做、要不要買的時候，對方會把顧慮直接講出來——錢、時間、還在猶豫什麼，不是丟一句「再看看」。",dim:"I",muscle:"I2",label:"推進肌肉｜讓他敢要",opts:ANCHORS},
 
-  {text:"隔一個禮拜再遇到，他還記得你說過的故事，甚至能用一句話跟別人介紹你。",dim:"A",muscle:"A3",label:"吸引肌肉｜讓他記得",opts:ANCHORS},
-  {text:"你答應他的事，後來真的做到了，做到之後還會回頭跟他說結果——不是只說「有啦我有記得」。",dim:"T",muscle:"T3",label:"信任肌肉｜讓他當真",opts:ANCHORS},
-  {text:"你舉了一個真實例子——誰做過、後來結果如何——他聽完主動追問：「那個人後來怎麼樣？」",dim:"P",muscle:"P3",label:"專業肌肉｜讓他放心",opts:ANCHORS},
-  {text:"聊完之後你拿到的是「他同意的具體下一步」——約好下次時間、他要準備什麼、或他答應去跟誰說——不是只有一句「再聯絡」。",dim:"I",muscle:"I3",label:"推進肌肉｜讓他答應",opts:ANCHORS},
+  {text:"隔一兩個禮拜再見到面，對方還說得出你的特點——不是只剩模糊的印象。",dim:"A",muscle:"A3",label:"吸引肌肉｜讓他記得",opts:ANCHORS},
+  {text:"你答應的事後來都做到了——所以有重要的事，對方會直接找你，不是找別人。",dim:"T",muscle:"T3",label:"信任肌肉｜讓他當真",opts:ANCHORS},
+  {text:"你講了一個真實案例——誰做過、後來結果如何——對方會追問「那個人後來怎麼樣？」",dim:"P",muscle:"P3",label:"專業肌肉｜讓他放心",opts:ANCHORS},
+  {text:"這場對話結束前，對方會跟你講定下一步什麼時候做——不是一句「再聯絡」。",dim:"I",muscle:"I3",label:"推進肌肉｜讓他答應",opts:ANCHORS},
 
   {text:"你想要收入變多的項目，最多的客戶從哪裡來？",dim:"SRC",label:"客戶來源",opts:["朋友／舊客戶／商會介紹","認識的新朋友或陌生人","社群或網路找上門","受僱領薪，沒有自己的客戶"]},
   {text:"你目前的年收入落在哪個區間？",dim:"INC",label:"基本資料",opts:["0-60萬","60-120萬","120-300萬","300-1000萬","1000萬以上"]}
@@ -551,6 +580,31 @@ var CTX_OPTS=[
         T:"有人看，但沒有人私訊你講他自己的事。",
         P:"被說「很有料」，卻沒有人來問怎麼合作。",
         I:"按讚收藏都有，然後沒有一個人真的行動。"}}
+];
+/* 誤區表（2026-09-15 老師：「給他一些他選擇場景底下常犯的誤區，幫我思考痛點怎麼挖深」）。
+   ⭐ 寫法的關鍵：痛不是來自「你沒做」，是來自「**你已經做了，而且做錯方向**」——
+      所以每一句都是「多數人會去 ⟨他真的試過的那件事⟩ ——但 ⟨那不是卡住的地方⟩」。
+      他認得那個動作，因為他做過；發現方向錯了才會想找人帶。
+   ⚠️ 三條紅線：①不點名場景（老師：不用特別點名一對一銷售）——用畫面描述，不掛標籤；
+      ②主詞寫「多數人」不寫「你」，指出誤區不是指責他；
+      ③禁用赤字語言（薄／弱／缺口／補），要講「方向」不講「不足」。 */
+var CTX_MIS=[
+  { A:"多數人會想「那我講大聲一點、多講幾次」——但音量不會讓人轉頭。",
+    T:"多數人會想「那我對他再好一點」——但關心不會讓人講真話。",
+    P:"多數人會想「那我再多學一點、講得更完整」——但懂得多，不等於他覺得這件事該問你。",
+    I:"多數人會想「那我講得更有道理一點」——但點頭跟行動是兩件事。" },
+  { A:"多數人會去背更好的開場白——但對方關門不是因為開場不好，是他一聽就知道你要賣。",
+    T:"多數人會想「那就多聊幾次、關係先做起來」——但熟不等於他願意把預算跟顧慮講出來。",
+    P:"多數人會把簡報做得更完整——但他回去沒消息，多半不是資訊不夠，是他沒把你講的接到自己身上。",
+    I:"多數人會去學收尾話術——但差的那一句不是逼單，是他自己還沒說出他要什麼。" },
+  { A:"多數人會去修投影片、加幾個梗——但台下滑手機通常不是不夠有趣，是前三分鐘沒有一句跟他有關。",
+    T:"多數人會再塞更多乾貨——但「跟我沒關係」是距離問題，不是資訊量問題。",
+    P:"多數人會補上更多頭銜跟架構——但「非你不可」不是靠證明你懂，是靠他親眼看到你的東西有用。",
+    I:"多數人會想「那我講得再熱血一點」——但感動退得很快，真正要的是散場前那個具體的下一步。" },
+  { A:"多數人會怪演算法，然後改成每天發——但滑過去的人不是沒看到，是前兩秒沒有理由停下來。",
+    T:"多數人會想「那我多分享一點生活」——但沒人私訊你，通常是你只給結論，沒給你自己還在卡的地方。",
+    P:"多數人會把內容做得更專業——但「很有料」跟「想找你合作」之間，差的是一個他看得到的實例。",
+    I:"多數人會去追流量——但按讚跟行動之間，差的不是人數，是一句明確的邀請。" }
 ];
 /* 結果句真相＝productkit 01-核心定義字典「兩種語言」條（對外入口用結果句）。
    2026-09-01：P＝讓他要找你（前一版「讓他覺得有解」、再前一版「讓人覺得你很會」皆作廢）。
@@ -785,7 +839,10 @@ function renderMuscleMap(){
       return {h:Math.round(24+pc/100*96),state:k===wk?"now":"past",dimKey:k,
               vTop:pc,lbl:DIMS[k].name.replace("肌肉",""),lbl2:BS_EN[k]};
     }),{vals:true})
-    +'<div class="dq-wallnote">實色＝先練這塊最有感・淡色＝已經量過。</div>';
+    /* ⚠️ 這一行不能省（2026-09-15）：0–100 長得像百分位，會被讀成「我贏過 62% 的人」。
+       它其實是「1–5 量表的位置換算成 0–100」（(分-1)/4×100），沒有常模、不跟任何人比。
+       這份測驗目前沒有常模資料，任何跨人比較的說法都是假的。 */
+    +'<div class="dq-wallnote">實色＝先練這塊最有感・淡色＝已經量過。<br>0–100 是你在量表上的位置，不是跟別人比的名次。</div>';
   if(MAP_OPEN){
     /* 鎖頭字只寫一次，就寫在會看到糊分數的地方——不然四排各掛一次＝四行雜訊 */
     h+='<div class="dq-bshint">🔒 形狀是真的，分數鎖著——進影響力健身房才全開。</div>'
@@ -831,20 +888,17 @@ function renderResult(){
 
   /* 場景個人化（2026-09-07 場景畫像版）：把最弱那塊肌肉翻成他選的場景裡看得見的樣子。
      舊「座標判讀」整段作廢——它在解釋一個沒發生的錨定，讀起來不知所云。 */
+  /* 2026-09-15 改「症狀＋誤區」兩句（老師：「給他常犯的誤區，痛點挖深」）。
+     舊版是「在『一對一銷售』這個場景裡，先練『專業肌肉』最有感——」＝
+     報了一次他自己剛剛選的答案，再報一次下面那張卡就會講的結論，兩句都沒有新資訊。
+     現在第一句給他認得的畫面（sym），第二句給他做過但沒用的那個動作（mis）——
+     痛點在「方向錯了」，不在「你不夠好」。場景名不出現，讓畫面自己對號。 */
   var ctxBox=document.getElementById("r-ctx-box");
   var ctx=(ctxIdx!==null&&ctxIdx!==undefined)?CTX_OPTS[ctxIdx]:null;
   if(ctx&&ctx.sym){
-    var cb=document.getElementById("r-ctx-badges");
-    cb.innerHTML="";
-    [ctx.need].forEach(function(t){
-      var b=document.createElement("span");
-      b.style.cssText="background:#F0E3DB;color:#6E4A3C;font-size:13px;border-radius:20px;padding:3px 10px;";
-      b.textContent=t;
-      cb.appendChild(b);
-    });
-    /* 標題改「你選的場景」後，開頭那句「你想練的場景：…」跟標題＋徽章三重複，砍掉 */
-    document.getElementById("r-ctx-read").textContent=
-      "在「"+ctx.need+"」這個場景裡，先練「"+DIMS[wk].name+"」最有感——它現在的樣子通常是：\n"+ctx.sym[wk]+"\n\n下面的課表，就是從這塊開始排的。";
+    document.getElementById("r-ctx-sym").textContent=ctx.sym[wk];
+    var mis=CTX_MIS[ctxIdx]&&CTX_MIS[ctxIdx][wk];
+    document.getElementById("r-ctx-mis").textContent=mis||"";
     ctxBox.style.display="block";
   }else{
     ctxBox.style.display="none";
@@ -860,19 +914,36 @@ function renderResult(){
   /* 2026-09-15 老師更正：進館（參觀席）只解鎖 1 塊＝專屬招（visitor.html 是 2 塊地基＋1 專屬招），
      另外 2 塊要成為會員才開。舊文案寫「這三塊就是你的第一份課表」是超收，
      而且會讓人進館後發現對不上。改成照實講解鎖節奏——反正「還沒解鎖」本來就是這頁最大的鉤子。 */
-  document.getElementById("r-weak3-title").textContent=DIMS[wk].name+"的 3 塊小肌群——進館先解鎖第 1 塊";
+  /* 🔬 2026-09-15 平手處理（老師拍板）。問題：一塊小肌群＝一題 1–5 整數，
+     三個單題比大小＝同分是常態不是例外；而舊碼是 stable sort，同分時第一名
+     永遠是 MORD 裡排最前面的那塊——「你的專屬招」被陣列順序靜默決定了。
+     測量上也撐不住：單題再測信度約 .6、SD≈1，兩題差值的標準誤約 0.89，
+     要差到 1.7 分才敢說「這塊真的比較弱」。
+     解法不是加題（會拉長測驗），是**把平手講成平手**：差距 < 1 分就並列，讓他自己挑。
+     三個好處：測量上誠實、不做假精準、他自己選的那塊承諾感更高。
+     （目前計分是整數，所以 <1 實際上就是同分；門檻寫成 1 是為了之後改小數計分也不用回來改。） */
+  var d=DIMS[wk];
+  var wkMuscles=musclesOfDim(wk).slice().sort(function(a,b){return (muscleScores[a]||0)-(muscleScores[b]||0);});
+  var lowest=muscleScores[wkMuscles[0]]||0;
+  var tiedN=wkMuscles.filter(function(m){return (muscleScores[m]||0)-lowest<1;}).length;
+  document.getElementById("r-weak3-title").textContent=tiedN>1
+    ? d.name+"的 3 塊小肌群——有 "+tiedN+" 塊一樣低，進館先解鎖 1 塊（你挑）"
+    : d.name+"的 3 塊小肌群——進館先解鎖第 1 塊";
+  document.getElementById("r-weak3-foot").textContent=tiedN>1
+    ? "分數一樣低就是一樣低，我們不幫你硬排名次——挑你比較常遇到那個場合的先練。一次一塊就好。"
+    : "進館先練解鎖的那一塊就好——不必三塊一起顧，更不必四大肌肉一起顧。";
   var w3=document.getElementById("r-weak3");
   w3.innerHTML="";
-  var wkMuscles=musclesOfDim(wk).slice().sort(function(a,b){return (muscleScores[a]||0)-(muscleScores[b]||0);});
   wkMuscles.forEach(function(mkey,i){
-    var d=DIMS[wk];
+    var isPick=(muscleScores[mkey]||0)-lowest<1;   /* 落在平手組裡＝進館時可以挑這塊 */
     var row=document.createElement("div");
     row.style.cssText="display:flex;align-items:center;gap:8px;padding:5px 0;";
-    var n=mk("div",null,(i+1)+"　"+MUSCLES[mkey].name);
+    /* 平手時不編號——編號＝名次，而名次正是這裡不成立的東西 */
+    var n=mk("div",null,(tiedN>1?"":(i+1)+"　")+MUSCLES[mkey].name);
     n.style.cssText="flex:1;font-size:15px;color:#5A3A2A;font-weight:500;";
-    var tag=mk("span",null,i===0?"進館解鎖":"會員解鎖");
+    var tag=mk("span",null,isPick?(tiedN>1?"進館可選":"進館解鎖"):"會員解鎖");
     tag.style.cssText="font-size:11px;font-weight:700;letter-spacing:.04em;border-radius:20px;padding:2px 8px;white-space:nowrap;"
-      +(i===0?"color:#fff;background:"+d.textColor+";":"color:#8A7266;background:#EFE6DB;");
+      +(isPick?"color:#fff;background:"+d.textColor+";":"color:#8A7266;background:#EFE6DB;");
     n.appendChild(tag);
     n.style.display="flex"; n.style.alignItems="center"; n.style.gap="7px";
     var dots=document.createElement("div");
@@ -891,14 +962,15 @@ function renderResult(){
 
   document.getElementById("linesave-wrap").style.display=(!userId&&liffReady)?"block":"none";
   show("s-result");
-  setTimeout(drawRadar,100);
   /* 快取升到 v3：多存 muscleScores（12 格），舊的 v2 快取沒有這欄、格式也對不上，直接不讀。 */
   localStorage.setItem("cct_result_v3",JSON.stringify({scores:scores,muscleScores:muscleScores,incIdx:incIdx,goalIdx:goalIdx,srcIdx:srcIdx,ctxIdx:ctxIdx,ans:ans,form:formData}));
 }
-/* 雷達圖：實作在 atpi-core.js 的 drawRadarSVG（兩個專案共用同一張圖），
-   這裡只留薄包裝——CLAUDE.md 的本機測試片段是呼叫 drawRadar()，保留這個名字不要拿掉。 */
+/* 雷達圖 2026-09-15 從結果頁下架（跟 MUSCLE MAP 的四大肌肉薄片排是同一份資料，見第二區註解）。
+   函式名保留：CLAUDE.md 的本機測試片段、_build-quiz-demo.py 的擷取 harness 都還會呼叫它，
+   而且 drawRadarSVG 本體在 atpi-core.js（member/full-report 那邊還在用），這裡只是不再有畫布。 */
 function drawRadar(){
-  drawRadarSVG(document.getElementById("radar"),scores);
+  var el=document.getElementById("radar");
+  if(el) drawRadarSVG(el,scores);
 }
 
 /* 依 dim 找那一題的選項文字（不要用寫死的 QS index，加減題就會錯位） */
