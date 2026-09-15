@@ -1,423 +1,799 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>quiz 全畫面 demo・逐頁檢視＋備註</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>quiz 可改版 demo・左看畫面右寫修改</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700;900&display=swap">
 <style>
-/* ═══ quiz（quiz.atpifit.com）全畫面攤平 demo・2026-09-05 ═══
-   目的：老師一頁一頁看正式 quiz 的每個畫面（含 16 題全展開），每個板塊掛備註便利貼。
-   內容照抄 index.html 正式版；結果頁的分數＝CLAUDE.md 測試樣本（標「示意」）。
-   備註存 localStorage（綁版本號 v1，板塊一改就換 key），底部可一鍵匯出。 */
+/* ══ 這一段是正式 index.html 的 CSS 原封不動搬過來（由 _build-quiz-demo.py 注入） ══
+   別在這裡改樣式——改了下次重跑產生器就沒了。要改樣式請改 index.html。 */
+
+/* 視覺對齊 member.html（2026-09-05 老師指示）：統一元素搬入、席位色用 A 磚橘。
+   規範真相＝productkit 30-App介面規範（§5 席位色系統／§6 席位橫幅＋行動鈕）。 */
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-html,body{background:#F7F1EC;font-family:"Noto Sans TC","PingFang TC",-apple-system,BlinkMacSystemFont,sans-serif;color:#4A1B0C;-webkit-font-smoothing:antialiased;}
-.wrap{max-width:480px;margin:0 auto;padding:1rem 1rem 110px;}
-.card{background:#fff;border-radius:18px;padding:18px 16px;border:1px solid #E8DDD3;box-shadow:0 2px 10px rgba(90,60,30,.05);margin-bottom:14px;}
-
-/* 畫面分隔標 */
-.scr-h{margin:34px 0 14px;padding:10px 14px;background:#4A1B0C;color:#F7F1EC;border-radius:12px;font-size:15px;font-weight:700;letter-spacing:.5px;}
-.scr-h small{display:block;font-weight:400;font-size:12px;color:rgba(247,241,236,.65);margin-top:3px;line-height:1.6;}
-.scr-h:first-of-type{margin-top:10px;}
-
-/* 板塊＋編號牌（同 member 精修模式） */
-.blk{position:relative;margin-bottom:6px;}
-.btag{position:absolute;top:-9px;right:0;font-size:10px;font-weight:700;letter-spacing:1px;color:#fff;background:#C99A4E;border-radius:10px;padding:2px 8px;z-index:5;}
-
-/* 備註便利貼（同 member.html rv-note） */
-.rv-note{background:#FFF6D8;border:1.5px dashed #D9BE6A;border-radius:10px;padding:9px 12px;font-size:14px;line-height:1.5;color:#5A4A1E;margin:6px 0 20px;min-height:21px;outline:none;}
-.rv-note:empty::before{content:"想怎麼改這個板塊（自動儲存）";color:#BCA65E;}
-.rv-note-all{background:#FDEBDD;border-color:#D9A276;color:#6E3A1E;margin:0 0 22px;}
-.rv-note-all:empty::before{content:"整份 quiz 的大方向寫這裡（自動儲存）";color:#C89A72;}
-
-/* 席位橫幅（quiz＝A 磚橘） */
-.tb{background:linear-gradient(135deg,#AF5433,#C6603A);padding:16px 20px 14px;color:#fff;border-radius:14px;}
+html,body{background:#F7F1EC;font-family:"Noto Sans TC","PingFang TC",-apple-system,BlinkMacSystemFont,sans-serif;min-height:100vh;color:#4A1B0C;-webkit-font-smoothing:antialiased;}
+/* 席位橫幅（30-規範 §6）：quiz＝A 磚橘（深版→原版，同 visitor/member 構法） */
+.tb{background:linear-gradient(135deg,#AF5433,#C6603A);padding:16px 20px 14px;color:#fff;}
 .tb-k{display:flex;align-items:center;font-size:11px;letter-spacing:3px;font-weight:700;color:rgba(255,255,255,.85);}
 .tb-d{margin-left:auto;font-size:12px;color:rgba(255,255,255,.75);letter-spacing:.5px;white-space:nowrap;}
 .tb-r{display:flex;align-items:center;gap:10px;margin-top:9px;}
 .tb-n{color:#fff;font-size:19px;font-weight:900;letter-spacing:.02em;}
 .tb-s{font-size:12.5px;color:rgba(255,255,255,.72);margin-top:5px;letter-spacing:.02em;}
 .hall{font-size:12px;font-weight:700;color:#fff;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);padding:3px 10px;border-radius:20px;white-space:nowrap;margin-left:auto;}
-
-/* boot 開場卡（正式版是滿版蓋頁，這裡攤平展示） */
+.hall:empty{display:none;}
+.aa-btn{margin-left:10px;font-size:13px;font-weight:800;letter-spacing:0;color:#fff;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.45);border-radius:14px;padding:3px 10px;cursor:pointer;font-family:inherit;line-height:1.4;white-space:nowrap;}
+/* 開場等待頁（同 member/pro boot-card：等待＝品牌精神露出時刻；載入中一律咖啡漸層） */
+.boots{position:fixed;inset:0;z-index:60;background:#F7F1EC;padding:18vh 20px 0;}
 .boot-card{background:linear-gradient(135deg,#4A1B0C,#6B3018);border-radius:20px;padding:42px 24px 38px;text-align:center;box-shadow:0 10px 30px rgba(74,27,12,.25);max-width:420px;margin:0 auto;}
-.boot-k{font-size:20px;font-weight:900;color:#F7F1EC;margin-top:14px;}
-.boot-t{font-size:13px;color:rgba(247,241,236,.7);margin-top:6px;}
-.boot-s{font-size:12.5px;color:#E8C89A;margin-top:16px;}
-.boot-dots{display:flex;gap:8px;justify-content:center;margin-top:14px;}
-.boot-dots span{width:9px;height:9px;border-radius:50%;animation:bpulse 1.1s infinite;}
-.ld-logo{animation:ldBreath 2s ease-in-out infinite;}
-@keyframes ldBreath{0%,100%{opacity:.75;}50%{opacity:1;}}
-@keyframes bpulse{0%,100%{opacity:.25;transform:scale(.85);}50%{opacity:1;transform:scale(1);}}
-
-/* 行動鈕（30 規範：唯一漸層鈕） */
-.btnO{display:block;width:100%;background:linear-gradient(135deg,#C6603A 0%,#C99A4E 100%);text-shadow:0 1px 2px rgba(0,0,0,.18);box-shadow:0 6px 18px rgba(198,96,58,.28);color:#fff;border:none;border-radius:16px;padding:17px;font-size:17px;font-weight:700;min-height:56px;text-align:center;margin-bottom:8px;font-family:inherit;}
-.btnN{display:block;width:100%;background:linear-gradient(135deg,#C6603A 0%,#C99A4E 100%);text-shadow:0 1px 2px rgba(0,0,0,.18);color:#fff;border:none;border-radius:16px;padding:17px;font-size:17px;font-weight:700;min-height:56px;margin-top:1.25rem;opacity:.25;text-align:center;font-family:inherit;}
-.btnskip{flex:1;background:#fff;color:#AF5433;border:1px solid #C6603A;border-radius:16px;padding:13px;font-size:16px;font-family:inherit;line-height:1.4;}
-.btnrep{flex:1.4;background:linear-gradient(135deg,#C6603A 0%,#C99A4E 100%);text-shadow:0 1px 2px rgba(0,0,0,.18);color:#fff;border:none;border-radius:16px;padding:13px;font-size:15px;font-weight:700;font-family:inherit;line-height:1.4;min-height:50px;}
-.btnrow{display:flex;gap:8px;}
-.dq-go{margin-top:14px;width:100%;display:block;text-align:center;background:linear-gradient(135deg,#C6603A 0%,#C99A4E 100%);text-shadow:0 1px 2px rgba(0,0,0,.18);color:#fff;border:0;border-radius:16px;padding:17px;font-size:17px;font-weight:700;font-family:inherit;min-height:56px;box-shadow:0 6px 18px rgba(198,96,58,.28);}
-
-/* q-1 hero／q-5 地圖／q-3 體格單／q-6 分享卡（照抄正式版） */
+.boot-k{font-size:12px;letter-spacing:4px;color:#E8C89A;font-weight:700;margin-top:16px;}
+.boot-t{font-size:19px;font-weight:700;color:#F7F1EC;margin-top:12px;line-height:1.6;}
+.boot-s{font-size:13px;color:rgba(247,241,236,.6);margin-top:8px;}
+.boot-dots{display:flex;justify-content:center;gap:12px;margin-top:26px;}
+.site-back{text-align:center;margin:26px 0 8px;}
+.site-back a{font-size:13px;color:#8A6A55;text-decoration:none;border-bottom:1px solid rgba(138,106,85,.3);padding-bottom:1px;}
+.boot-dots span{width:11px;height:11px;border-radius:50%;animation:bpulse 1.2s ease-in-out infinite;}
+@keyframes bpulse{0%,100%{transform:scale(.7);opacity:.45;}50%{transform:scale(1.15);opacity:1;}}
+@keyframes ldBreath{0%,100%{transform:scale(1);opacity:.82;}50%{transform:scale(1.06);opacity:1;}}
+.ld-logo{animation:ldBreath 2.6s ease-in-out infinite;}
+.hide{display:none!important;}
+:focus-visible{outline:2px solid #C6603A;outline-offset:2px;}
+@media (prefers-reduced-motion:reduce){.ld-logo,.boot-dots span{animation:none;}}
+.screen{display:none;}.screen.active{display:block;}
+.wrap{max-width:480px;margin:0 auto;padding:1rem;}
+.card{background:#fff;border-radius:18px;padding:18px 16px;border:1px solid #E8DDD3;box-shadow:0 2px 10px rgba(90,60,30,.05);margin-bottom:14px;}
+.hero{display:flex;align-items:flex-start;gap:10px;margin-bottom:1rem;}
+.av{width:56px;height:56px;border-radius:50%;object-fit:cover;object-position:top center;border:2px solid #E6DAD1;flex-shrink:0;}
+.bub{background:#fff;border:0.5px solid #E6DAD1;border-radius:0 14px 14px 14px;padding:10px 12px;font-size:15px;color:#5A3A2A;line-height:1.7;flex:1;}
+.bub strong{color:#AF5433;font-weight:500;}
+.caserow{display:flex;align-items:flex-start;gap:8px;margin-bottom:8px;}
+.cav{width:38px;height:38px;border-radius:50%;object-fit:cover;object-position:top center;border:1.5px solid #E6DAD1;flex-shrink:0;}
+.cbub{background:#fff;border:0.5px solid #E6DAD1;border-radius:0 12px 12px 12px;padding:8px 11px;font-size:15px;color:#5A3A2A;line-height:1.65;flex:1;}
+.cname{font-weight:500;color:#4A1B0C;font-size:15px;margin-bottom:1px;}
+.chi{color:#AF5433;font-weight:500;}
+.hdiv{height:0.5px;background:#E6DAD1;margin:10px 0;}
+.btitle{font-size:15px;color:#6E4A3C;margin-bottom:6px;}
+.blist{list-style:none;margin-bottom:1.25rem;}
+.blist li{font-size:15px;color:#5A3A2A;padding:4px 0 4px 1.3rem;position:relative;line-height:1.6;}
+.blist li::before{content:"✓";position:absolute;left:0;color:#AF5433;}
+.blist li strong{color:#4A1B0C;font-weight:500;}
+.progtop{display:flex;justify-content:space-between;font-size:15px;color:#6E4A3C;margin-bottom:8px;}
+/* 2026-09-11 改版：3px 細條退役 → 16 片斜切薄片（§3.9 灰階打底、彩色點名）。
+   一題一片：肌肉題亮該肌肉色、GOAL/CTX/SRC/INC 亮中性棕；當題同色半透明＝預告。 */
+.progslices{display:flex;gap:3px;margin-bottom:1.25rem;}
+.progslices i{flex:1;height:9px;background:#EDE4DA;border-radius:2px;transform:skewX(-12deg);transition:background .25s,opacity .25s;}
+.qprev{background:none;border:none;color:#8A7266;font-size:14px;padding:10px 0 2px;margin-top:8px;cursor:pointer;font-family:inherit;}
+/* 程度題＝5 片由矮到高的薄片，站在同一條基線上（高度＝程度，跟結果頁同一套語彙）。
+   ⚠️ 舊版是「等寬格子裡放不等大的圓」：格子等寬、圓越大，圓與圓的邊緣間距就越窄，
+   看起來左鬆右緊＝距離很怪。改成等寬薄片＋固定 gap，間距從頭到尾一樣。
+   右邊 19px＝最高片 88px 的斜角呼吸位（88×tan12°）。
+   點擊區＝整欄（寬約 1/5、高 ≥56px），比原本 52px 的圓好點很多。 */
+.degrow{display:flex;align-items:flex-end;gap:10px;border-bottom:2px solid rgba(74,27,12,.18);padding:16px 19px 0 4px;}
+.degw{flex:1;min-height:56px;display:flex;align-items:flex-end;background:none;border:none;padding:0;cursor:pointer;}
+.degc{display:block;width:100%;border-radius:6px 6px 0 0;background:#fff;border:2px solid #9C8879;border-bottom:0;transform:skewX(-12deg);transform-origin:50% 100%;transition:background .15s,border-color .15s,box-shadow .15s,transform .15s;}
+.degw:active .degc{transform:skewX(-12deg) translateY(3px);}
+.deglbls{display:flex;justify-content:space-between;font-size:13px;color:#8A7266;margin-top:10px;padding:0 19px 0 4px;}
+.degcap{text-align:center;font-size:15px;font-weight:500;margin-top:12px;min-height:24px;}
+.qlabel{display:inline-block;font-size:14px;background:#F0E3DB;color:#993C1D;border-radius:8px;padding:2px 8px;margin-bottom:8px;}
+.qtxt{font-size:18px;font-weight:500;color:#4A1B0C;line-height:1.65;margin-bottom:1.25rem;}
+.opt{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #E6DAD1;border-radius:12px;padding:13px 14px;cursor:pointer;text-align:left;width:100%;margin-bottom:8px;}
+.opt.sel{border:2px solid #C6603A;background:#FDF6EF;}
+.odot{width:28px;height:28px;border-radius:50%;background:#F0E3DB;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:500;color:#993C1D;flex-shrink:0;}
+.opt.sel .odot{background:#AF5433;color:#fff;}
+.otxt{font-size:16px;color:#5A3A2A;line-height:1.5;}
+.opt.sel .otxt{color:#4A1B0C;}
+.ftitle{font-size:19px;font-weight:600;color:#4A1B0C;margin-bottom:4px;}
+.fsub{font-size:15px;color:#6E4A3C;margin-bottom:1.25rem;line-height:1.6;}
+.field{margin-bottom:.9rem;}
+.field label{display:block;font-size:15px;color:#6E4A3C;margin-bottom:5px;font-weight:500;}
+.field input,.field select{width:100%;background:#fff;border:1px solid #E6DAD1;border-radius:10px;padding:11px 13px;font-size:17px;color:#4A1B0C;outline:none;-webkit-appearance:none;}
+.field input:focus,.field select:focus{border-color:#C6603A;}
+.selwrap{position:relative;}
+.selwrap::after{content:"▾";position:absolute;right:13px;top:50%;transform:translateY(-50%);color:#6E4A3C;pointer-events:none;}
+.btnrow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px;}
+.btnskip{background:#fff;color:#AF5433;border:2px solid #C6603A;border-radius:16px;padding:13px 8px;font-size:15px;cursor:pointer;text-align:center;line-height:1.4;min-height:50px;}
+.btnrep{background:linear-gradient(135deg,#C6603A 0%,#C99A4E 100%);text-shadow:0 1px 2px rgba(0,0,0,.18);color:#fff;border:none;border-radius:16px;padding:13px 8px;font-size:15px;font-weight:700;cursor:pointer;text-align:center;line-height:1.4;min-height:50px;box-shadow:0 6px 18px rgba(198,96,58,.28);}
+/* 深色錨點卡＝平色 #4A1B0C（30-規範：咖啡漸層是私教層識別線，這裡不搶） */
+.inccard{background:#4A1B0C;border-radius:16px;padding:1.25rem;margin-bottom:1rem;color:#F7F1EC;}
+.inclevel{font-size:14px;color:rgba(255,255,255,0.6);margin-bottom:4px;}
+.inctitle{font-size:22px;font-weight:600;margin-bottom:8px;}
+.incbeat{display:inline-block;background:rgba(198,96,58,0.3);border:0.5px solid #C6603A;border-radius:10px;padding:3px 10px;font-size:15px;color:#E8C89A;margin-bottom:12px;}
+.incnxtlbl{font-size:14px;color:rgba(255,255,255,0.5);margin-bottom:4px;}
+.incnxt{font-size:16px;color:rgba(255,255,255,0.9);margin-bottom:12px;}
+.incwklbl{font-size:14px;color:rgba(255,255,255,0.5);margin-bottom:4px;}
+.incwk{font-size:16px;font-weight:500;color:#E8C89A;}
+.chartbox{background:#fff;border:0.5px solid #E6DAD1;border-radius:14px;padding:1rem;display:flex;justify-content:center;margin-bottom:1rem;}
+.strcard{background:#FDF6EF;border:0.5px solid #F0E3DB;border-radius:12px;padding:1rem;margin-bottom:1rem;}
+.strlbl{font-size:14px;color:#6E4A3C;margin-bottom:4px;}
+.strname{font-size:17px;font-weight:500;color:#4A1B0C;margin-bottom:6px;}
+.strdesc{font-size:15px;color:#6E4A3C;line-height:1.7;white-space:pre-line;}
+.dimgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1rem;}
+.dimc{background:#fff;border:0.5px solid #E6DAD1;border-radius:12px;padding:12px;}
+.dimn{font-size:14px;margin-bottom:3px;}
+.dimv{font-size:20px;font-weight:600;}
+.dimmx{font-size:14px;color:#8A7266;font-weight:400;}
+.dimbar{height:3px;background:#F0E3DB;border-radius:2px;margin-top:6px;}
+.dimbf{height:3px;border-radius:2px;}
+.copybox{background:#fff;border-left:3px solid #C6603A;border-radius:0 12px 12px 0;padding:1rem;font-size:15px;color:#6E4A3C;line-height:1.8;margin-bottom:1rem;}
+.copybox strong{color:#AF5433;font-weight:500;}
+.saving{text-align:center;font-size:15px;color:#6E4A3C;padding:.5rem 0;min-height:20px;}
+/* 行動鈕＝磚橘漸層（30-規範 §5 第三支：打卡/開始這類「現在就做」，同 member .go4） */
+.btnO{display:block;width:100%;background:linear-gradient(135deg,#C6603A 0%,#C99A4E 100%);text-shadow:0 1px 2px rgba(0,0,0,.18);box-shadow:0 6px 18px rgba(198,96,58,.28);color:#fff;border:none;border-radius:16px;padding:17px;font-size:17px;font-weight:700;min-height:56px;cursor:pointer;text-align:center;margin-bottom:8px;font-family:inherit;}
+.btnO:active{transform:scale(.98);}
+.btnG{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:#fff;color:#AF5433;border:1px solid #C6603A;border-radius:16px;padding:13px;font-size:16px;cursor:pointer;margin-bottom:8px;font-family:inherit;}
+/* ── 三頁大demo搬入（2026-09-04 老師指示：先把相近元素放一起，之後再整合）──
+   dq- 前綴＝demo-quiz.html 搬進來的板塊（q-1 hero／q-3 MUSCLE MAP／q-5 地圖／q-6 分享卡）。 */
+.dq-blk{position:relative;margin-bottom:16px;}
+.dq-tag{position:absolute;top:-9px;right:0;font-size:10px;font-weight:700;letter-spacing:1px;color:#fff;background:#C99A4E;border-radius:10px;padding:2px 8px;z-index:5;}
+.dq-mock{font-size:10px;color:#fff;background:#8A7266;border-radius:8px;padding:1px 6px;margin-left:6px;vertical-align:2px;}
 .dq-pill{display:inline-block;font-size:12px;font-weight:700;letter-spacing:1px;color:#8a6a1e;background:#F3E7CF;border-radius:20px;padding:4px 12px;}
-.dq-hero-t{font-size:28px;font-weight:900;line-height:1.35;margin-top:12px;}
+.dq-cd{background:#fff;border-radius:16px;padding:17px 16px;box-shadow:0 2px 10px rgba(74,27,12,.05);}
+.dq-sec{font-size:13px;font-weight:700;color:#6E4A3C;margin-bottom:11px;}
+.dq-rule4{height:2px;border-radius:2px;background:linear-gradient(90deg,#C6603A,#6E8B77,#6E8CA8,#C99A4E);margin-top:14px;}
+.dq-go{margin-top:14px;width:100%;display:block;text-align:center;text-decoration:none;background:linear-gradient(135deg,#C6603A 0%,#C99A4E 100%);text-shadow:0 1px 2px rgba(0,0,0,.18);color:#fff;border:0;border-radius:16px;padding:17px;font-size:17px;font-weight:700;font-family:inherit;cursor:pointer;min-height:56px;box-shadow:0 6px 18px rgba(198,96,58,.28);transition:transform .15s;}
+.dq-go:active{transform:scale(.97);}
+.dq-hero-t{font-size:28px;font-weight:900;line-height:1.35;margin-top:12px;color:#4A1B0C;}
 .dq-hero-t em{font-style:normal;color:#C6603A;}
 .dq-hero-s{font-size:14px;color:#6E4A3C;line-height:1.9;margin-top:10px;}
 .dq-hero-meta{display:flex;gap:14px;margin-top:14px;font-size:12.5px;color:#8A7266;}
 .dq-hero-meta b{color:#993C1D;}
-.dq-rule4{height:2px;border-radius:2px;background:linear-gradient(90deg,#C6603A,#6E8B77,#6E8CA8,#C99A4E);margin-top:14px;}
-.dq-cd{background:#fff;border-radius:16px;padding:17px 16px;box-shadow:0 2px 10px rgba(74,27,12,.05);}
-.dq-sec{font-size:13px;font-weight:700;color:#6E4A3C;margin-bottom:11px;}
-.dq-mock{font-size:10px;color:#fff;background:#8A7266;border-radius:8px;padding:1px 6px;margin-left:6px;vertical-align:2px;}
+/* 薄片：跟 member／visitor／pro 同一套語彙。改行為四邊要同步。
+   quiz 的鉤子＝「名字露、分數模糊」，所以 12 小塊走 fog（只糊數字，形狀照實） */
+.slw{--sg:0px;}
+.srow{display:flex;align-items:flex-end;gap:7px;border-bottom:2px solid rgba(74,27,12,.22);padding:6px calc(4px + var(--sg,0px)) 0 4px;}
+.sl{flex:1;border-radius:6px 6px 0 0;transform:skewX(-12deg);transform-origin:50% 100%;position:relative;transition:height .4s cubic-bezier(.4,0,.2,1);}
+.sl.todo{background:transparent!important;border:1.5px dashed #9C8879;border-bottom:0;}
+.sl.now.gold{background:#F1E5CC!important;border:2px solid #8E682B;border-bottom:0;}
+.slv{display:flex;gap:7px;padding:0 calc(4px + var(--sg,0px)) 0 4px;}
+.slv span{flex:1;text-align:center;font-size:12.5px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1;}
+.slbl{display:flex;gap:7px;padding:7px calc(4px + var(--sg,0px)) 0 4px;}
+.slbl span{flex:1;text-align:center;font-size:12px;font-weight:700;color:#4A1B0C;line-height:1.45;}
+.slbl span i{display:block;font-style:normal;font-size:10.5px;font-weight:800;letter-spacing:1px;}
+.slbl span.dim{color:#8A7266;font-weight:600;}
+.slw.fog .slv{filter:blur(3.5px);user-select:none;}
+.dq-subrow{margin-top:14px;border-top:1px dashed #E8DDD3;padding-top:12px;}
+.dq-wallnote{font-size:12.5px;color:#8A7266;margin-top:10px;line-height:1.7;}
+.dq-walltg{width:100%;background:none;border:0;color:#AF5433;font-weight:700;font-size:13.5px;padding:14px 0 2px;cursor:pointer;font-family:inherit;min-height:44px;text-align:center;}
+.dq-bshint{margin-top:14px;font-size:12.5px;color:#6E4A3C;background:#EFE6DB;border-radius:10px;padding:9px 12px;line-height:1.7;font-weight:600;}
 .dq-map{position:relative;padding-left:26px;}
 .dq-map:before{content:"";position:absolute;left:8px;top:10px;bottom:10px;width:3px;border-radius:3px;background:linear-gradient(180deg,#C6603A,#6E8B77,#6E8CA8,#C99A4E);}
 .dq-stn{position:relative;padding:9px 0 9px 6px;}
 .dq-stn:before{content:"";position:absolute;left:-24px;top:16px;width:13px;height:13px;border-radius:50%;border:2.5px solid #fff;box-shadow:0 1px 4px rgba(74,27,12,.2);}
-.dq-stn.here:before{background:#C6603A;}
+.dq-stn.here:before{background:#C6603A;animation:dqherepulse 1.8s infinite;}
 .dq-stn.n2:before{background:#6E8B77;}
 .dq-stn.n3:before{background:#6E8CA8;}
 .dq-stn.n4:before{background:#C99A4E;}
-.dq-stn-t{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px;}
-.dq-you{font-size:11px;color:#fff;background:#C6603A;border-radius:10px;padding:1px 8px;font-weight:700;}
+@keyframes dqherepulse{0%,100%{box-shadow:0 0 0 0 rgba(198,96,58,.4);}50%{box-shadow:0 0 0 7px rgba(198,96,58,0);}}
+.dq-stn-t{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px;color:#4A1B0C;}
+.dq-stn-t .dq-you{font-size:11px;color:#fff;background:#C6603A;border-radius:10px;padding:1px 8px;font-weight:700;}
 .dq-stn-s{font-size:12.5px;color:#8A7266;margin-top:3px;line-height:1.7;}
 .dq-stn a{color:#AF5433;font-weight:700;text-decoration:none;}
-.dq-dim{margin-bottom:13px;}
-.dq-dim-hd{display:flex;align-items:baseline;gap:8px;font-size:14px;font-weight:700;}
-.dq-dim-hd small{font-weight:400;color:#8A7266;font-size:12px;}
-.dq-dim-v{margin-left:auto;font-size:15px;font-variant-numeric:tabular-nums;}
-.dq-dim-bar{height:8px;border-radius:8px;background:#EFE5DC;margin-top:6px;overflow:hidden;}
-.dq-dim-bf{height:100%;border-radius:8px;}
-.dq-peek{position:relative;margin-top:14px;border-radius:12px;overflow:hidden;}
-.dq-peek-g{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;filter:blur(3px);opacity:.55;}
-.dq-peek-c{background:#F7F1EC;border-radius:10px;padding:8px;font-size:11px;line-height:1.5;}
-.dq-peek-ov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#993C1D;text-align:center;line-height:1.7;}
 .dq-share{background:#4A1B0C;border-radius:16px;padding:18px;color:#F7F1EC;text-align:center;}
 .dq-share-t{font-size:16px;font-weight:700;line-height:1.7;}
 .dq-share-s{font-size:12.5px;color:rgba(247,241,236,.6);margin-top:8px;line-height:1.7;}
 .dq-share-b{display:inline-block;margin-top:14px;background:#F7F1EC;color:#4A1B0C;border-radius:14px;padding:11px 26px;font-size:14px;font-weight:700;text-decoration:none;}
 
-/* 題卡 */
-.progtop{display:flex;justify-content:space-between;font-size:14px;color:#6E4A3C;margin-bottom:6px;}
-.progbar{height:6px;border-radius:6px;background:#EFE5DC;overflow:hidden;margin-bottom:14px;}
-.progfill{height:100%;border-radius:6px;background:linear-gradient(90deg,#C6603A,#C99A4E);}
-.qlabel{font-size:13px;font-weight:700;color:#993C1D;background:#F0E3DB;border-radius:12px;padding:3px 12px;display:inline-block;margin-bottom:10px;}
-.qtxt{font-size:17px;font-weight:600;line-height:1.7;margin-bottom:14px;}
-.opt{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #E6DAD1;border-radius:12px;padding:13px 14px;text-align:left;width:100%;margin-bottom:8px;font-size:15px;line-height:1.6;color:#4A1B0C;font-family:inherit;}
-.opt .num{flex-shrink:0;width:24px;height:24px;border-radius:50%;background:#F0E3DB;color:#993C1D;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+</style>
+<style>
+/* ══ demo 外殼（全部 x- 開頭，跟正式頁的 class 不會撞） ══ */
+html,body{background:#1b1512;color:#EFE6DE;font-family:"Noto Sans TC","PingFang TC",-apple-system,sans-serif;margin:0;}
+#x-bar{position:sticky;top:0;z-index:900;display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+       background:#241b17;border-bottom:1px solid #3a2c25;padding:11px 18px;}
+#x-bar h1{font-size:15px;font-weight:700;margin:0;letter-spacing:.04em;color:#EFE6DE;}
+#x-bar .x-sp{flex:1;}
+#x-bar .x-tip{font-size:12.5px;color:#9b8478;}
+#x-cnt{font-size:13px;color:#C99A4E;font-weight:700;}
+#x-bar button{font-family:inherit;font-size:13.5px;font-weight:600;border:0;border-radius:9px;
+              padding:9px 15px;cursor:pointer;background:#C6603A;color:#fff;}
+#x-bar button.x-ghost{background:transparent;color:#C9B6A8;border:1px solid #4a382f;}
+#x-bar button:disabled{opacity:.4;cursor:default;}
+#x-toc{display:flex;gap:7px;flex-wrap:wrap;padding:12px 18px 4px;}
+#x-toc a{font-size:12px;color:#C9B6A8;background:#2f2420;border:1px solid #3f312a;
+         border-radius:20px;padding:4px 11px;text-decoration:none;}
+#x-toc a:hover{border-color:#C6603A;color:#FFD79A;}
 
-/* 留資頁 */
-.ftitle{font-size:22px;font-weight:700;margin-bottom:6px;}
-.fsub{font-size:14px;color:#6E4A3C;line-height:1.7;margin-bottom:16px;}
-.field{margin-bottom:12px;}
-.field label{display:block;font-size:14px;color:#6E4A3C;margin-bottom:5px;}
-.field input,.field select{width:100%;background:#fff;border:1px solid #E6DAD1;border-radius:10px;padding:11px 13px;font-size:17px;color:#4A1B0C;-webkit-appearance:none;}
+.x-row{display:flex;gap:22px;align-items:flex-start;padding:26px 18px;border-top:1px solid #2b211c;}
+.x-left{flex:0 0 400px;}
+.x-cap{padding:0 2px 10px;}
+.x-cap b{display:block;font-size:14.5px;color:#EFE6DE;}
+.x-cap span{display:block;font-size:12px;color:#8a7266;margin-top:4px;line-height:1.6;}
+.x-frame{width:400px;background:#F7F1EC;color:#4A1B0C;border-radius:10px;padding:14px 12px;
+         box-shadow:0 10px 34px rgba(0,0,0,.45);overflow:hidden;}
+.x-frame.x-dark{background:#F7F1EC;}
+.x-frame,.x-frame *{font-family:"Noto Sans TC","PingFang TC",-apple-system,sans-serif;}
+.x-frame .screen{display:block;}
+.x-frame .wrap{max-width:none;padding:0;}
 
-/* 結果頁小元件 */
-.w3row{display:flex;align-items:center;gap:8px;padding:5px 0;}
-.w3row .nm{flex:1;font-size:15px;color:#5A3A2A;font-weight:500;}
-.w3row .tg{color:#fff;font-size:13px;border-radius:20px;padding:2px 9px;}
-.w3row .vv{font-size:14px;color:#6E4A3C;width:44px;text-align:right;}
-.mrow{display:flex;align-items:center;gap:8px;padding:4px 0;}
-.mrow .mn{flex:1;font-size:13.5px;color:#5A3A2A;}
-.mrow .dots{display:flex;gap:4px;}
-.mrow .dots i{width:9px;height:9px;border-radius:50%;display:block;}
-.mrow .mv{font-size:13px;color:#6E4A3C;width:20px;text-align:right;}
+.x-side{flex:1;min-width:260px;position:sticky;top:64px;}
+.x-sh{font-size:12px;color:#8a7266;letter-spacing:.06em;margin-bottom:7px;}
+.x-note{width:100%;min-height:120px;resize:vertical;background:#FFF6D8;border:1.5px dashed #D9BE6A;
+        border-radius:10px;padding:11px 13px;font-family:inherit;font-size:14px;line-height:1.75;
+        color:#5A4A1E;outline:none;}
+.x-note:focus{border-color:#C99A4E;border-style:solid;}
+.x-diff{margin-top:11px;}
+.x-diff .x-d{background:#2f2420;border:1px solid #3f312a;border-radius:9px;padding:9px 11px;margin-bottom:8px;}
+.x-diff .x-o{font-size:12.5px;color:#9b8478;text-decoration:line-through;line-height:1.65;}
+.x-diff .x-n{font-size:13px;color:#FFD79A;line-height:1.7;margin-top:4px;}
 
-/* 底部匯出列 */
-.expbar{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);z-index:50;display:flex;gap:8px;align-items:center;background:#4A1B0C;border-radius:22px;padding:8px 10px 8px 18px;box-shadow:0 6px 20px rgba(74,27,12,.35);}
-.expbar span{font-size:12px;color:rgba(247,241,236,.7);white-space:nowrap;}
-.expbar button{background:#C6603A;color:#fff;border:0;border-radius:16px;padding:9px 16px;font-size:13px;font-weight:700;font-family:inherit;white-space:nowrap;}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+/* 直接改字：只有「自己身上就有文字」的元素可編輯，結構不會被改壞 */
+[data-edit]{outline:1px dashed transparent;border-radius:3px;transition:outline-color .12s,background .12s;}
+body.x-marks [data-edit]{outline-color:rgba(198,96,58,.38);}
+[data-edit]:hover{outline-color:rgba(198,96,58,.85);background:rgba(198,96,58,.07);}
+[data-edit]:focus{outline:2px solid #C6603A;background:#fff;}
+[data-edit].x-dirty{background:#FFF6D9;outline-color:#C99A4E;}
+/* 選取用淡琥珀底＋深墨字，不用系統反白（會蓋掉字，看不到自己改了什麼） */
+[data-edit]::selection,[data-edit] *::selection{background:#FFD79A;color:#4A1B0C;}
+
+@media (max-width:900px){ .x-row{flex-direction:column;} .x-left{flex:none;} .x-side{position:static;width:100%;} }
 </style>
 </head>
-<body>
-<div class="wrap">
+<body class="x-marks">
 
-<div style="font-size:20px;font-weight:900;margin:6px 0 4px;">quiz 全畫面 demo <span style="font-size:13px;color:#C6603A;font-weight:700;">v2</span></div>
-<div style="font-size:13px;color:#8A7266;line-height:1.8;margin-bottom:14px;">已照 2026-09-05 你的 12 條備註改完（標語刪／首-2首-3重做／說明頁精簡／題目改字／潛力改已解鎖／12格詳細下架／路徑卡下架改Email／課表改最弱大肌肉三塊）。板塊編號是新的一輪，便利貼直接打字，看完按底下「匯出備註」。分數與雷達＝示意樣本。</div>
-<div class="rv-note rv-note-all" contenteditable="true" data-note="總"></div>
+<div id="x-bar">
+  <h1>quiz 可改版 demo</h1>
+  <span class="x-tip">左邊畫面上點任何一段字就能直接改；右邊寫你的想法。都會自動存。</span>
+  <span class="x-sp"></span>
+  <span id="x-cnt">尚未修改</span>
+  <button class="x-ghost" id="x-toggle">隱藏虛線</button>
+  <button class="x-ghost" id="x-reset">清空全部</button>
+  <button id="x-copy" disabled>複製全部修改</button>
+</div>
+<div id="x-toc"></div>
 
-<!-- ═════════ 畫面 0 ═════════ -->
-<div class="scr-h">畫面 0｜開場等待頁（boot）<small>開頁先蓋滿版咖啡漸層卡，LIFF 載入完成就收掉（最多 3.5 秒）。跨頁 canon：載入中一律咖啡漸層。</small></div>
-<div class="blk" data-id="開-1"><span class="btag">開-1</span>
+<section class="x-row" data-key="boot"><div class="x-left"><div class="x-cap"><b>畫面 0｜開場等待頁（boot）</b><span>開頁先蓋滿版咖啡漸層卡，LIFF 載入完成就收掉。跨頁 canon：載入中一律咖啡漸層。</span></div><div class="x-frame x-dark" data-key="boot">
   <div class="boot-card">
-    <svg class="ld-logo" width="66" height="49" viewBox="-52 -30 104 72" aria-hidden="true"><g fill="none" stroke="#E8C89A" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="M-36 -22 L36 -22 Q48 -22 48 -10"/><path d="M48 -10 L48 10 Q48 22 36 22"/><path d="M36 22 L-6 22 L-16 36 L-22 22 L-36 22 Q-48 22 -48 10"/><path d="M-48 10 L-48 -10 Q-48 -22 -36 -22"/></g><circle cx="-21" cy="0" r="5" fill="#C6603A"/><circle cx="-7" cy="0" r="5" fill="#6E8B77"/><circle cx="7" cy="0" r="5" fill="#6E8CA8"/><circle cx="21" cy="0" r="5" fill="#C99A4E"/></svg>
+    <svg class="ld-logo" width="66" height="49" viewBox="-52 -30 104 72" aria-hidden="true"><g fill="none" stroke="#E8C89A" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="M-36 -22 L36 -22 Q48 -22 48 -10"></path><path d="M48 -10 L48 10 Q48 22 36 22"></path><path d="M36 22 L-6 22 L-16 36 L-22 22 L-36 22 Q-48 22 -48 10"></path><path d="M-48 10 L-48 -10 Q-48 -22 -36 -22"></path></g><circle cx="-21" cy="0" r="5" fill="#C6603A"></circle><circle cx="-7" cy="0" r="5" fill="#6E8B77"></circle><circle cx="7" cy="0" r="5" fill="#6E8CA8"></circle><circle cx="21" cy="0" r="5" fill="#C99A4E"></circle></svg>
     <div class="boot-k">影響力健身房</div>
     <div class="boot-t">練好溝通，你就有影響力</div>
     <div class="boot-s">準備你的影響力健檢…</div>
-    <div class="boot-dots"><span style="background:#C6603A;"></span><span style="background:#6E8B77;animation-delay:.18s;"></span><span style="background:#6E8CA8;animation-delay:.36s;"></span><span style="background:#C99A4E;animation-delay:.54s;"></span></div>
-  </div>
-</div>
-
-<!-- ═════════ 共用頭 ═════════ -->
-<div class="scr-h">共用｜席位橫幅＋標語<small>每個畫面上方都有。quiz＝A 磚橘席位色；連點 logo 5 下＝重測彩蛋。</small></div>
-<div class="blk" data-id="橫-1"><span class="btag">橫-1</span>
-  <div class="tb">
-    <div class="tb-k"><span>ATPIFIT · MUSCLE CHECK</span><div class="tb-d">免費 · 60 秒</div></div>
-    <div class="tb-r">
-      <svg width="30" height="22" viewBox="-52 -30 104 72" aria-hidden="true"><g fill="none" stroke="#fff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="M-36 -22 L36 -22 Q48 -22 48 -10"/><path d="M48 -10 L48 10 Q48 22 36 22"/><path d="M36 22 L-6 22 L-16 36 L-22 22 L-36 22 Q-48 22 -48 10"/><path d="M-48 10 L-48 -10 Q-48 -22 -36 -22"/></g><circle cx="-21" cy="0" r="5" fill="#C6603A" stroke="#fff" stroke-width="1.4"/><circle cx="-7" cy="0" r="5" fill="#6E8B77" stroke="#fff" stroke-width="1.4"/><circle cx="7" cy="0" r="5" fill="#6E8CA8" stroke="#fff" stroke-width="1.4"/><circle cx="21" cy="0" r="5" fill="#C99A4E" stroke="#fff" stroke-width="1.4"/></svg>
-      <div class="tb-n">影響力健身房</div><span class="hall">影響力健檢</span>
+    <div class="boot-dots">
+      <span style="background:#C6603A;"></span>
+      <span style="background:#6E8B77;animation-delay:.18s;"></span>
+      <span style="background:#6E8CA8;animation-delay:.36s;"></span>
+      <span style="background:#C99A4E;animation-delay:.54s;"></span>
     </div>
-    <div class="tb-s">練好溝通，你就有影響力</div>
   </div>
-</div>
-<!-- 橫-2 標語已依備註刪除 -->
+</div></div><aside class="x-side"><div class="x-sh">在這裡寫你要怎麼改</div><textarea class="x-note" data-key="boot" placeholder="這一屏想改什麼？直接寫（自動存）"></textarea><div class="x-diff" data-key="boot"></div></aside></section>
+<section class="x-row" data-key="tb"><div class="x-left"><div class="x-cap"><b>共用｜席位橫幅</b><span>每個畫面上方都有。quiz＝A 磚橘席位色；連點 logo 5 下＝重測彩蛋；Aa＝字級開關。</span></div><div class="x-frame" data-key="tb"><div class="tb" id="tb__app-logo">
+  <div class="tb-k"><span>ATPIFIT · MUSCLE CHECK</span><div class="tb-d">免費 · 3 分鐘</div><button class="aa-btn" id="tb__aaBtn" aria-label="調整字體大小">Aa</button></div>
+  <div class="tb-r">
+    <svg width="30" height="22" viewBox="-52 -30 104 72" aria-hidden="true"><g fill="none" stroke="#fff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="M-36 -22 L36 -22 Q48 -22 48 -10"></path><path d="M48 -10 L48 10 Q48 22 36 22"></path><path d="M36 22 L-6 22 L-16 36 L-22 22 L-36 22 Q-48 22 -48 10"></path><path d="M-48 10 L-48 -10 Q-48 -22 -36 -22"></path></g><circle cx="-21" cy="0" r="5" fill="#C6603A" stroke="#fff" stroke-width="1.4"></circle><circle cx="-7" cy="0" r="5" fill="#6E8B77" stroke="#fff" stroke-width="1.4"></circle><circle cx="7" cy="0" r="5" fill="#6E8CA8" stroke="#fff" stroke-width="1.4"></circle><circle cx="21" cy="0" r="5" fill="#C99A4E" stroke="#fff" stroke-width="1.4"></circle></svg>
+    <div class="tb-n">影響力健身房</div><span class="hall">影響力健檢</span>
+  </div>
+  <div class="tb-s">練好溝通，你就有影響力</div>
+</div></div></div><aside class="x-side"><div class="x-sh">在這裡寫你要怎麼改</div><textarea class="x-note" data-key="tb" placeholder="這一屏想改什麼？直接寫（自動存）"></textarea><div class="x-diff" data-key="tb"></div></aside></section>
+<section class="x-row" data-key="intro"><div class="x-left"><div class="x-cap"><b>畫面 1｜首頁（s-intro）</b><span>好奇鉤子 → 這份測驗為誰做 → 影響力之路 → 開始測驗。</span></div><div class="x-frame" data-key="intro">
 
-<!-- ═════════ 畫面 1：首頁 ═════════ -->
-<div class="scr-h">畫面 1｜首頁（s-intro）<small>好奇鉤子 → 適合誰 → 影響力之路 → 開始測驗。冗文（能幫你清單／光頭自介／學員故事）已刪。</small></div>
-<div class="blk" data-id="首-1"><span class="btag">首-1</span>
-  <div>
-    <!-- pill 已刪（2026-09-05 文案掃）：與席位橫幅整句重複 -->
+  <!-- q-1 大demo搬入（2026-09-04）：好奇鉤子 hero——不先留資、60秒承諾、測完先拿一句 -->
+  <div class="dq-blk" style="margin:6px 0 22px;"><span class="dq-tag">q-1</span>
+    <!-- pill 已刪（2026-09-05 文案掃）：與正上方席位橫幅（館名＋健檢徽章＋免費60秒）整句重複 -->
     <div class="dq-hero-t">為什麼有些人一開口，<br>別人就<em>想聽</em>？</div>
-    <div class="dq-hero-s">不是天賦，是 <b>4 大影響力肌肉</b>——吸引、信任、專業、推進。測出你哪塊最有感，<b>今天就能用</b>。</div>
-    <div class="dq-hero-meta"><span>⏱ <b>60 秒</b></span><span>📱 不用留資料</span><span>🎁 測完先拿一句話</span></div>
+    <div class="dq-hero-s">不是天賦，是 <b>4 大影響力肌肉</b>——吸引、信任、專業、推進。測出你先練哪塊最能提升影響力，<b>今天就能用</b>。</div>
+    <!-- 2026-09-07 老師抓包：60 秒是會被體感打臉的承諾（16 題實測 3～4 分鐘）。全站改 3 分鐘。 -->
+    <div class="dq-hero-meta"><span>⏱ <b>3 分鐘</b></span><span>📱 不用留資料</span><span>🎁 測完馬上知道怎麼提升影響力</span></div>
     <div class="dq-rule4"></div>
     <button class="dq-go">開始測 →</button>
   </div>
-</div>
-<div class="blk" data-id="首-2"><span class="btag">首-2</span>
-  <div class="card" style="margin-bottom:0;">
-  <div style="font-size:16px;font-weight:700;margin-bottom:12px;">這份測驗為誰做？</div>
+
+  <!-- 2026-09-05 老師備註【首-2】重做：一眼看懂「誰適合＋會得到什麼」。
+       身分寫在前（人先認出自己），得到寫成一句場景結果；下半段直接列「60 秒後拿到的三樣」。 -->
+  <div class="card">
+  <div class="btitle" style="margin-bottom:12px;">這份測驗為誰做？</div>
+  <!-- ⚠️ 這三張是「三種人」不是 ATPI 三個維度，所以三張同色。
+       原本橘／藍／金，跟下面四大肌肉的 A／P／I 撞同一組色票＝顏色在說謊。
+       同色＝這一站（路人席）的人都在這裡，A 深版 #AF5433 是 quiz 的席位色。 -->
   <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px;">
-    <div style="background:#FDF6EF;border-left:3px solid #C6603A;border-radius:0 12px 12px 0;padding:11px 13px;">
+    <div style="background:#FDF6EF;border-left:3px solid #AF5433;border-radius:0 12px 12px 0;padding:11px 13px;">
       <div style="font-size:15px;font-weight:600;color:#AF5433;margin-bottom:2px;">上班族・想說話有份量</div>
       <div style="font-size:15px;color:#5A3A2A;line-height:1.6;">同事、家人、老闆——同一句話，你說出來就有人聽。</div>
     </div>
-    <div style="background:#DDE6EE;border-left:3px solid #6E8CA8;border-radius:0 12px 12px 0;padding:11px 13px;">
-      <div style="font-size:15px;font-weight:600;color:#54718D;margin-bottom:2px;">業務・顧問・接案者</div>
+    <div style="background:#FDF6EF;border-left:3px solid #AF5433;border-radius:0 12px 12px 0;padding:11px 13px;">
+      <div style="font-size:15px;font-weight:600;color:#AF5433;margin-bottom:2px;">業務・顧問・接案者</div>
       <div style="font-size:15px;color:#5A3A2A;line-height:1.6;">不推銷。對方聊完主動問「那要怎麼跟你合作？」</div>
     </div>
-    <div style="background:#F1E5CC;border-left:3px solid #C99A4E;border-radius:0 12px 12px 0;padding:11px 13px;">
-      <div style="font-size:15px;font-weight:600;color:#8E682B;margin-bottom:2px;">講師・帶團隊的人</div>
+    <div style="background:#FDF6EF;border-left:3px solid #AF5433;border-radius:0 12px 12px 0;padding:11px 13px;">
+      <div style="font-size:15px;font-weight:600;color:#AF5433;margin-bottom:2px;">講師・帶團隊的人</div>
       <div style="font-size:15px;color:#5A3A2A;line-height:1.6;">一開口全場想聽，每個人覺得「這說的就是我」。</div>
     </div>
   </div>
-  <div style="font-size:14px;font-weight:700;color:#6E4A3C;margin-bottom:8px;">60 秒後你會拿到</div>
+  <div style="font-size:14px;font-weight:700;color:#6E4A3C;margin-bottom:8px;">3 分鐘後你會拿到</div>
   <div style="font-size:15px;color:#5A3A2A;line-height:2.1;">
-    <div>① 你的<b>影響力體格單</b>——4 塊肌肉各幾分</div>
+    <div>① 你的<b>影響力肌肉</b>——4 塊各幾分</div>
     <div>② <b>先練哪塊最有感</b>——今天就能用</div>
-    <div>③ 留 Email 加送<b>完整變現報告</b>（可跳過）</div>
+    <div>③ 留 Email 加送<b>完整影響力報告</b>（可跳過）</div>
   </div>
   </div>
-</div>
-<div class="blk" data-id="首-3"><span class="btag">首-3</span>
-  <div class="dq-cd">
-    <div class="dq-sec">影響力之路——每一站都有人陪你練</div>
-    <div class="dq-map">
-      <div class="dq-stn here" style="background:#FDF6EF;border-radius:12px;padding:10px 10px 10px 6px;"><div class="dq-stn-t">第 1 站・測出體格 <span class="dq-you">你在這裡</span></div><div class="dq-stn-s">60 秒，找到先練哪塊最有感</div></div>
-      <div class="dq-stn n2"><div class="dq-stn-t">第 2 站・免費體驗</div><div class="dq-stn-s">每月分享會＋社群，先看別人怎麼練</div></div>
-      <div class="dq-stn n3"><div class="dq-stn-t">第 3 站・進健身房</div><div class="dq-stn-s">每天一招，12 塊小肌群逐塊點亮 → <a>看會員的一天 →</a></div></div>
-      <div class="dq-stn n4"><div class="dq-stn-t">第 4 站・私人教練席</div><div class="dq-stn-s">教練看著你的每一筆紀錄，練進真實關係 → <a>看教練席 →</a></div></div>
+  <!-- q-5 全貌感地圖（2026-09-05 老師指示搬到首頁）：你在這裡＋future pacing，
+       連到三頁大demo（絕對網址，因為 demo 檔在 consult-workshop repo）。 -->
+  <!-- 2026-09-05 老師備註【首-3】重做：每站＝一個名字＋一句「在那裡會得到什麼」，
+       現在這站用暖底把「你在這裡」抬出來，後面三站當 future pacing。 -->
+  <div class="dq-blk"><span class="dq-tag">q-5</span>
+    <div class="dq-cd">
+      <div class="dq-sec">影響力之路——每一站都有人陪你練</div>
+      <div class="dq-map">
+        <div class="dq-stn here" style="background:#FDF6EF;border-radius:12px;padding:10px 10px 10px 6px;"><div class="dq-stn-t">第 1 站・測影響力肌肉 <span class="dq-you">你在這裡</span></div><div class="dq-stn-s">3 分鐘，找到先練哪塊最有感</div></div>
+        <div class="dq-stn n2"><div class="dq-stn-t">第 2 站・免費體驗</div><div class="dq-stn-s">每月分享會＋社群，先看別人怎麼練</div></div>
+        <div class="dq-stn n3"><div class="dq-stn-t">第 3 站・進健身房</div><div class="dq-stn-s">每天一招，12 塊小肌群逐塊點亮 → <a data-href="https://app.atpifit.com/demo-member.html">看會員的一天 →</a></div></div>
+        <div class="dq-stn n4"><div class="dq-stn-t">第 4 站・私人教練席</div><div class="dq-stn-s">教練看著你的每一筆紀錄，練進真實關係 → <a data-href="https://app.atpifit.com/demo-pro.html">看教練席 →</a></div></div>
+      </div>
     </div>
   </div>
-</div>
-<div class="blk" data-id="首-4"><span class="btag">首-4</span>
-  <button class="btnO">開始測驗 →</button>
-</div>
 
-<!-- ═════════ 畫面 2：測驗前說明 ═════════ -->
-<div class="scr-h">畫面 2｜測驗前說明（s-explain）<small>舊「溝通變現是什麼」整卡已刪；四塊肌肉卡精簡成一行一塊。</small></div>
-<div class="blk" data-id="說-1"><span class="btag">說-1</span>
-  <div class="card" style="margin-bottom:0;">
-    <div style="font-size:20px;font-weight:700;line-height:1.5;margin-bottom:4px;">等一下測的，就是這 4 塊</div>
+  <button class="btnO" id="intro__btn-start">開始測驗 →</button>
+
+  <!-- 唯一一條連回主站的連結。子網域沒有這條，Google 無從把它跟 atpifit.com 綁在一起。 -->
+  <div class="site-back">
+    <a data-href="https://atpifit.com/">影響力健身房 ATPIFit 官網</a>
+  </div>
+</div></div><aside class="x-side"><div class="x-sh">在這裡寫你要怎麼改</div><textarea class="x-note" data-key="intro" placeholder="這一屏想改什麼？直接寫（自動存）"></textarea><div class="x-diff" data-key="intro"></div></aside></section>
+<section class="x-row" data-key="explain"><div class="x-left"><div class="x-cap"><b>畫面 2｜測驗前說明（s-explain）</b><span>四塊肌肉各一行，講清楚等一下在量什麼。</span></div><div class="x-frame" data-key="explain">
+
+  <!-- 2026-09-05 老師備註【說-1】：整卡刪（講「溝通變現是什麼」太課本，路人要的是測完拿到什麼）。
+       【說-2】重做：一塊肌肉一行＝名字＋結果句＋「少了會怎樣」一句，全卡掃 10 秒能讀完。 -->
+  <div class="card">
+    <div style="font-size:20px;font-weight:700;color:#4A1B0C;line-height:1.5;margin-bottom:4px;">等一下測的，就是這 4 塊</div>
     <div style="font-size:15px;color:#6E4A3C;line-height:1.7;margin-bottom:14px;">影響力不是天賦，是 4 塊練得起來的肌肉。</div>
     <div style="display:flex;flex-direction:column;gap:8px;">
-      <div style="background:#FDF6EF;border-left:3px solid #C6603A;border-radius:0 12px 12px 0;padding:11px 13px;"><div style="font-size:15px;font-weight:600;color:#AF5433;margin-bottom:2px;">吸引肌肉——讓他想靠近</div><div style="font-size:15px;color:#5A3A2A;line-height:1.6;">少了它：說再多，對方點頭就走。</div></div>
-      <div style="background:#DCE7DE;border-left:3px solid #6E8B77;border-radius:0 12px 12px 0;padding:11px 13px;"><div style="font-size:15px;font-weight:600;color:#5C7464;margin-bottom:2px;">信任肌肉——讓他願意說</div><div style="font-size:15px;color:#5A3A2A;line-height:1.6;">少了它：他喜歡你，但真心話和錢都留著。</div></div>
-      <div style="background:#DDE6EE;border-left:3px solid #6E8CA8;border-radius:0 12px 12px 0;padding:11px 13px;"><div style="font-size:15px;font-weight:600;color:#54718D;margin-bottom:2px;">專業肌肉——讓他要找你</div><div style="font-size:15px;color:#5A3A2A;line-height:1.6;">少了它：「聽起來不錯」，然後就沒有然後。</div></div>
-      <div style="background:#F1E5CC;border-left:3px solid #C99A4E;border-radius:0 12px 12px 0;padding:11px 13px;"><div style="font-size:15px;font-weight:600;color:#8E682B;margin-bottom:2px;">推進肌肉——讓他願意動</div><div style="font-size:15px;color:#5A3A2A;line-height:1.6;">少了它：最後一句永遠是「我再想想」。</div></div>
+      <div style="background:#FDF6EF;border-left:3px solid #C6603A;border-radius:0 12px 12px 0;padding:11px 13px;">
+        <div style="font-size:15px;font-weight:600;color:#AF5433;margin-bottom:2px;">吸引肌肉——讓他想靠近</div>
+        <div style="font-size:15px;color:#5A3A2A;line-height:1.6;">少了它：說再多，對方點頭就走。</div>
+      </div>
+      <div style="background:#DCE7DE;border-left:3px solid #6E8B77;border-radius:0 12px 12px 0;padding:11px 13px;">
+        <div style="font-size:15px;font-weight:600;color:#5C7464;margin-bottom:2px;">信任肌肉——讓他願意說</div>
+        <div style="font-size:15px;color:#5A3A2A;line-height:1.6;">少了它：他喜歡你，但真心話和錢都留著。</div>
+      </div>
+      <div style="background:#DDE6EE;border-left:3px solid #6E8CA8;border-radius:0 12px 12px 0;padding:11px 13px;">
+        <div style="font-size:15px;font-weight:600;color:#54718D;margin-bottom:2px;">專業肌肉——讓他要找你</div>
+        <div style="font-size:15px;color:#5A3A2A;line-height:1.6;">少了它：「聽起來不錯」，然後就沒有然後。</div>
+      </div>
+      <div style="background:#F1E5CC;border-left:3px solid #C99A4E;border-radius:0 12px 12px 0;padding:11px 13px;">
+        <div style="font-size:15px;font-weight:600;color:#8E682B;margin-bottom:2px;">推進肌肉——讓他願意動</div>
+        <div style="font-size:15px;color:#5A3A2A;line-height:1.6;">少了它：最後一句永遠是「我再想想」。</div>
+      </div>
     </div>
-    <div style="font-size:15px;line-height:1.7;margin-top:12px;"><strong>變現要四塊一起出力</strong>——哪一塊快歸零，整條路就跟著打折。</div>
+    <div style="font-size:15px;color:#4A1B0C;line-height:1.7;margin-top:12px;"><strong>影響力要四塊一起出力</strong>——哪一塊快歸零，說再多都到不了對方心裡。</div>
   </div>
-</div>
-<div class="blk" data-id="說-2"><span class="btag">說-2</span>
-  <div class="card" style="background:#4A1B0C;border:none;margin-bottom:0;">
+
+  <div class="card" style="background:#4A1B0C;border:none;">
     <div style="font-size:15px;color:rgba(255,255,255,0.55);margin-bottom:8px;">這個測驗會做什麼</div>
-    <div style="font-size:16px;color:#fff;line-height:1.8;">每塊肌肉再拆成 3 個小肌群，一共 <strong style="color:#E8C89A;">12 塊</strong>——測完你會拿到 4 塊肌肉的體格單，和<strong style="color:#E8C89A;">先練最有感的那 3 塊</strong>。</div>
-    <div style="font-size:15px;color:rgba(255,255,255,0.65);line-height:1.7;margin-top:10px;">12 題只問<strong style="color:#E8C89A;">具體發生過的事</strong>（對方說了什麼、做了什麼）——想不出實例就選「沒做到」，那才測得準。</div>
+    <div style="font-size:16px;color:#fff;line-height:1.8;">每塊肌肉再拆成 3 個小肌群，一共 <strong style="color:#E8C89A;">12 塊</strong>——測完你會拿到 4 塊肌肉的分數，和<strong style="color:#E8C89A;">先練最有感的那 3 塊</strong>。</div>
+    <div style="font-size:15px;color:rgba(255,255,255,0.65);line-height:1.7;margin-top:10px;">16 題影響力測驗，只問<strong style="color:#E8C89A;">具體發生過的事</strong>（對方說了什麼、做了什麼）——想不出實例就選「沒做到」，那才測得準。</div>
   </div>
-</div>
-<div class="blk" data-id="說-3"><span class="btag">說-3</span>
-  <button class="btnO">開始作答 →</button>
-</div>
 
-<!-- ═════════ 畫面 3：16 題全展開 ═════════ -->
-<div class="scr-h">畫面 3｜答題頁（s-quiz）・16 題全展開<small>正式版一次只出一題＋進度條。這裡把 16 題全部攤開一頁一頁看：2 題暖身（不計分）→ 12 題肌肉題（1–5 錨點）→ 2 題背景（不計分）。</small></div>
-<div id="qhost"></div>
+  <button class="btnO" id="explain__btn-explain-go">開始作答 →</button>
 
-<!-- ═════════ 畫面 4：留資頁 ═════════ -->
-<div class="scr-h">畫面 4｜留資頁（s-form）<small>測完才留資（先給價值再要資料）。可以不領取直接看結果——但拿得到 userId 時名單照送，進館才查得到人。</small></div>
-<div class="blk" data-id="資-1"><span class="btag">資-1</span>
-  <div class="card" style="margin-bottom:0;">
-    <div class="ftitle">測驗完成！</div>
-    <div class="fsub">留下 Email，完整變現報告寄到你的信箱。<br>（也可以不領取，直接看結果）</div>
-    <div class="field"><label>姓名</label><input type="text" placeholder="請輸入姓名" readonly></div>
-    <div class="field"><label>Email</label><input type="email" placeholder="請輸入 Email" readonly></div>
-    <div class="field"><label>職業／身份</label><select disabled><option>請選擇（業務／講師／創業者／上班族／學生／其他）</option></select></div>
-    <div class="btnrow" style="margin-top:14px;">
-      <button class="btnskip">不領取<br><span style="font-size:14px;opacity:.7">直接看結果</span></button>
-      <button class="btnrep">領取完整報告<br><span style="font-size:14px;opacity:.85">查看結果</span></button>
-    </div>
+</div></div><aside class="x-side"><div class="x-sh">在這裡寫你要怎麼改</div><textarea class="x-note" data-key="explain" placeholder="這一屏想改什麼？直接寫（自動存）"></textarea><div class="x-diff" data-key="explain"></div></aside></section>
+<section class="x-row" data-key="q1"><div class="x-left"><div class="x-cap"><b>畫面 3-1｜第 1 題（共 16 題）</b><span>開始前先想想・不計分</span></div><div class="x-frame" data-key="q1"><div class="card">
+  <div class="progtop"><span id="q1__q-counter">第 1 題，共 16 題</span></div>
+  <div class="progslices" id="q1__prog-slices"><i style="background: rgb(175, 84, 51);"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="qlabel" id="q1__q-label" style="color: rgb(153, 60, 29); background: rgb(240, 227, 219);">開始前先想想</div>
+  <div class="qtxt" id="q1__q-text">你期待透過提升「影響力」，能為你額外增加多少年收入？</div>
+  <!-- 肌肉題常駐提示（renderQ 依 q.muscle 顯示）：一行解三件事——
+       題幹是敘述句所以要補「問題」本身；行為回憶提示＝自評膨脹的煞車；「沒機會做」也歸到選 1。 -->
+  <div id="q1__q-hint" style="display:none;font-size:13.5px;color:#8A7266;line-height:1.7;margin:-6px 0 14px;">這樣的事，在你身上多常發生？——想不出實例，就誠實選「沒做到」。</div>
+  <div id="q1__opts-wrap"><button class="opt"><div class="odot">1</div><span class="otxt">多賺 20 萬以內</span></button><button class="opt"><div class="odot">2</div><span class="otxt">多賺 20～100 萬</span></button><button class="opt"><div class="odot">3</div><span class="otxt">多賺 100～300 萬</span></button><button class="opt"><div class="odot">4</div><span class="otxt">多賺 300 萬以上</span></button></div>
+  <!-- 2026-09-11「選了就走」改版：下一題鈕退役，點選項即前進，只留回頭路 -->
+  <button class="qprev hide" id="q1__btn-prev">← 上一題</button>
+</div></div></div><aside class="x-side"><div class="x-sh">在這裡寫你要怎麼改</div><textarea class="x-note" data-key="q1" placeholder="這一屏想改什麼？直接寫（自動存）"></textarea><div class="x-diff" data-key="q1"></div></aside></section>
+<section class="x-row" data-key="q2"><div class="x-left"><div class="x-cap"><b>畫面 3-2｜第 2 題（共 16 題）</b><span>先選場景・不計分</span></div><div class="x-frame" data-key="q2"><div class="card">
+  <div class="progtop"><span id="q2__q-counter">第 2 題，共 16 題</span></div>
+  <div class="progslices" id="q2__prog-slices"><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(175, 84, 51);"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="qlabel" id="q2__q-label" style="color: rgb(153, 60, 29); background: rgb(240, 227, 219);">先選場景</div>
+  <div class="qtxt" id="q2__q-text">你最想在哪種場合，說話更有影響力？</div>
+  <!-- 肌肉題常駐提示（renderQ 依 q.muscle 顯示）：一行解三件事——
+       題幹是敘述句所以要補「問題」本身；行為回憶提示＝自評膨脹的煞車；「沒機會做」也歸到選 1。 -->
+  <div id="q2__q-hint" style="display:none;font-size:13.5px;color:#8A7266;line-height:1.7;margin:-6px 0 14px;">這樣的事，在你身上多常發生？——想不出實例，就誠實選「沒做到」。</div>
+  <div id="q2__opts-wrap"><button class="opt"><div class="odot">1</div><span class="otxt">職場與家人——說話有份量、有人聽</span></button><button class="opt"><div class="odot">2</div><span class="otxt">一對一銷售談合作——他主動問「怎麼跟你合作」</span></button><button class="opt"><div class="odot">3</div><span class="otxt">一對多演講帶團隊——一開口全場想聽</span></button></div>
+  <!-- 2026-09-11「選了就走」改版：下一題鈕退役，點選項即前進，只留回頭路 -->
+  <button class="qprev" id="q2__btn-prev">← 上一題</button>
+</div></div></div><aside class="x-side"><div class="x-sh">在這裡寫你要怎麼改</div><textarea class="x-note" data-key="q2" placeholder="這一屏想改什麼？直接寫（自動存）"></textarea><div class="x-diff" data-key="q2"></div></aside></section>
+<section class="x-row" data-key="q3"><div class="x-left"><div class="x-cap"><b>畫面 3-3｜第 3 題（共 16 題）</b><span>吸引肌肉｜讓他開口・肌肉題（1–5 錨點，選了就自動前進）</span></div><div class="x-frame" data-key="q3"><div class="card">
+  <div class="progtop"><span id="q3__q-counter">第 3 題，共 16 題</span></div>
+  <div class="progslices" id="q3__prog-slices"><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(198, 96, 58);"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="qlabel" id="q3__q-label" style="color: rgb(175, 84, 51); background: rgba(198, 96, 58, 0.133);">吸引肌肉｜讓他開口</div>
+  <div class="qtxt" id="q3__q-text">在還不熟的場合，你主動開口聊，對方會接著聊下去——不是客套一兩句就結束。</div>
+  <!-- 肌肉題常駐提示（renderQ 依 q.muscle 顯示）：一行解三件事——
+       題幹是敘述句所以要補「問題」本身；行為回憶提示＝自評膨脹的煞車；「沒機會做」也歸到選 1。 -->
+  <div id="q3__q-hint" style="display: block; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">這樣的事，在你身上多常發生？——想不出實例，就誠實選「沒做到」。</div>
+  <div id="q3__opts-wrap"><div class="degrow"><button class="degw" aria-label="沒做到"><span class="degc" style="height: 20px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="偶爾，而且生硬"><span class="degc" style="height: 37px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="想到才做、時好時壞"><span class="degc" style="height: 54px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="多數情境做得到"><span class="degc" style="height: 71px; background: rgb(198, 96, 58); border-color: rgb(198, 96, 58); box-shadow: rgba(198, 96, 58, 0.333) 0px 3px 10px;"></span></button><button class="degw" aria-label="穩定到自動化"><span class="degc" style="height: 88px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button></div><div class="deglbls"><span>沒做到</span><span>穩定到自動化</span></div><div class="degcap" id="q3__deg-cap" style="color: rgb(175, 84, 51);">多數情境做得到</div></div>
+  <!-- 2026-09-11「選了就走」改版：下一題鈕退役，點選項即前進，只留回頭路 -->
+  <button class="qprev" id="q3__btn-prev">← 上一題</button>
+</div></div></div><aside class="x-side"><div class="x-sh">在這裡寫你要怎麼改</div><textarea class="x-note" data-key="q3" placeholder="這一屏想改什麼？直接寫（自動存）"></textarea><div class="x-diff" data-key="q3"></div></aside></section>
+<section class="x-row" data-key="q4"><div class="x-left"><div class="x-cap"><b>畫面 3-4｜第 4 題（共 16 題）</b><span>信任肌肉｜讓他敢說・肌肉題（1–5 錨點，選了就自動前進）</span></div><div class="x-frame" data-key="q4"><div class="card">
+  <div class="progtop"><span id="q4__q-counter">第 4 題，共 16 題</span></div>
+  <div class="progslices" id="q4__prog-slices"><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(110, 139, 119);"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="qlabel" id="q4__q-label" style="color: rgb(92, 116, 100); background: rgba(110, 139, 119, 0.133);">信任肌肉｜讓他敢說</div>
+  <div class="qtxt" id="q4__q-text">你會先講自己還沒做到、還在煩惱的事，講完之後，他也開始講他的。</div>
+  <!-- 肌肉題常駐提示（renderQ 依 q.muscle 顯示）：一行解三件事——
+       題幹是敘述句所以要補「問題」本身；行為回憶提示＝自評膨脹的煞車；「沒機會做」也歸到選 1。 -->
+  <div id="q4__q-hint" style="display: block; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">這樣的事，在你身上多常發生？——想不出實例，就誠實選「沒做到」。</div>
+  <div id="q4__opts-wrap"><div class="degrow"><button class="degw" aria-label="沒做到"><span class="degc" style="height: 20px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="偶爾，而且生硬"><span class="degc" style="height: 37px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="想到才做、時好時壞"><span class="degc" style="height: 54px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="多數情境做得到"><span class="degc" style="height: 71px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="穩定到自動化"><span class="degc" style="height: 88px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button></div><div class="deglbls"><span>沒做到</span><span>穩定到自動化</span></div><div class="degcap" id="q4__deg-cap" style="color: rgb(92, 116, 100);"></div></div>
+  <!-- 2026-09-11「選了就走」改版：下一題鈕退役，點選項即前進，只留回頭路 -->
+  <button class="qprev" id="q4__btn-prev">← 上一題</button>
+</div></div></div><aside class="x-side"><div class="x-sh">在這裡寫你要怎麼改</div><textarea class="x-note" data-key="q4" placeholder="這一屏想改什麼？直接寫（自動存）"></textarea><div class="x-diff" data-key="q4"></div></aside></section>
+<section class="x-row" data-key="q5"><div class="x-left"><div class="x-cap"><b>畫面 3-5｜第 5 題（共 16 題）</b><span>專業肌肉｜讓他釐清・肌肉題（1–5 錨點，選了就自動前進）</span></div><div class="x-frame" data-key="q5"><div class="card">
+  <div class="progtop"><span id="q5__q-counter">第 5 題，共 16 題</span></div>
+  <div class="progslices" id="q5__prog-slices"><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(110, 140, 168);"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="qlabel" id="q5__q-label" style="color: rgb(84, 113, 141); background: rgba(110, 140, 168, 0.133);">專業肌肉｜讓他釐清</div>
+  <div class="qtxt" id="q5__q-text">他跟你聊煩惱時，你會問「現在情況怎樣？」「想變成怎樣？」，然後點出中間真正卡住的地方——他聽完說「對⋯⋯就是這個」。</div>
+  <!-- 肌肉題常駐提示（renderQ 依 q.muscle 顯示）：一行解三件事——
+       題幹是敘述句所以要補「問題」本身；行為回憶提示＝自評膨脹的煞車；「沒機會做」也歸到選 1。 -->
+  <div id="q5__q-hint" style="display: block; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">這樣的事，在你身上多常發生？——想不出實例，就誠實選「沒做到」。</div>
+  <div id="q5__opts-wrap"><div class="degrow"><button class="degw" aria-label="沒做到"><span class="degc" style="height: 20px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="偶爾，而且生硬"><span class="degc" style="height: 37px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="想到才做、時好時壞"><span class="degc" style="height: 54px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="多數情境做得到"><span class="degc" style="height: 71px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="穩定到自動化"><span class="degc" style="height: 88px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button></div><div class="deglbls"><span>沒做到</span><span>穩定到自動化</span></div><div class="degcap" id="q5__deg-cap" style="color: rgb(84, 113, 141);"></div></div>
+  <!-- 2026-09-11「選了就走」改版：下一題鈕退役，點選項即前進，只留回頭路 -->
+  <button class="qprev" id="q5__btn-prev">← 上一題</button>
+</div></div></div><aside class="x-side"><div class="x-sh">在這裡寫你要怎麼改</div><textarea class="x-note" data-key="q5" placeholder="這一屏想改什麼？直接寫（自動存）"></textarea><div class="x-diff" data-key="q5"></div></aside></section>
+<section class="x-row" data-key="q6"><div class="x-left"><div class="x-cap"><b>畫面 3-6｜第 6 題（共 16 題）</b><span>推進肌肉｜讓他想要・肌肉題（1–5 錨點，選了就自動前進）</span></div><div class="x-frame" data-key="q6"><div class="card">
+  <div class="progtop"><span id="q6__q-counter">第 6 題，共 16 題</span></div>
+  <div class="progslices" id="q6__prog-slices"><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(201, 154, 78);"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="qlabel" id="q6__q-label" style="color: rgb(142, 104, 43); background: rgba(201, 154, 78, 0.133);">推進肌肉｜讓他想要</div>
+  <div class="qtxt" id="q6__q-text">聊到最後，他自己說出「所以之後我就可以⋯⋯」——他嘴裡講的是他想要的樣子，不是你提供的東西。</div>
+  <!-- 肌肉題常駐提示（renderQ 依 q.muscle 顯示）：一行解三件事——
+       題幹是敘述句所以要補「問題」本身；行為回憶提示＝自評膨脹的煞車；「沒機會做」也歸到選 1。 -->
+  <div id="q6__q-hint" style="display: block; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">這樣的事，在你身上多常發生？——想不出實例，就誠實選「沒做到」。</div>
+  <div id="q6__opts-wrap"><div class="degrow"><button class="degw" aria-label="沒做到"><span class="degc" style="height: 20px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="偶爾，而且生硬"><span class="degc" style="height: 37px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="想到才做、時好時壞"><span class="degc" style="height: 54px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="多數情境做得到"><span class="degc" style="height: 71px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="穩定到自動化"><span class="degc" style="height: 88px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button></div><div class="deglbls"><span>沒做到</span><span>穩定到自動化</span></div><div class="degcap" id="q6__deg-cap" style="color: rgb(142, 104, 43);"></div></div>
+  <!-- 2026-09-11「選了就走」改版：下一題鈕退役，點選項即前進，只留回頭路 -->
+  <button class="qprev" id="q6__btn-prev">← 上一題</button>
+</div></div></div><aside class="x-side"><div class="x-sh">在這裡寫你要怎麼改</div><textarea class="x-note" data-key="q6" placeholder="這一屏想改什麼？直接寫（自動存）"></textarea><div class="x-diff" data-key="q6"></div></aside></section>
+<section class="x-row" data-key="q7"><div class="x-left"><div class="x-cap"><b>畫面 3-7｜第 7 題（共 16 題）</b><span>吸引肌肉｜讓他追問・肌肉題（1–5 錨點，選了就自動前進）</span></div><div class="x-frame" data-key="q7"><div class="card">
+  <div class="progtop"><span id="q7__q-counter">第 7 題，共 16 題</span></div>
+  <div class="progslices" id="q7__prog-slices"><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(198, 96, 58);"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="qlabel" id="q7__q-label" style="color: rgb(175, 84, 51); background: rgba(198, 96, 58, 0.133);">吸引肌肉｜讓他追問</div>
+  <div class="qtxt" id="q7__q-text">你講完自己在做什麼之後，他當場「哇」了一聲，主動追問「然後呢？」「你怎麼做到的？」——不是只點頭說「喔喔」。</div>
+  <!-- 肌肉題常駐提示（renderQ 依 q.muscle 顯示）：一行解三件事——
+       題幹是敘述句所以要補「問題」本身；行為回憶提示＝自評膨脹的煞車；「沒機會做」也歸到選 1。 -->
+  <div id="q7__q-hint" style="display: block; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">這樣的事，在你身上多常發生？——想不出實例，就誠實選「沒做到」。</div>
+  <div id="q7__opts-wrap"><div class="degrow"><button class="degw" aria-label="沒做到"><span class="degc" style="height: 20px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="偶爾，而且生硬"><span class="degc" style="height: 37px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="想到才做、時好時壞"><span class="degc" style="height: 54px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="多數情境做得到"><span class="degc" style="height: 71px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="穩定到自動化"><span class="degc" style="height: 88px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button></div><div class="deglbls"><span>沒做到</span><span>穩定到自動化</span></div><div class="degcap" id="q7__deg-cap" style="color: rgb(175, 84, 51);"></div></div>
+  <!-- 2026-09-11「選了就走」改版：下一題鈕退役，點選項即前進，只留回頭路 -->
+  <button class="qprev" id="q7__btn-prev">← 上一題</button>
+</div></div></div><aside class="x-side"><div class="x-sh">在這裡寫你要怎麼改</div><textarea class="x-note" data-key="q7" placeholder="這一屏想改什麼？直接寫（自動存）"></textarea><div class="x-diff" data-key="q7"></div></aside></section>
+<section class="x-row" data-key="q8"><div class="x-left"><div class="x-cap"><b>畫面 3-8｜第 8 題（共 16 題）</b><span>信任肌肉｜讓他交心・肌肉題（1–5 錨點，選了就自動前進）</span></div><div class="x-frame" data-key="q8"><div class="card">
+  <div class="progtop"><span id="q8__q-counter">第 8 題，共 16 題</span></div>
+  <div class="progslices" id="q8__prog-slices"><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(110, 139, 119);"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="qlabel" id="q8__q-label" style="color: rgb(92, 116, 100); background: rgba(110, 139, 119, 0.133);">信任肌肉｜讓他交心</div>
+  <div class="qtxt" id="q8__q-text">你一層一層問下去，最後他講出了你根本沒問到的事，是他自己想多說的。</div>
+  <!-- 肌肉題常駐提示（renderQ 依 q.muscle 顯示）：一行解三件事——
+       題幹是敘述句所以要補「問題」本身；行為回憶提示＝自評膨脹的煞車；「沒機會做」也歸到選 1。 -->
+  <div id="q8__q-hint" style="display: block; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">這樣的事，在你身上多常發生？——想不出實例，就誠實選「沒做到」。</div>
+  <div id="q8__opts-wrap"><div class="degrow"><button class="degw" aria-label="沒做到"><span class="degc" style="height: 20px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="偶爾，而且生硬"><span class="degc" style="height: 37px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="想到才做、時好時壞"><span class="degc" style="height: 54px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="多數情境做得到"><span class="degc" style="height: 71px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="穩定到自動化"><span class="degc" style="height: 88px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button></div><div class="deglbls"><span>沒做到</span><span>穩定到自動化</span></div><div class="degcap" id="q8__deg-cap" style="color: rgb(92, 116, 100);"></div></div>
+  <!-- 2026-09-11「選了就走」改版：下一題鈕退役，點選項即前進，只留回頭路 -->
+  <button class="qprev" id="q8__btn-prev">← 上一題</button>
+</div></div></div><aside class="x-side"><div class="x-sh">在這裡寫你要怎麼改</div><textarea class="x-note" data-key="q8" placeholder="這一屏想改什麼？直接寫（自動存）"></textarea><div class="x-diff" data-key="q8"></div></aside></section>
+<section class="x-row" data-key="q9"><div class="x-left"><div class="x-cap"><b>畫面 3-9｜第 9 題（共 16 題）</b><span>專業肌肉｜讓他有感・肌肉題（1–5 錨點，選了就自動前進）</span></div><div class="x-frame" data-key="q9"><div class="card">
+  <div class="progtop"><span id="q9__q-counter">第 9 題，共 16 題</span></div>
+  <div class="progslices" id="q9__prog-slices"><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(110, 140, 168);"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="qlabel" id="q9__q-label" style="color: rgb(84, 113, 141); background: rgba(110, 140, 168, 0.133);">專業肌肉｜讓他有感</div>
+  <div class="qtxt" id="q9__q-text">與其解釋半天，你會直接做一次給他看、或讓他自己試一次，他馬上懂，還說得出「這真的有用」。</div>
+  <!-- 肌肉題常駐提示（renderQ 依 q.muscle 顯示）：一行解三件事——
+       題幹是敘述句所以要補「問題」本身；行為回憶提示＝自評膨脹的煞車；「沒機會做」也歸到選 1。 -->
+  <div id="q9__q-hint" style="display: block; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">這樣的事，在你身上多常發生？——想不出實例，就誠實選「沒做到」。</div>
+  <div id="q9__opts-wrap"><div class="degrow"><button class="degw" aria-label="沒做到"><span class="degc" style="height: 20px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="偶爾，而且生硬"><span class="degc" style="height: 37px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="想到才做、時好時壞"><span class="degc" style="height: 54px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="多數情境做得到"><span class="degc" style="height: 71px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="穩定到自動化"><span class="degc" style="height: 88px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button></div><div class="deglbls"><span>沒做到</span><span>穩定到自動化</span></div><div class="degcap" id="q9__deg-cap" style="color: rgb(84, 113, 141);"></div></div>
+  <!-- 2026-09-11「選了就走」改版：下一題鈕退役，點選項即前進，只留回頭路 -->
+  <button class="qprev" id="q9__btn-prev">← 上一題</button>
+</div></div></div><aside class="x-side"><div class="x-sh">在這裡寫你要怎麼改</div><textarea class="x-note" data-key="q9" placeholder="這一屏想改什麼？直接寫（自動存）"></textarea><div class="x-diff" data-key="q9"></div></aside></section>
+<section class="x-row" data-key="q10"><div class="x-left"><div class="x-cap"><b>畫面 3-10｜第 10 題（共 16 題）</b><span>推進肌肉｜讓他敢要・肌肉題（1–5 錨點，選了就自動前進）</span></div><div class="x-frame" data-key="q10"><div class="card">
+  <div class="progtop"><span id="q10__q-counter">第 10 題，共 16 題</span></div>
+  <div class="progslices" id="q10__prog-slices"><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(201, 154, 78);"></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="qlabel" id="q10__q-label" style="color: rgb(142, 104, 43); background: rgba(201, 154, 78, 0.133);">推進肌肉｜讓他敢要</div>
+  <div class="qtxt" id="q10__q-text">你會主動問他還有什麼顧慮，把他心裡的擔心先問出來、一個一個回——不是等他自己開口你才知道。</div>
+  <!-- 肌肉題常駐提示（renderQ 依 q.muscle 顯示）：一行解三件事——
+       題幹是敘述句所以要補「問題」本身；行為回憶提示＝自評膨脹的煞車；「沒機會做」也歸到選 1。 -->
+  <div id="q10__q-hint" style="display: block; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">這樣的事，在你身上多常發生？——想不出實例，就誠實選「沒做到」。</div>
+  <div id="q10__opts-wrap"><div class="degrow"><button class="degw" aria-label="沒做到"><span class="degc" style="height: 20px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="偶爾，而且生硬"><span class="degc" style="height: 37px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="想到才做、時好時壞"><span class="degc" style="height: 54px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="多數情境做得到"><span class="degc" style="height: 71px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="穩定到自動化"><span class="degc" style="height: 88px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button></div><div class="deglbls"><span>沒做到</span><span>穩定到自動化</span></div><div class="degcap" id="q10__deg-cap" style="color: rgb(142, 104, 43);"></div></div>
+  <!-- 2026-09-11「選了就走」改版：下一題鈕退役，點選項即前進，只留回頭路 -->
+  <button class="qprev" id="q10__btn-prev">← 上一題</button>
+</div></div></div><aside class="x-side"><div class="x-sh">在這裡寫你要怎麼改</div><textarea class="x-note" data-key="q10" placeholder="這一屏想改什麼？直接寫（自動存）"></textarea><div class="x-diff" data-key="q10"></div></aside></section>
+<section class="x-row" data-key="q11"><div class="x-left"><div class="x-cap"><b>畫面 3-11｜第 11 題（共 16 題）</b><span>吸引肌肉｜讓他記得・肌肉題（1–5 錨點，選了就自動前進）</span></div><div class="x-frame" data-key="q11"><div class="card">
+  <div class="progtop"><span id="q11__q-counter">第 11 題，共 16 題</span></div>
+  <div class="progslices" id="q11__prog-slices"><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(198, 96, 58);"></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="qlabel" id="q11__q-label" style="color: rgb(175, 84, 51); background: rgba(198, 96, 58, 0.133);">吸引肌肉｜讓他記得</div>
+  <div class="qtxt" id="q11__q-text">隔一個禮拜再遇到，他還記得你說過的故事，甚至能用一句話跟別人介紹你。</div>
+  <!-- 肌肉題常駐提示（renderQ 依 q.muscle 顯示）：一行解三件事——
+       題幹是敘述句所以要補「問題」本身；行為回憶提示＝自評膨脹的煞車；「沒機會做」也歸到選 1。 -->
+  <div id="q11__q-hint" style="display: block; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">這樣的事，在你身上多常發生？——想不出實例，就誠實選「沒做到」。</div>
+  <div id="q11__opts-wrap"><div class="degrow"><button class="degw" aria-label="沒做到"><span class="degc" style="height: 20px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="偶爾，而且生硬"><span class="degc" style="height: 37px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="想到才做、時好時壞"><span class="degc" style="height: 54px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="多數情境做得到"><span class="degc" style="height: 71px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="穩定到自動化"><span class="degc" style="height: 88px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button></div><div class="deglbls"><span>沒做到</span><span>穩定到自動化</span></div><div class="degcap" id="q11__deg-cap" style="color: rgb(175, 84, 51);"></div></div>
+  <!-- 2026-09-11「選了就走」改版：下一題鈕退役，點選項即前進，只留回頭路 -->
+  <button class="qprev" id="q11__btn-prev">← 上一題</button>
+</div></div></div><aside class="x-side"><div class="x-sh">在這裡寫你要怎麼改</div><textarea class="x-note" data-key="q11" placeholder="這一屏想改什麼？直接寫（自動存）"></textarea><div class="x-diff" data-key="q11"></div></aside></section>
+<section class="x-row" data-key="q12"><div class="x-left"><div class="x-cap"><b>畫面 3-12｜第 12 題（共 16 題）</b><span>信任肌肉｜讓他當真・肌肉題（1–5 錨點，選了就自動前進）</span></div><div class="x-frame" data-key="q12"><div class="card">
+  <div class="progtop"><span id="q12__q-counter">第 12 題，共 16 題</span></div>
+  <div class="progslices" id="q12__prog-slices"><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(110, 139, 119);"></i><i></i><i></i><i></i><i></i></div>
+  <div class="qlabel" id="q12__q-label" style="color: rgb(92, 116, 100); background: rgba(110, 139, 119, 0.133);">信任肌肉｜讓他當真</div>
+  <div class="qtxt" id="q12__q-text">你答應他的事，後來真的做到了，做到之後還會回頭跟他說結果——不是只說「有啦我有記得」。</div>
+  <!-- 肌肉題常駐提示（renderQ 依 q.muscle 顯示）：一行解三件事——
+       題幹是敘述句所以要補「問題」本身；行為回憶提示＝自評膨脹的煞車；「沒機會做」也歸到選 1。 -->
+  <div id="q12__q-hint" style="display: block; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">這樣的事，在你身上多常發生？——想不出實例，就誠實選「沒做到」。</div>
+  <div id="q12__opts-wrap"><div class="degrow"><button class="degw" aria-label="沒做到"><span class="degc" style="height: 20px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="偶爾，而且生硬"><span class="degc" style="height: 37px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="想到才做、時好時壞"><span class="degc" style="height: 54px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="多數情境做得到"><span class="degc" style="height: 71px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="穩定到自動化"><span class="degc" style="height: 88px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button></div><div class="deglbls"><span>沒做到</span><span>穩定到自動化</span></div><div class="degcap" id="q12__deg-cap" style="color: rgb(92, 116, 100);"></div></div>
+  <!-- 2026-09-11「選了就走」改版：下一題鈕退役，點選項即前進，只留回頭路 -->
+  <button class="qprev" id="q12__btn-prev">← 上一題</button>
+</div></div></div><aside class="x-side"><div class="x-sh">在這裡寫你要怎麼改</div><textarea class="x-note" data-key="q12" placeholder="這一屏想改什麼？直接寫（自動存）"></textarea><div class="x-diff" data-key="q12"></div></aside></section>
+<section class="x-row" data-key="q13"><div class="x-left"><div class="x-cap"><b>畫面 3-13｜第 13 題（共 16 題）</b><span>專業肌肉｜讓他放心・肌肉題（1–5 錨點，選了就自動前進）</span></div><div class="x-frame" data-key="q13"><div class="card">
+  <div class="progtop"><span id="q13__q-counter">第 13 題，共 16 題</span></div>
+  <div class="progslices" id="q13__prog-slices"><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(110, 140, 168);"></i><i></i><i></i><i></i></div>
+  <div class="qlabel" id="q13__q-label" style="color: rgb(84, 113, 141); background: rgba(110, 140, 168, 0.133);">專業肌肉｜讓他放心</div>
+  <div class="qtxt" id="q13__q-text">你舉了一個真實例子——誰做過、後來結果如何——他聽完主動追問：「那個人後來怎麼樣？」</div>
+  <!-- 肌肉題常駐提示（renderQ 依 q.muscle 顯示）：一行解三件事——
+       題幹是敘述句所以要補「問題」本身；行為回憶提示＝自評膨脹的煞車；「沒機會做」也歸到選 1。 -->
+  <div id="q13__q-hint" style="display: block; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">這樣的事，在你身上多常發生？——想不出實例，就誠實選「沒做到」。</div>
+  <div id="q13__opts-wrap"><div class="degrow"><button class="degw" aria-label="沒做到"><span class="degc" style="height: 20px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="偶爾，而且生硬"><span class="degc" style="height: 37px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="想到才做、時好時壞"><span class="degc" style="height: 54px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="多數情境做得到"><span class="degc" style="height: 71px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="穩定到自動化"><span class="degc" style="height: 88px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button></div><div class="deglbls"><span>沒做到</span><span>穩定到自動化</span></div><div class="degcap" id="q13__deg-cap" style="color: rgb(84, 113, 141);"></div></div>
+  <!-- 2026-09-11「選了就走」改版：下一題鈕退役，點選項即前進，只留回頭路 -->
+  <button class="qprev" id="q13__btn-prev">← 上一題</button>
+</div></div></div><aside class="x-side"><div class="x-sh">在這裡寫你要怎麼改</div><textarea class="x-note" data-key="q13" placeholder="這一屏想改什麼？直接寫（自動存）"></textarea><div class="x-diff" data-key="q13"></div></aside></section>
+<section class="x-row" data-key="q14"><div class="x-left"><div class="x-cap"><b>畫面 3-14｜第 14 題（共 16 題）</b><span>推進肌肉｜讓他答應・肌肉題（1–5 錨點，選了就自動前進）</span></div><div class="x-frame" data-key="q14"><div class="card">
+  <div class="progtop"><span id="q14__q-counter">第 14 題，共 16 題</span></div>
+  <div class="progslices" id="q14__prog-slices"><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(201, 154, 78);"></i><i></i><i></i></div>
+  <div class="qlabel" id="q14__q-label" style="color: rgb(142, 104, 43); background: rgba(201, 154, 78, 0.133);">推進肌肉｜讓他答應</div>
+  <div class="qtxt" id="q14__q-text">聊完之後你拿到的是「他同意的具體下一步」——約好下次時間、他要準備什麼、或他答應去跟誰說——不是只有一句「再聯絡」。</div>
+  <!-- 肌肉題常駐提示（renderQ 依 q.muscle 顯示）：一行解三件事——
+       題幹是敘述句所以要補「問題」本身；行為回憶提示＝自評膨脹的煞車；「沒機會做」也歸到選 1。 -->
+  <div id="q14__q-hint" style="display: block; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">這樣的事，在你身上多常發生？——想不出實例，就誠實選「沒做到」。</div>
+  <div id="q14__opts-wrap"><div class="degrow"><button class="degw" aria-label="沒做到"><span class="degc" style="height: 20px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="偶爾，而且生硬"><span class="degc" style="height: 37px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="想到才做、時好時壞"><span class="degc" style="height: 54px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="多數情境做得到"><span class="degc" style="height: 71px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button><button class="degw" aria-label="穩定到自動化"><span class="degc" style="height: 88px; background: rgb(255, 255, 255); border-color: rgb(156, 136, 121); box-shadow: none;"></span></button></div><div class="deglbls"><span>沒做到</span><span>穩定到自動化</span></div><div class="degcap" id="q14__deg-cap" style="color: rgb(142, 104, 43);"></div></div>
+  <!-- 2026-09-11「選了就走」改版：下一題鈕退役，點選項即前進，只留回頭路 -->
+  <button class="qprev" id="q14__btn-prev">← 上一題</button>
+</div></div></div><aside class="x-side"><div class="x-sh">在這裡寫你要怎麼改</div><textarea class="x-note" data-key="q14" placeholder="這一屏想改什麼？直接寫（自動存）"></textarea><div class="x-diff" data-key="q14"></div></aside></section>
+<section class="x-row" data-key="q15"><div class="x-left"><div class="x-cap"><b>畫面 3-15｜第 15 題（共 16 題）</b><span>客戶來源・不計分</span></div><div class="x-frame" data-key="q15"><div class="card">
+  <div class="progtop"><span id="q15__q-counter">第 15 題，共 16 題</span></div>
+  <div class="progslices" id="q15__prog-slices"><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(175, 84, 51);"></i><i></i></div>
+  <div class="qlabel" id="q15__q-label" style="color: rgb(153, 60, 29); background: rgb(240, 227, 219);">客戶來源</div>
+  <div class="qtxt" id="q15__q-text">你想要收入變多的項目，最多的客戶從哪裡來？</div>
+  <!-- 肌肉題常駐提示（renderQ 依 q.muscle 顯示）：一行解三件事——
+       題幹是敘述句所以要補「問題」本身；行為回憶提示＝自評膨脹的煞車；「沒機會做」也歸到選 1。 -->
+  <div id="q15__q-hint" style="display: none; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">這樣的事，在你身上多常發生？——想不出實例，就誠實選「沒做到」。</div>
+  <div id="q15__opts-wrap"><button class="opt"><div class="odot">1</div><span class="otxt">朋友／舊客戶／商會介紹</span></button><button class="opt"><div class="odot">2</div><span class="otxt">認識的新朋友或陌生人</span></button><button class="opt"><div class="odot">3</div><span class="otxt">社群或網路找上門</span></button><button class="opt"><div class="odot">4</div><span class="otxt">受僱領薪，沒有自己的客戶</span></button></div>
+  <!-- 2026-09-11「選了就走」改版：下一題鈕退役，點選項即前進，只留回頭路 -->
+  <button class="qprev" id="q15__btn-prev">← 上一題</button>
+</div></div></div><aside class="x-side"><div class="x-sh">在這裡寫你要怎麼改</div><textarea class="x-note" data-key="q15" placeholder="這一屏想改什麼？直接寫（自動存）"></textarea><div class="x-diff" data-key="q15"></div></aside></section>
+<section class="x-row" data-key="q16"><div class="x-left"><div class="x-cap"><b>畫面 3-16｜第 16 題（共 16 題）</b><span>基本資料・不計分</span></div><div class="x-frame" data-key="q16"><div class="card">
+  <div class="progtop"><span id="q16__q-counter">第 16 題，共 16 題</span></div>
+  <div class="progslices" id="q16__prog-slices"><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(168, 146, 131);"></i><i style="background: rgb(175, 84, 51);"></i></div>
+  <div class="qlabel" id="q16__q-label" style="color: rgb(153, 60, 29); background: rgb(240, 227, 219);">基本資料</div>
+  <div class="qtxt" id="q16__q-text">你目前的年收入落在哪個區間？</div>
+  <!-- 肌肉題常駐提示（renderQ 依 q.muscle 顯示）：一行解三件事——
+       題幹是敘述句所以要補「問題」本身；行為回憶提示＝自評膨脹的煞車；「沒機會做」也歸到選 1。 -->
+  <div id="q16__q-hint" style="display: none; font-size: 13.5px; color: rgb(138, 114, 102); line-height: 1.7; margin: -6px 0px 14px;">這樣的事，在你身上多常發生？——想不出實例，就誠實選「沒做到」。</div>
+  <div id="q16__opts-wrap"><button class="opt"><div class="odot">1</div><span class="otxt">0-60萬</span></button><button class="opt"><div class="odot">2</div><span class="otxt">60-120萬</span></button><button class="opt"><div class="odot">3</div><span class="otxt">120-300萬</span></button><button class="opt"><div class="odot">4</div><span class="otxt">300-1000萬</span></button><button class="opt"><div class="odot">5</div><span class="otxt">1000萬以上</span></button></div>
+  <!-- 2026-09-11「選了就走」改版：下一題鈕退役，點選項即前進，只留回頭路 -->
+  <button class="qprev" id="q16__btn-prev">← 上一題</button>
+</div></div></div><aside class="x-side"><div class="x-sh">在這裡寫你要怎麼改</div><textarea class="x-note" data-key="q16" placeholder="這一屏想改什麼？直接寫（自動存）"></textarea><div class="x-diff" data-key="q16"></div></aside></section>
+<section class="x-row" data-key="form"><div class="x-left"><div class="x-cap"><b>畫面 4｜留資頁（s-form）</b><span>測完才留資（先給價值再要資料）。可以不領取直接看結果。</span></div><div class="x-frame" data-key="form"><div class="card">
+  <div class="ftitle">測驗完成！</div>
+  <div class="fsub">留下 Email，完整影響力報告寄到你的信箱。<br>（也可以不領取，直接看結果）</div>
+  <div class="field"><label>姓名</label><input type="text" id="form__f-name" placeholder="請輸入姓名"></div>
+  <div class="field"><label>Email</label><input type="email" id="form__f-email" placeholder="請輸入 Email"></div>
+  <div class="field"><label>職業／身份</label><div class="selwrap"><select id="form__f-job">
+    <option value="">請選擇</option><option>業務／銷售</option><option>講師／教練</option>
+    <option>創業者／自由工作者</option><option>上班族</option><option>學生</option><option>其他</option>
+  </select></div></div>
+  <div class="btnrow">
+    <button class="btnskip" id="form__btn-skip">不領取<br><span style="font-size:14px;opacity:.7">直接看結果</span></button>
+    <button class="btnrep" id="form__btn-rep">領取完整報告<br><span style="font-size:14px;opacity:.85">查看結果</span></button>
   </div>
-</div>
+</div></div></div><aside class="x-side"><div class="x-sh">在這裡寫你要怎麼改</div><textarea class="x-note" data-key="form" placeholder="這一屏想改什麼？直接寫（自動存）"></textarea><div class="x-diff" data-key="form"></div></aside></section>
+<section class="x-row" data-key="result"><div class="x-left"><div class="x-cap"><b>畫面 5｜結果頁（s-result）</b><span>分數＝示意樣本，走的是正式公式（atpi-core.js）。MUSCLE MAP 這裡是收合態。</span></div><div class="x-frame" data-key="result">
 
-<!-- ═════════ 畫面 5：結果頁 ═════════ -->
-<div class="scr-h">畫面 5｜結果頁（s-result）<small>分數＝示意樣本（A50／T83／P25／I50，總分 169＝γ0.6 公式）。新順序：已解鎖影響力 → 座標＋雷達 → 體格單（真分數） → 先練這塊＋課表 → 進館 CTA → 分享卡。12 格詳細卡與路徑卡已下架。</small></div>
-<div class="blk" data-id="果-1"><span class="btag">果-1</span>
-  <div class="card" style="text-align:center;margin-bottom:0;">
-    <div style="font-size:14px;color:#993C1D;background:#F0E3DB;border-radius:12px;padding:3px 12px;display:inline-block;margin-bottom:12px;">影響力健檢</div>
+  <!-- 第零區：身分卡（2026-09-11 對標 16personalities：先給「你是哪型」的身分，數字其次——
+       身分才是願意截圖分享的東西。最強那塊肌肉＝你的型；命名「○型溝通者」為暫定，老師可再改。 -->
+  <div class="card" id="result__r-identity" style="text-align:center;"><div style="font-size:13px;letter-spacing:2px;color:#8A7266;margin-bottom:10px;">你的影響力型態</div><div style="font-size:26px;font-weight:700;color:#4A1B0C;line-height:1.4;margin-bottom:6px;">你是「<span style="color:#5C7464;">信任型</span>」溝通者</div><div style="font-size:15px;color:#6E4A3C;margin-bottom:14px;">大家願意把真心話留給你。</div><div style="display:flex;gap:5px;align-items:center;padding:0 8px;"><div style="flex:50;height:9px;border-radius:3px;transform:skewX(-12deg);background:#DED2C6;"></div><div style="flex:75;height:14px;border-radius:3px;transform:skewX(-12deg);background:#6E8B77;"></div><div style="flex:25;height:9px;border-radius:3px;transform:skewX(-12deg);background:#DED2C6;"></div><div style="flex:50;height:9px;border-radius:3px;transform:skewX(-12deg);background:#DED2C6;"></div></div><div style="display:flex;gap:5px;padding:0 8px;margin-top:6px;"><div style="flex:50;font-size:11px;text-align:center;color:#B4A294;font-weight:400;">吸引</div><div style="flex:75;font-size:11px;text-align:center;color:#5C7464;font-weight:700;">信任</div><div style="flex:25;font-size:11px;text-align:center;color:#B4A294;font-weight:400;">專業</div><div style="flex:50;font-size:11px;text-align:center;color:#B4A294;font-weight:400;">推進</div></div></div>
+
+  <!-- 第一區：已解鎖影響力（2026-09-05 老師備註【果-1】：數值從「尚未解鎖(1000−x)」改成已解鎖 x——只講已點亮的，落差感留給 /1000 自己說話） -->
+  <div class="card" style="text-align:center;">
+    <div id="result__reset-trigger" style="font-size:14px;color:#993C1D;background:#F0E3DB;border-radius:12px;padding:3px 12px;display:inline-block;margin-bottom:12px;">影響力健檢</div>
     <div style="font-size:15px;color:#6E4A3C;margin-bottom:4px;">已解鎖影響力</div>
     <div style="display:flex;align-items:baseline;justify-content:center;gap:4px;margin-bottom:4px;">
-      <!-- 示意分＝(.50×.83×.25×.50)^0.6×1000＝169（字典⑦ γ=0.6 公式；舊值 388 是公式改版前的，作廢） -->
-      <div style="font-size:52px;font-weight:700;color:#C6603A;line-height:1;">169<span class="dq-mock">示意</span></div>
+      <div id="result__r-potential" style="font-size:52px;font-weight:700;color:#C6603A;line-height:1;">159</div>
       <div style="font-size:18px;color:#8A7266;font-weight:400;">/ 1000</div>
     </div>
     <div style="font-size:14px;color:#8A7266;">吸引 × 信任 × 專業 × 推進　4 大肌肉</div>
   </div>
-</div>
-<div class="blk" data-id="果-2"><span class="btag">果-2</span>
-  <div class="card" style="margin-bottom:0;">
-    <div style="background:#fff;border:0.5px solid #E6DAD1;border-radius:12px;padding:12px;margin-bottom:14px;">
-      <div style="font-size:14px;color:#6E4A3C;margin-bottom:6px;">這組分數的座標<span class="dq-mock">示意</span></div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
-        <span style="background:#F0E3DB;color:#6E4A3C;font-size:13px;border-radius:20px;padding:3px 10px;">正在找解法</span>
-      </div>
-      <div style="font-size:15px;color:#5A3A2A;line-height:1.8;">這次你評的是「正在找解法」的人——門檻大半過了，接下來比誰真的能解決。這種對象最吃 P 專業肌肉，收尾靠 I 推進肌肉補臨門一腳。<br><br>你這塊是「專業肌肉 25 分」——這正是你面對這種對象特別吃力的原因。<br><br>（這題不算分。同一組分數，換一種對象難度就完全不同——這是你「對這種人」的分數，不是你的固定人格。）</div>
+
+  <!-- 第二區：ATPI 四個分數 + 雷達圖 -->
+  <div class="card">
+    <div id="result__r-ctx-box" style="display: block; background: rgb(255, 255, 255); border: 0.5px solid rgb(230, 218, 209); border-radius: 12px; padding: 12px; margin-bottom: 14px;">
+      <!-- 2026-09-08 老師拍板：舊標題「這組分數的座標」是 0907 已廢「錨定座標」版的殘留 -->
+      <div style="font-size:14px;color:#6E4A3C;margin-bottom:6px;">你選的場景</div>
+      <div id="result__r-ctx-badges" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;"><span style="background: rgb(240, 227, 219); color: rgb(110, 74, 60); font-size: 13px; border-radius: 20px; padding: 3px 10px;">一對一銷售</span></div>
+      <div id="result__r-ctx-read" style="font-size:15px;color:#5A3A2A;line-height:1.8;white-space:pre-line;">在「一對一銷售」這個場景裡，先練「專業肌肉」最有感——它現在的樣子通常是：
+他說「聽起來不錯」，回去就沒消息了。
+
+下面的課表，就是從這塊開始排的。</div>
     </div>
-    <div style="display:flex;flex-direction:column;align-items:center;gap:4px;margin-bottom:12px;">
-      <svg viewBox="0 0 260 240" width="260" height="240" style="max-width:100%;">
-        <polygon points="130,30 230,120 130,210 30,120" fill="none" stroke="#E6DAD1" stroke-width="1"/>
-        <polygon points="130,75 180,120 130,165 80,120" fill="none" stroke="#EFE5DC" stroke-width="1"/>
-        <polygon points="130,75 213,120 130,187 105,120" fill="rgba(198,96,58,.18)" stroke="#C6603A" stroke-width="2"/>
-        <circle cx="130" cy="75" r="4" fill="#C6603A"/><circle cx="213" cy="120" r="4" fill="#6E8B77"/><circle cx="130" cy="187" r="4" fill="#6E8CA8"/><circle cx="105" cy="120" r="4" fill="#C99A4E"/>
-        <text x="130" y="18" text-anchor="middle" font-size="13" fill="#AF5433" font-weight="700">吸引 50</text>
-        <text x="232" y="124" text-anchor="start" font-size="13" fill="#5C7464" font-weight="700">信任 83</text>
-        <text x="130" y="230" text-anchor="middle" font-size="13" fill="#54718D" font-weight="700">專業 25</text>
-        <text x="28" y="124" text-anchor="end" font-size="13" fill="#8E682B" font-weight="700">推進 50</text>
-      </svg>
+    <div class="chartbox" style="flex-direction:column;align-items:center;gap:4px;border:none;padding:0;margin-bottom:.25rem;">
+      <svg id="result__radar" viewBox="-14 0 288 270" width="288" height="270" style="max-width:100%;" xmlns="http://www.w3.org/2000/svg"><polygon points="130,117.5 152.5,140 130,162.5 107.5,140" fill="none" stroke="rgba(168,128,96,0.18)" stroke-width="0.8"></polygon><polygon points="130,95 175,140 130,185 85,140" fill="none" stroke="rgba(168,128,96,0.18)" stroke-width="0.8"></polygon><polygon points="130,72.5 197.5,140 130,207.5 62.5,140" fill="none" stroke="rgba(168,128,96,0.18)" stroke-width="0.8"></polygon><polygon points="130,50 220,140 130,230 40,140" fill="rgba(240,228,218,0.4)" stroke="rgba(168,128,96,0.18)" stroke-width="0.8"></polygon><line x1="130" y1="140" x2="130" y2="50" stroke="rgba(168,128,96,0.15)" stroke-width="0.8"></line><line x1="130" y1="140" x2="220" y2="140" stroke="rgba(168,128,96,0.15)" stroke-width="0.8"></line><line x1="130" y1="140" x2="130" y2="230" stroke="rgba(168,128,96,0.15)" stroke-width="0.8"></line><line x1="130" y1="140" x2="40" y2="140" stroke="rgba(168,128,96,0.15)" stroke-width="0.8"></line><polygon points="130,95 197.5,140 130,162.5 85,140" fill="rgba(198,96,58,0.15)" stroke="#C6603A" stroke-width="2" stroke-linejoin="round"></polygon><g id="result__radar-tip" opacity="0" style="pointer-events:none;"><rect rx="8" ry="8" fill="#2d1f0f" height="26"></rect><text font-size="12" font-weight="600" fill="#fff" text-anchor="middle" dominant-baseline="middle" font-family="-apple-system,sans-serif"></text></g><circle cx="130" cy="95" r="14" fill="transparent" style="cursor:pointer;"></circle><circle cx="130" cy="95" r="5" fill="#C6603A" stroke="#fff" stroke-width="1.5" style="pointer-events:none;"></circle><circle cx="197.5" cy="140" r="14" fill="transparent" style="cursor:pointer;"></circle><circle cx="197.5" cy="140" r="5" fill="#6E8B77" stroke="#fff" stroke-width="1.5" style="pointer-events:none;"></circle><circle cx="130" cy="162.5" r="14" fill="transparent" style="cursor:pointer;"></circle><circle cx="130" cy="162.5" r="5" fill="#6E8CA8" stroke="#fff" stroke-width="1.5" style="pointer-events:none;"></circle><circle cx="85" cy="140" r="14" fill="transparent" style="cursor:pointer;"></circle><circle cx="85" cy="140" r="5" fill="#C99A4E" stroke="#fff" stroke-width="1.5" style="pointer-events:none;"></circle><text x="130" y="28" font-size="12" font-weight="500" fill="#AF5433" text-anchor="middle" dominant-baseline="middle" font-family="-apple-system,sans-serif">吸引肌肉</text><text x="242" y="140" font-size="12" font-weight="500" fill="#5C7464" text-anchor="middle" dominant-baseline="middle" font-family="-apple-system,sans-serif">信任肌肉</text><text x="130" y="252" font-size="12" font-weight="500" fill="#54718D" text-anchor="middle" dominant-baseline="middle" font-family="-apple-system,sans-serif">專業肌肉</text><text x="18" y="140" font-size="12" font-weight="500" fill="#8E682B" text-anchor="middle" dominant-baseline="middle" font-family="-apple-system,sans-serif">推進肌肉</text></svg>
+    </div>
+    <!-- 2026-09-05 老師備註【果-2】：12 格詳細卡（score-grid）下架——詳細解析不是測驗的目的，
+         分數只留下面 MUSCLE MAP 的四大肌肉排；小肌群逐格點亮留給健身房。 -->
+  </div>
+
+  <!-- MUSCLE MAP：四頁共用同一個卡名（quiz／visitor／member／pro）。
+       大肌肉排真成數＋12 小塊名字露、分數模糊——進健身房才全開。
+       整張卡（含鎖頭字、展開鈕）都在 renderMuscleMap() 裡長出來。 -->
+  <div class="dq-blk"><span class="dq-tag">q-3</span>
+    <div class="dq-cd">
+      <div class="dq-sec">MUSCLE MAP · <b>影響力肌肉</b></div>
+      <div id="result__bs-map"><div class="slw" style="--sg:21px;"><div class="slv"><span style="color:#8A7266;">50</span><span style="color:#8A7266;">75</span><span style="color:#54718D;">25</span><span style="color:#8A7266;">50</span></div><div class="srow"><div class="sl past" style="height:72px;background:#F4E1D9;"></div><div class="sl past" style="height:96px;background:#DCE7DE;"></div><div class="sl now" style="height:48px;background:#6E8CA8;box-shadow:0 2px 8px #6E8CA844;"></div><div class="sl past" style="height:72px;background:#F1E5CC;"></div></div><div class="slbl"><span class=""><i style="color:#AF5433;">ATTRACT</i>吸引</span><span class=""><i style="color:#5C7464;">TRUST</i>信任</span><span class=""><i style="color:#54718D;">PROFESSIONAL</i>專業</span><span class=""><i style="color:#8E682B;">IMPACT</i>推進</span></div></div><div class="dq-wallnote">實色＝先練這塊最有感・淡色＝已經量過。</div><button class="dq-walltg">每塊再拆成 3 小塊，看這 12 塊 ▾</button></div>
     </div>
   </div>
-</div>
-<div class="blk" data-id="果-3"><span class="btag">果-3</span>
-  <div class="dq-cd">
-    <div class="dq-sec">你的影響力體格單<span class="dq-mock">示意</span></div>
-    <div class="dq-dim"><div class="dq-dim-hd" style="color:#AF5433;">吸引肌肉<small>讓他想靠近</small><span class="dq-dim-v">50</span></div><div class="dq-dim-bar"><div class="dq-dim-bf" style="width:50%;background:#C6603A;"></div></div></div>
-    <div class="dq-dim"><div class="dq-dim-hd" style="color:#5C7464;">信任肌肉<small>讓他願意說</small><span class="dq-dim-v">83</span></div><div class="dq-dim-bar"><div class="dq-dim-bf" style="width:83%;background:#6E8B77;"></div></div></div>
-    <div class="dq-dim"><div class="dq-dim-hd" style="color:#54718D;">專業肌肉<small>讓他要找你</small><span class="dq-dim-v">25</span></div><div class="dq-dim-bar"><div class="dq-dim-bf" style="width:25%;background:#6E8CA8;"></div></div></div>
-    <div class="dq-dim"><div class="dq-dim-hd" style="color:#8E682B;">推進肌肉<small>讓他願意動</small><span class="dq-dim-v">50</span></div><div class="dq-dim-bar"><div class="dq-dim-bf" style="width:50%;background:#C99A4E;"></div></div></div>
-    <div class="dq-peek">
-      <div class="dq-peek-g">
-        <div class="dq-peek-c">讓他想聽</div><div class="dq-peek-c">讓他心動</div><div class="dq-peek-c">讓他放心</div>
-        <div class="dq-peek-c">讓他敢說</div><div class="dq-peek-c">讓他信你</div><div class="dq-peek-c">讓他懂你</div>
-        <div class="dq-peek-c">讓他服你</div><div class="dq-peek-c">讓他要你</div><div class="dq-peek-c">讓他行動</div>
-      </div>
-      <div class="dq-peek-ov">每塊大肌肉還能拆成 3 塊小肌群<br>——進健身房才全開</div>
-    </div>
-  </div>
-</div>
-<!-- 舊果-4 強項路徑卡已依備註下架（改進 Email 報告，寄送待做） -->
-<div class="blk" data-id="果-4"><span class="btag">果-4</span>
-  <div class="card" style="border-color:#F0E3DB;margin-bottom:0;">
-    <div style="font-size:14px;color:#6E4A3C;margin-bottom:6px;">練起這塊肌肉，CP 值最高<span class="dq-mock">示意</span></div>
-    <div style="font-size:17px;font-weight:600;margin-bottom:6px;">專業肌肉（讓他要找你）——現在先練這塊，最有感</div>
-    <div style="font-size:15px;color:#6E4A3C;line-height:1.7;">專業肌肉決定對方願不願意付你高單價——如果對方覺得你說的東西「聽起來不錯但不確定有沒有用」，就不會成交。<br><br>你需要的是把你的能力用對方聽得懂的語言說出來。</div>
+
+  <!-- 第三區（強項組合 × 最省力變現路徑）2026-09-05 老師備註【果-4】下架：
+       結果頁不放路徑全文，改放進 Email 完整報告（寄送功能待做）。文案本體還在 atpi-core.js 的 COMBO_PATH，不刪。 -->
+
+  <!-- 第四區：最大缺口（大肌肉層）＋ 它的 3 塊小肌群（進館後的第一份課表）
+       2026-09-05 老師備註【果-5】：三塊不再全域挑最低，一律＝最弱那塊大肌肉的 3 塊——就是挑他最弱的大肌肉。 -->
+  <div class="card" style="border-color:#F0E3DB;">
+    <div style="font-size:14px;color:#6E4A3C;margin-bottom:6px;">練起這塊肌肉，CP 值最高</div>
+    <div id="result__r-weak-name" style="font-size:17px;font-weight:600;color:#4A1B0C;margin-bottom:6px;">專業肌肉（讓他要找你）——現在先練這塊，最有感</div>
+    <div id="result__r-weak-desc" style="font-size:15px;color:#6E4A3C;line-height:1.7;white-space:pre-line;">專業肌肉決定他會不會指名找你——他說「聽起來不錯」，但還不確定你能不能解決他的問題，就會回去想想，然後沒有然後。
+
+你需要的是把你的本事，用他聽得懂的話說出來，讓他認定「這要問你」。</div>
     <div style="height:0.5px;background:#E6DAD1;margin:12px 0;"></div>
-    <div style="font-size:14px;color:#6E4A3C;margin-bottom:4px;">專業肌肉的 3 塊小肌群——你的第一份課表</div>
-    <div class="mrow"><div class="mn" style="font-size:15px;color:#5A3A2A;font-weight:500;">1　讓他有感</div><div class="dots"><i style="background:#6E8CA8;"></i><i style="background:#F0E3DB;"></i><i style="background:#F0E3DB;"></i><i style="background:#F0E3DB;"></i><i style="background:#F0E3DB;"></i></div><div class="mv" style="width:44px;">1 / 5</div></div>
-    <div class="mrow"><div class="mn" style="font-size:15px;color:#5A3A2A;font-weight:500;">2　讓他放心</div><div class="dots"><i style="background:#6E8CA8;"></i><i style="background:#6E8CA8;"></i><i style="background:#F0E3DB;"></i><i style="background:#F0E3DB;"></i><i style="background:#F0E3DB;"></i></div><div class="mv" style="width:44px;">2 / 5</div></div>
-    <div class="mrow"><div class="mn" style="font-size:15px;color:#5A3A2A;font-weight:500;">3　讓他釐清</div><div class="dots"><i style="background:#6E8CA8;"></i><i style="background:#6E8CA8;"></i><i style="background:#6E8CA8;"></i><i style="background:#F0E3DB;"></i><i style="background:#F0E3DB;"></i></div><div class="mv" style="width:44px;">3 / 5</div></div>
+    <div id="result__r-weak3-title" style="font-size:14px;color:#6E4A3C;margin-bottom:4px;">專業肌肉的 3 塊小肌群——你的第一份課表</div>
+    <div id="result__r-weak3"><div style="display: flex; align-items: center; gap: 8px; padding: 5px 0px;"><div style="flex: 1 1 0%; font-size: 15px; color: rgb(90, 58, 42); font-weight: 500;">1　讓他放心</div><div style="display: flex; gap: 4px;"><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(110, 140, 168);"></div><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(240, 227, 219);"></div><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(240, 227, 219);"></div><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(240, 227, 219);"></div><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(240, 227, 219);"></div></div><div style="font-size: 14px; color: rgb(110, 74, 60); width: 44px; text-align: right;">1 / 5</div></div><div style="display: flex; align-items: center; gap: 8px; padding: 5px 0px;"><div style="flex: 1 1 0%; font-size: 15px; color: rgb(90, 58, 42); font-weight: 500;">2　讓他釐清</div><div style="display: flex; gap: 4px;"><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(110, 140, 168);"></div><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(110, 140, 168);"></div><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(240, 227, 219);"></div><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(240, 227, 219);"></div><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(240, 227, 219);"></div></div><div style="font-size: 14px; color: rgb(110, 74, 60); width: 44px; text-align: right;">2 / 5</div></div><div style="display: flex; align-items: center; gap: 8px; padding: 5px 0px;"><div style="flex: 1 1 0%; font-size: 15px; color: rgb(90, 58, 42); font-weight: 500;">3　讓他有感</div><div style="display: flex; gap: 4px;"><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(110, 140, 168);"></div><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(110, 140, 168);"></div><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(110, 140, 168);"></div><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(240, 227, 219);"></div><div style="width: 9px; height: 9px; border-radius: 50%; background: rgb(240, 227, 219);"></div></div><div style="font-size: 14px; color: rgb(110, 74, 60); width: 44px; text-align: right;">3 / 5</div></div></div>
     <div style="font-size:14px;color:#8A7266;line-height:1.6;margin-top:8px;">進館後就從這三塊開始練——先練最有感的，不必四塊一起顧。</div>
   </div>
-</div>
-<div class="blk" data-id="果-5"><span class="btag">果-5</span>
-  <div class="card" style="background:#FDF6EF;border:0.5px solid #F0E3DB;margin-bottom:0;">
-    <div style="font-size:15px;color:#6E4A3C;line-height:1.8;margin-bottom:1rem;">對方喜歡你也信你，但還不確定你是不是真的能解決——這一關過了，他才會指名找你。先練專業。</div>
-    <button class="btnO" style="margin-bottom:0;">進影響力健身房 →</button>
-  </div>
-</div>
-<div class="blk" data-id="果-6"><span class="btag">果-6</span>
-  <div class="dq-share">
-    <div class="dq-share-t">把體格單傳給一個朋友，<br>猜猜他哪塊最有感。</div>
-    <div class="dq-share-s">傳出去的那一刻，你已經在練吸引肌肉了。</div>
-    <a class="dq-share-b">傳給朋友<span class="dq-mock" style="background:rgba(74,27,12,.4);">示意</span></a>
-  </div>
-</div>
 
-</div><!-- /wrap -->
+  <!-- 第五區：下一步。⚠️ 2026-09-01 老師拍板「分流取消」＝只留一個出口（進館）。
+       舊的 Calendly 諮詢鈕與 LINE 分享鈕已移除（分享鈕的連結還會把人繞回測驗起點）。
+       這顆鈕沒有 disabled 狀態：免費路人也要進得去，健身房那邊已改成
+       「名單內、未開通 → member.html（會員模式）」，不再一律踢到 showcase。 -->
+  <div class="card" style="background:#FDF6EF;border:0.5px solid #F0E3DB;">
+    <div id="result__r-cta-desc" style="font-size:15px;color:#6E4A3C;line-height:1.8;margin-bottom:1rem;">對方喜歡你也信你，但還不確定你是不是真的能解決——這一關過了，他才會指名找你。先練專業。</div>
+    <!-- 北極星句（2026-09-06 老師拍板：感召式成交——行動前先被理念感動，放錢鈕正前方）。
+         句子＝金句庫（productkit 14§5）骨層主打第一句；#12 句庫挑完後可輪替。
+         引號層同日拍板：只給品牌金句，大金引號＋署名（裝飾字符襯線、內文無襯線）。 -->
+    <div style="margin:0 4px 1rem;"><span style="display:block;font-family:Georgia,'Times New Roman',serif;font-size:38px;color:#C99A4E;line-height:.7;">❝</span><div style="font-size:16px;color:#4A1B0C;line-height:2;font-weight:700;margin-top:4px;">影響力的盡頭不是成交，<br>是有人因為你變好。</div><div style="margin-top:2px;font-size:12.5px;color:#9c7f6f;text-align:right;letter-spacing:.08em;">—— 光頭</div></div>
+    <button class="btnO" id="result__btn-workshop" style="margin-bottom:0;">進影響力健身房 →</button>
+  </div>
 
-<div class="expbar">
-  <span id="ncount">備註 0 則</span>
-  <button onclick="exportNotes()">匯出備註</button>
-</div>
+  <!-- LINE 外開測驗（拿不到 userId）的救援入口（2026-09-08）：自願綁 LINE，不強制登入。
+       按下去走 liff.login() → 跳回來後 initLiff 的快取補送（cct_result_v3）會自動把整份結果寫進試算表。
+       有 userId 時整塊隱藏。次要鈕＝白底描邊，不跟上面的錢鈕搶。 -->
+  <div id="result__linesave-wrap" style="display: block;">
+    <button class="btnO" id="result__btn-linesave" style="background:#fff;color:#AF5433;border:1.5px solid #E8C89A;box-shadow:none;text-shadow:none;">用 LINE 保存我的結果</button>
+    <div style="font-size:12.5px;color:#8A7266;text-align:center;margin-bottom:8px;">保存後，進健身房不用重測，直接接上你的影響力肌肉。</div>
+  </div>
+
+  <!-- q-6 分享卡（2026-09-07 老師拍板復活）：接回 LIFF shareTargetPicker 的 Flex 卡。
+       9/01 下架的原因是它當時「跟進館搶主 CTA」——現在位置在結果頁最底、進館鈕之後，
+       已經是次要出口；朋友收到連結從測驗開始本來就是對的（那是引流，不是迴圈）。
+       舊卡文案整批作廢（溝通變現／尚未解鎖赤字寫法／舊色票），shareQuizCard() 全部重寫。 -->
+  <div class="dq-blk"><span class="dq-tag">q-6</span>
+    <div class="dq-share">
+      <div class="dq-share-t">把這張肌肉圖傳給一個朋友，<br>猜猜他哪塊最有感。</div>
+      <div class="dq-share-s">傳出去的那一刻，你已經在練吸引肌肉了。</div>
+      <a class="dq-share-b" href="#" id="result__btn-share">傳給朋友</a>
+    </div>
+  </div>
+  <div class="saving" id="result__saving-msg"></div>
+</div></div><aside class="x-side"><div class="x-sh">在這裡寫你要怎麼改</div><textarea class="x-note" data-key="result" placeholder="這一屏想改什麼？直接寫（自動存）"></textarea><div class="x-diff" data-key="result"></div></aside></section>
+<section class="x-row" data-key="mapopen"><div class="x-left"><div class="x-cap"><b>畫面 5b｜MUSCLE MAP 展開</b><span>12 小塊：形狀是真的、分數糊掉＝進館才全開。這是 quiz 最大的鉤子。</span></div><div class="x-frame" data-key="mapopen"><div class="dq-blk"><span class="dq-tag">q-3</span>
+    <div class="dq-cd">
+      <div class="dq-sec">MUSCLE MAP · <b>影響力肌肉</b></div>
+      <div id="mapopen__bs-map"><div class="slw" style="--sg:21px;"><div class="slv"><span style="color:#8A7266;">50</span><span style="color:#8A7266;">75</span><span style="color:#54718D;">25</span><span style="color:#8A7266;">50</span></div><div class="srow"><div class="sl past" style="height:72px;background:#F4E1D9;"></div><div class="sl past" style="height:96px;background:#DCE7DE;"></div><div class="sl now" style="height:48px;background:#6E8CA8;box-shadow:0 2px 8px #6E8CA844;"></div><div class="sl past" style="height:72px;background:#F1E5CC;"></div></div><div class="slbl"><span class=""><i style="color:#AF5433;">ATTRACT</i>吸引</span><span class=""><i style="color:#5C7464;">TRUST</i>信任</span><span class=""><i style="color:#54718D;">PROFESSIONAL</i>專業</span><span class=""><i style="color:#8E682B;">IMPACT</i>推進</span></div></div><div class="dq-wallnote">實色＝先練這塊最有感・淡色＝已經量過。</div><div class="dq-bshint">🔒 形狀是真的，分數鎖著——進影響力健身房才全開。</div><div class="dq-subrow"><div class="dq-sec" style="margin-bottom:8px;"><span style="color:#AF5433;">ATTRACT</span> · <b>吸引肌肉・3 小塊</b></div><div class="slw fog" style="--sg:16px;"><div class="slv"><span style="color:#8A7266;">3.0</span><span style="color:#8A7266;">4.0</span><span style="color:#8A7266;">2.0</span></div><div class="srow"><div class="sl past" style="height:53px;background:#F4E1D9;"></div><div class="sl past" style="height:71px;background:#F4E1D9;"></div><div class="sl past" style="height:36px;background:#F4E1D9;"></div></div><div class="slbl"><span class=""><i style="color:#AF5433;">A1</i>讓他開口</span><span class=""><i style="color:#AF5433;">A2</i>讓他追問</span><span class=""><i style="color:#AF5433;">A3</i>讓他記得</span></div></div></div><div class="dq-subrow"><div class="dq-sec" style="margin-bottom:8px;"><span style="color:#5C7464;">TRUST</span> · <b>信任肌肉・3 小塊</b></div><div class="slw fog" style="--sg:19px;"><div class="slv"><span style="color:#8A7266;">4.0</span><span style="color:#8A7266;">5.0</span><span style="color:#8A7266;">3.0</span></div><div class="srow"><div class="sl past" style="height:71px;background:#DCE7DE;"></div><div class="sl past" style="height:88px;background:#DCE7DE;"></div><div class="sl past" style="height:53px;background:#DCE7DE;"></div></div><div class="slbl"><span class=""><i style="color:#5C7464;">T1</i>讓他敢說</span><span class=""><i style="color:#5C7464;">T2</i>讓他交心</span><span class=""><i style="color:#5C7464;">T3</i>讓他當真</span></div></div></div><div class="dq-subrow"><div class="dq-sec" style="margin-bottom:8px;"><span style="color:#54718D;">PROFESSIONAL</span> · <b>專業肌肉・3 小塊</b></div><div class="slw fog" style="--sg:12px;"><div class="slv"><span style="color:#8A7266;">2.0</span><span style="color:#8A7266;">3.0</span><span style="color:#8A7266;">1.0</span></div><div class="srow"><div class="sl past" style="height:36px;background:#DDE6EE;"></div><div class="sl past" style="height:53px;background:#DDE6EE;"></div><div class="sl past" style="height:18px;background:#DDE6EE;"></div></div><div class="slbl"><span class=""><i style="color:#54718D;">P1</i>讓他釐清</span><span class=""><i style="color:#54718D;">P2</i>讓他有感</span><span class=""><i style="color:#54718D;">P3</i>讓他放心</span></div></div></div><div class="dq-subrow"><div class="dq-sec" style="margin-bottom:8px;"><span style="color:#8E682B;">IMPACT</span> · <b>推進肌肉・3 小塊</b></div><div class="slw fog" style="--sg:16px;"><div class="slv"><span style="color:#8A7266;">3.0</span><span style="color:#8A7266;">4.0</span><span style="color:#8A7266;">2.0</span></div><div class="srow"><div class="sl past" style="height:53px;background:#F1E5CC;"></div><div class="sl past" style="height:71px;background:#F1E5CC;"></div><div class="sl past" style="height:36px;background:#F1E5CC;"></div></div><div class="slbl"><span class=""><i style="color:#8E682B;">I1</i>讓他想要</span><span class=""><i style="color:#8E682B;">I2</i>讓他敢要</span><span class=""><i style="color:#8E682B;">I3</i>讓他答應</span></div></div></div><button class="dq-walltg">收合 ▴</button></div>
+    </div>
+  </div></div></div><aside class="x-side"><div class="x-sh">在這裡寫你要怎麼改</div><textarea class="x-note" data-key="mapopen" placeholder="這一屏想改什麼？直接寫（自動存）"></textarea><div class="x-diff" data-key="mapopen"></div></aside></section>
 
 <script>
-/* ── 16 題全展開（照抄正式版 QS；1–5 錨點＝ANCHORS）── */
-var ANCHORS=["沒做到","偶爾，而且生硬","想到才做、時好時壞","多數情境做得到","穩定到自動化"];
-var QS=[
-  {text:"你期待透過提升「影響力」，能為你額外增加多少年收入？",label:"開始前先想想",opts:["多賺 20 萬以內","多賺 20～100 萬","多賺 100～300 萬","多賺 300 萬以上"]},
-  {text:"最近一次你想讓對方接受一個想法、或採取一個行動的談話——當時他有沒有在找解法？（後面 12 題都以那次的他為準）",label:"先設定對象",opts:["沒在找解法——閒聊而已，他沒想解決什麼","願意聽我說，但還沒覺得自己需要","正在找解法——他主動想解決一個問題"]},
-  {text:"在還不熟的場合，你主動先開口，而對方不是只回你一句「謝謝」就結束。",label:"吸引肌肉｜讓他開口",opts:ANCHORS},
-  {text:"你講完自己在做什麼之後，他當場「哇」了一聲，主動追問「然後呢？」「你怎麼做到的？」——不是只點頭說「喔喔」。",label:"吸引肌肉｜讓他追問",opts:ANCHORS},
-  {text:"隔一個禮拜再遇到，他還記得你講過的故事、講得出你的轉折點，甚至能用一句話跟別人介紹你。",label:"吸引肌肉｜讓他記得",opts:ANCHORS},
-  {text:"你會先把自己心裡沒說出口的講出來——還在怕的、還沒做成的——講完之後，他也開始說他的。",label:"信任肌肉｜讓他敢說",opts:ANCHORS},
-  {text:"你一層一層問下去，最後他講出了你根本沒問到的事，是他自己想多說的。",label:"信任肌肉｜讓他交心",opts:ANCHORS},
-  {text:"你答應他的事，後來真的做到了，而且講得出結果或過程來佐證——不是只說「有啦我有記得」。",label:"信任肌肉｜讓他當真",opts:ANCHORS},
-  {text:"你帶他講出「現在在哪、想到哪」，兩邊的數字是他自己報的，然後在中間的落差挖出他原本沒說出口的卡點。",label:"專業肌肉｜讓他釐清",opts:ANCHORS},
-  {text:"你不是用講的——你當場讓他親自試一次或看一次，他秒懂，而且說得出「這真的有用」。",label:"專業肌肉｜讓他有感",opts:ANCHORS},
-  {text:"你搬出別人的見證、數據或第三方背書之後，他主動追問那個案例：「那個人後來怎麼樣？」",label:"專業肌肉｜讓他放心",opts:ANCHORS},
-  {text:"你帶他確認「他真正想要的結果」，最後他是用那個結果在複述——「所以我可以⋯⋯」，而不是複述你的方案內容。",label:"推進肌肉｜讓他想要",opts:ANCHORS},
-  {text:"你會主動問他還有什麼顧慮，把他心裡的擔心先問出來並回應——不是等他自己開口你才知道。",label:"推進肌肉｜讓他敢要",opts:ANCHORS},
-  {text:"聊完之後你拿到的是「他同意的具體下一步」——約好下次時間、他要準備什麼、或他答應去跟誰說——不是只有一句「再聯絡」。",label:"推進肌肉｜讓他答應",opts:ANCHORS},
-  {text:"你想要收入變多的項目，最多的客戶從哪裡來？",label:"客戶來源",opts:["朋友／舊客戶／商會介紹","認識的新朋友或陌生人","社群或網路找上門","受僱領薪，沒有自己的客戶"]},
-  {text:"你目前的年收入落在哪個區間？",label:"基本資料",opts:["0-60萬","60-120萬","120-300萬","300-1000萬","1000萬以上"]}
-];
-var qhost=document.getElementById("qhost");
-QS.forEach(function(q,i){
-  var pct=Math.round(i/16*100);
-  var blk=document.createElement("div");blk.className="blk";blk.setAttribute("data-id","題-"+(i+1));
-  var isAnchor=(q.opts===ANCHORS);
-  blk.innerHTML='<span class="btag">題-'+(i+1)+'</span>'
-    +'<div class="card" style="margin-bottom:0;">'
-    +'<div class="progtop"><span>第 '+(i+1)+' 題，共 16 題</span><span>'+pct+'%</span></div>'
-    +'<div class="progbar"><div class="progfill" style="width:'+pct+'%;"></div></div>'
-    +'<div class="qlabel">'+q.label+'</div>'
-    +'<div class="qtxt">'+q.text+'</div>'
-    +q.opts.map(function(o,j){return '<div class="opt">'+(isAnchor?'<span class="num">'+(j+1)+'</span>':'')+'<span>'+o+'</span></div>';}).join("")
-    +'<div class="btnN">下一題 →</div>'
-    +'</div>';
-  qhost.appendChild(blk);
+/* 版本號綁畫面內容（2bb1bd98）：index.html 一改、重跑產生器，key 就換，
+   舊草稿不會蓋在對不上的新畫面上。 */
+var LSKEY = "cctdemo_2bb1bd98";
+/* BUTTON 不排除——CTA 的字最需要改。抓下來的 DOM 已由產生器拔掉 onclick，點下去不會亂跑。 */
+var SKIP = new Set(["SCRIPT","STYLE","SVG","PATH","CIRCLE","LINE","POLYGON","INPUT","TEXTAREA","BR","OPTION","SELECT"]);
+var store = [];
+
+document.querySelectorAll(".x-frame").forEach(function(frame){
+  var key = frame.dataset.key, n = 0;
+  frame.querySelectorAll("*").forEach(function(el){
+    if (SKIP.has(el.tagName.toUpperCase())) return;
+    if (el.closest("svg")) return;
+    var own = [].some.call(el.childNodes, function(c){ return c.nodeType === 3 && c.textContent.trim(); });
+    if (!own) return;
+    /* 巢狀的不再標一次：外層已可編輯，內層再標會讓瀏覽器整塊反白蓋住字 */
+    if (el.parentElement && el.parentElement.closest("[data-edit]")) return;
+    var id = key + ":" + (n++);
+    el.setAttribute("data-edit", id);
+    el.setAttribute("contenteditable", "true");
+    el.spellcheck = false;
+    store.push({ id:id, key:key, el:el, original:el.innerText.trim() });
+  });
 });
 
-/* score-grid（4 卡＋12 格五點燈）已依 2026-09-05 備註【果-2】下架——分數區＝果-3 體格單四條 */
+var byId = {}; store.forEach(function(s){ byId[s.id] = s; });
+var notes = [].slice.call(document.querySelectorAll(".x-note"));
+var cntEl = document.getElementById("x-cnt"), copyBtn = document.getElementById("x-copy");
 
-/* ── 備註便利貼（同 member 精修模式：localStorage 綁版本號）──
-   v3＝2026-09-05 命名＋CTX 單軸＋文案掃改版後的新一輪（內容大改過，v2 的備註不能對位、不搬過來） */
-var NK="quiz_allpages_notes_v3";
-function nLoad(){try{return JSON.parse(localStorage.getItem(NK)||"{}");}catch(e){return {};}}
-function nSave(k,t){try{var o=nLoad();if(t)o[k]=t;else delete o[k];localStorage.setItem(NK,JSON.stringify(o));nCount();}catch(e){}}
-function nCount(){var o=nLoad();var n=Object.keys(o).length;document.getElementById("ncount").textContent="備註 "+n+" 則";}
-var notes=nLoad();
-document.querySelectorAll(".blk[data-id]").forEach(function(blk){
-  var id=blk.getAttribute("data-id");
-  var note=document.createElement("div");
-  note.className="rv-note";note.contentEditable="true";
-  if(notes[id])note.textContent=notes[id];
-  note.addEventListener("input",function(){nSave(id,note.textContent.trim());});
-  blk.insertAdjacentElement("afterend",note);
+/* 貼上一律轉純文字，免得把 Word／網頁樣式帶進來 */
+document.addEventListener("paste", function(e){
+  var host = e.target.closest && e.target.closest("[data-edit]");
+  if (!host) return;
+  e.preventDefault();
+  document.execCommand("insertText", false, e.clipboardData.getData("text/plain"));
 });
-var allNote=document.querySelector('[data-note="總"]');
-if(notes["總"])allNote.textContent=notes["總"];
-allNote.addEventListener("input",function(){nSave("總",allNote.textContent.trim());});
-nCount();
-function exportNotes(){
-  var o=nLoad();var keys=Object.keys(o);
-  if(!keys.length){alert("還沒有備註");return;}
-  var txt=keys.map(function(k){return "【"+k+"】"+o[k];}).join("\n");
-  if(navigator.clipboard&&navigator.clipboard.writeText){
-    navigator.clipboard.writeText(txt).then(function(){alert("已複製 "+keys.length+" 則備註，直接貼給 Claude 就行");},function(){prompt("全選複製：",txt);});
-  }else{prompt("全選複製：",txt);}
+
+function load(){
+  var d = {};
+  try { d = JSON.parse(localStorage.getItem(LSKEY) || "{}"); } catch (e) {}
+  store.forEach(function(s){ if (d.edits && d.edits[s.id] !== undefined) s.el.innerText = d.edits[s.id]; });
+  notes.forEach(function(t){ if (d.notes && d.notes[t.dataset.key]) t.value = d.notes[t.dataset.key]; });
 }
+function save(){
+  var d = { edits:{}, notes:{} };
+  store.forEach(function(s){ var v = s.el.innerText.trim(); if (v !== s.original) d.edits[s.id] = v; });
+  notes.forEach(function(t){ if (t.value.trim()) d.notes[t.dataset.key] = t.value.trim(); });
+  try { localStorage.setItem(LSKEY, JSON.stringify(d)); } catch (e) {}
+}
+
+function esc(t){ return t.replace(/&/g,"&amp;").replace(/</g,"&lt;"); }
+function refresh(){
+  var byKey = {};
+  var n = 0;
+  store.forEach(function(s){
+    var now = s.el.innerText.trim(), ch = now !== s.original;
+    s.el.classList.toggle("x-dirty", ch);
+    if (ch) { n++; (byKey[s.key] = byKey[s.key] || []).push(s); }
+  });
+  document.querySelectorAll(".x-diff").forEach(function(box){
+    var list = byKey[box.dataset.key] || [];
+    box.innerHTML = list.map(function(s){
+      return '<div class="x-d"><div class="x-o">' + esc(s.original)
+           + '</div><div class="x-n">' + esc(s.el.innerText.trim()) + "</div></div>";
+    }).join("");
+  });
+  var noted = notes.filter(function(t){ return t.value.trim(); }).length;
+  cntEl.textContent = (n || noted) ? ("已改 " + n + " 處字・" + noted + " 則註記") : "尚未修改";
+  copyBtn.disabled = !(n || noted);
+  save();
+}
+
+/* 匯出＝直接進剪貼簿的純文字，這樣可以貼回對話，不用再傳檔案 */
+function report(){
+  var lines = ["# quiz demo 修改（版本 2bb1bd98）"];
+  document.querySelectorAll(".x-row").forEach(function(row){
+    var key = row.dataset.key;
+    var title = row.querySelector(".x-cap b").textContent;
+    var note = row.querySelector(".x-note").value.trim();
+    var eds = store.filter(function(s){ return s.key === key && s.el.innerText.trim() !== s.original; });
+    if (!note && !eds.length) return;
+    lines.push("", "## " + title);
+    if (note) lines.push("【想怎麼改】" + note);
+    eds.forEach(function(s){ lines.push("【改字】" + s.original + "  →  " + s.el.innerText.trim()); });
+  });
+  return lines.join("\n");
+}
+
+copyBtn.addEventListener("click", function(){
+  var t = report();
+  navigator.clipboard.writeText(t).then(function(){
+    copyBtn.textContent = "已複製，直接貼給我";
+    setTimeout(function(){ copyBtn.textContent = "複製全部修改"; }, 2200);
+  }, function(){
+    var w = window.open("", "_blank");
+    w.document.write("<pre style='white-space:pre-wrap;font-size:15px;padding:20px'>" + esc(t) + "</pre>");
+  });
+});
+
+document.getElementById("x-reset").addEventListener("click", function(){
+  if (!confirm("清空這份 demo 的所有修改與註記？")) return;
+  try { localStorage.removeItem(LSKEY); } catch (e) {}
+  location.reload();
+});
+var tg = document.getElementById("x-toggle");
+tg.addEventListener("click", function(){
+  document.body.classList.toggle("x-marks");
+  tg.textContent = document.body.classList.contains("x-marks") ? "隱藏虛線" : "顯示虛線";
+});
+
+document.addEventListener("input", refresh);
+
+/* 目錄：一頁一頁跳 */
+document.getElementById("x-toc").innerHTML =
+  [].map.call(document.querySelectorAll(".x-row"), function(row, i){
+    row.id = "b" + i;
+    return '<a href="#b' + i + '">' + row.querySelector(".x-cap b").textContent.split("｜")[0] + "</a>";
+  }).join("");
+
+load();
+refresh();
 </script>
 </body>
 </html>
