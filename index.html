@@ -82,12 +82,16 @@ html,body{background:#F7F1EC;font-family:"Noto Sans TC","PingFang TC",-apple-sys
 .progslices{display:flex;gap:3px;margin-bottom:1.25rem;}
 .progslices i{flex:1;height:9px;background:#EDE4DA;border-radius:2px;transform:skewX(-12deg);transition:background .25s,opacity .25s;}
 .qprev{background:none;border:none;color:#8A7266;font-size:14px;padding:10px 0 2px;margin-top:8px;cursor:pointer;font-family:inherit;}
-/* 程度題＝5 顆由小到大的圓（16personalities 式）；.degw 是 52×56 的隱形點擊區（圓最小 20px、手指點不準） */
-.degrow{display:flex;align-items:center;justify-content:space-between;padding:10px 4px 2px;}
-.degw{width:52px;height:56px;display:flex;align-items:center;justify-content:center;background:none;border:none;padding:0;cursor:pointer;}
-.degc{display:block;border-radius:50%;background:#fff;border:2.5px solid;transition:transform .15s,background .15s,box-shadow .15s;}
-.degw:active .degc{transform:scale(.88);}
-.deglbls{display:flex;justify-content:space-between;font-size:13px;color:#8A7266;margin-top:10px;padding:0 4px;}
+/* 程度題＝5 片由矮到高的薄片，站在同一條基線上（高度＝程度，跟結果頁同一套語彙）。
+   ⚠️ 舊版是「等寬格子裡放不等大的圓」：格子等寬、圓越大，圓與圓的邊緣間距就越窄，
+   看起來左鬆右緊＝距離很怪。改成等寬薄片＋固定 gap，間距從頭到尾一樣。
+   右邊 19px＝最高片 88px 的斜角呼吸位（88×tan12°）。
+   點擊區＝整欄（寬約 1/5、高 ≥56px），比原本 52px 的圓好點很多。 */
+.degrow{display:flex;align-items:flex-end;gap:10px;border-bottom:2px solid rgba(74,27,12,.18);padding:16px 19px 0 4px;}
+.degw{flex:1;min-height:56px;display:flex;align-items:flex-end;background:none;border:none;padding:0;cursor:pointer;}
+.degc{display:block;width:100%;border-radius:6px 6px 0 0;background:#fff;border:2px solid #9C8879;border-bottom:0;transform:skewX(-12deg);transform-origin:50% 100%;transition:background .15s,border-color .15s,box-shadow .15s,transform .15s;}
+.degw:active .degc{transform:skewX(-12deg) translateY(3px);}
+.deglbls{display:flex;justify-content:space-between;font-size:13px;color:#8A7266;margin-top:10px;padding:0 19px 0 4px;}
 .degcap{text-align:center;font-size:15px;font-weight:500;margin-top:12px;min-height:24px;}
 .qlabel{display:inline-block;font-size:14px;background:#F0E3DB;color:#993C1D;border-radius:8px;padding:2px 8px;margin-bottom:8px;}
 .qtxt{font-size:18px;font-weight:500;color:#4A1B0C;line-height:1.65;margin-bottom:1.25rem;}
@@ -137,7 +141,7 @@ html,body{background:#F7F1EC;font-family:"Noto Sans TC","PingFang TC",-apple-sys
 .btnO:active{transform:scale(.98);}
 .btnG{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:#fff;color:#AF5433;border:1px solid #C6603A;border-radius:16px;padding:13px;font-size:16px;cursor:pointer;margin-bottom:8px;font-family:inherit;}
 /* ── 三頁大demo搬入（2026-09-04 老師指示：先把相近元素放一起，之後再整合）──
-   dq- 前綴＝demo-quiz.html 搬進來的板塊（q-1 hero／q-3 體格單／q-5 地圖／q-6 分享卡）。 */
+   dq- 前綴＝demo-quiz.html 搬進來的板塊（q-1 hero／q-3 MUSCLE MAP／q-5 地圖／q-6 分享卡）。 */
 .dq-blk{position:relative;margin-bottom:16px;}
 .dq-tag{position:absolute;top:-9px;right:0;font-size:10px;font-weight:700;letter-spacing:1px;color:#fff;background:#C99A4E;border-radius:10px;padding:2px 8px;z-index:5;}
 .dq-mock{font-size:10px;color:#fff;background:#8A7266;border-radius:8px;padding:1px 6px;margin-left:6px;vertical-align:2px;}
@@ -157,17 +161,18 @@ html,body{background:#F7F1EC;font-family:"Noto Sans TC","PingFang TC",-apple-sys
 .slw{--sg:0px;}
 .srow{display:flex;align-items:flex-end;gap:7px;border-bottom:2px solid rgba(74,27,12,.22);padding:6px calc(4px + var(--sg,0px)) 0 4px;}
 .sl{flex:1;border-radius:6px 6px 0 0;transform:skewX(-12deg);transform-origin:50% 100%;position:relative;transition:height .4s cubic-bezier(.4,0,.2,1);}
-.sl.todo{background:transparent!important;border:1.5px dashed #B4A695;border-bottom:0;}
+.sl.todo{background:transparent!important;border:1.5px dashed #9C8879;border-bottom:0;}
 .sl.now.gold{background:#F1E5CC!important;border:2px solid #8E682B;border-bottom:0;}
 .slv{display:flex;gap:7px;padding:0 calc(4px + var(--sg,0px)) 0 4px;}
 .slv span{flex:1;text-align:center;font-size:12.5px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1;}
 .slbl{display:flex;gap:7px;padding:7px calc(4px + var(--sg,0px)) 0 4px;}
 .slbl span{flex:1;text-align:center;font-size:12px;font-weight:700;color:#4A1B0C;line-height:1.45;}
 .slbl span i{display:block;font-style:normal;font-size:10.5px;font-weight:800;letter-spacing:1px;}
-.slbl span.dim{color:#B4A695;font-weight:600;}
+.slbl span.dim{color:#8A7266;font-weight:600;}
 .slw.fog .slv{filter:blur(3.5px);user-select:none;}
 .dq-subrow{margin-top:14px;border-top:1px dashed #E8DDD3;padding-top:12px;}
 .dq-wallnote{font-size:12.5px;color:#8A7266;margin-top:10px;line-height:1.7;}
+.dq-walltg{width:100%;background:none;border:0;color:#AF5433;font-weight:700;font-size:13.5px;padding:14px 0 2px;cursor:pointer;font-family:inherit;min-height:44px;text-align:center;}
 .dq-bshint{margin-top:14px;font-size:12.5px;color:#6E4A3C;background:#EFE6DB;border-radius:10px;padding:9px 12px;line-height:1.7;font-weight:600;}
 .dq-map{position:relative;padding-left:26px;}
 .dq-map:before{content:"";position:absolute;left:8px;top:10px;bottom:10px;width:3px;border-radius:3px;background:linear-gradient(180deg,#C6603A,#6E8B77,#6E8CA8,#C99A4E);}
@@ -286,7 +291,7 @@ applyFontScale_(fontScaleNow_());
     <div class="dq-cd">
       <div class="dq-sec">影響力之路——每一站都有人陪你練</div>
       <div class="dq-map">
-        <div class="dq-stn here" style="background:#FDF6EF;border-radius:12px;padding:10px 10px 10px 6px;"><div class="dq-stn-t">第 1 站・測出體格 <span class="dq-you">你在這裡</span></div><div class="dq-stn-s">3 分鐘，找到先練哪塊最有感</div></div>
+        <div class="dq-stn here" style="background:#FDF6EF;border-radius:12px;padding:10px 10px 10px 6px;"><div class="dq-stn-t">第 1 站・測影響力肌肉 <span class="dq-you">你在這裡</span></div><div class="dq-stn-s">3 分鐘，找到先練哪塊最有感</div></div>
         <div class="dq-stn n2"><div class="dq-stn-t">第 2 站・免費體驗</div><div class="dq-stn-s">每月分享會＋社群，先看別人怎麼練</div></div>
         <div class="dq-stn n3"><div class="dq-stn-t">第 3 站・進健身房</div><div class="dq-stn-s">每天一招，12 塊小肌群逐塊點亮 → <a href="https://app.atpifit.com/demo-member.html">看會員的一天 →</a></div></div>
         <div class="dq-stn n4"><div class="dq-stn-t">第 4 站・私人教練席</div><div class="dq-stn-s">教練看著你的每一筆紀錄，練進真實關係 → <a href="https://app.atpifit.com/demo-pro.html">看教練席 →</a></div></div>
@@ -332,7 +337,7 @@ applyFontScale_(fontScaleNow_());
 
   <div class="card" style="background:#4A1B0C;border:none;">
     <div style="font-size:15px;color:rgba(255,255,255,0.55);margin-bottom:8px;">這個測驗會做什麼</div>
-    <div style="font-size:16px;color:#fff;line-height:1.8;">每塊肌肉再拆成 3 個小肌群，一共 <strong style="color:#E8C89A;">12 塊</strong>——測完你會拿到 4 塊肌肉的體格單，和<strong style="color:#E8C89A;">先練最有感的那 3 塊</strong>。</div>
+    <div style="font-size:16px;color:#fff;line-height:1.8;">每塊肌肉再拆成 3 個小肌群，一共 <strong style="color:#E8C89A;">12 塊</strong>——測完你會拿到 4 塊肌肉的分數，和<strong style="color:#E8C89A;">先練最有感的那 3 塊</strong>。</div>
     <div style="font-size:15px;color:rgba(255,255,255,0.65);line-height:1.7;margin-top:10px;">16 題影響力測驗，只問<strong style="color:#E8C89A;">具體發生過的事</strong>（對方說了什麼、做了什麼）——想不出實例就選「沒做到」，那才測得準。</div>
   </div>
 
@@ -397,16 +402,16 @@ applyFontScale_(fontScaleNow_());
       <svg id="radar" viewBox="-14 0 288 270" width="288" height="270" style="max-width:100%;" xmlns="http://www.w3.org/2000/svg"></svg>
     </div>
     <!-- 2026-09-05 老師備註【果-2】：12 格詳細卡（score-grid）下架——詳細解析不是測驗的目的，
-         分數只留下面的體格單四條；小肌群逐格點亮留給健身房。 -->
+         分數只留下面 MUSCLE MAP 的四大肌肉排；小肌群逐格點亮留給健身房。 -->
   </div>
 
   <!-- MUSCLE MAP：四頁共用同一個卡名（quiz／visitor／member／pro）。
-       大肌肉排真成數＋12 小塊名字露、分數模糊——進健身房才全開。JS 在 renderResult 渲染。 -->
+       大肌肉排真成數＋12 小塊名字露、分數模糊——進健身房才全開。
+       整張卡（含鎖頭字、展開鈕）都在 renderMuscleMap() 裡長出來。 -->
   <div class="dq-blk"><span class="dq-tag">q-3</span>
     <div class="dq-cd">
       <div class="dq-sec">MUSCLE MAP · <b>影響力肌肉</b></div>
       <div id="bs-map"></div>
-      <div class="dq-bshint">🔒 12 塊小肌群都量好了——分數進影響力健身房才全開。</div>
     </div>
   </div>
 
@@ -443,7 +448,7 @@ applyFontScale_(fontScaleNow_());
        有 userId 時整塊隱藏。次要鈕＝白底描邊，不跟上面的錢鈕搶。 -->
   <div id="linesave-wrap" style="display:none;">
     <button class="btnO" id="btn-linesave" style="background:#fff;color:#AF5433;border:1.5px solid #E8C89A;box-shadow:none;text-shadow:none;">用 LINE 保存我的結果</button>
-    <div style="font-size:12.5px;color:#8A7266;text-align:center;margin-bottom:8px;">保存後，進健身房不用重測，直接接上你的體格單。</div>
+    <div style="font-size:12.5px;color:#8A7266;text-align:center;margin-bottom:8px;">保存後，進健身房不用重測，直接接上你的影響力肌肉。</div>
   </div>
 
   <!-- q-6 分享卡（2026-09-07 老師拍板復活）：接回 LIFF shareTargetPicker 的 Flex 卡。
@@ -452,7 +457,7 @@ applyFontScale_(fontScaleNow_());
        舊卡文案整批作廢（溝通變現／尚未解鎖赤字寫法／舊色票），shareQuizCard() 全部重寫。 -->
   <div class="dq-blk"><span class="dq-tag">q-6</span>
     <div class="dq-share">
-      <div class="dq-share-t">把體格單傳給一個朋友，<br>猜猜他哪塊最有感。</div>
+      <div class="dq-share-t">把這張肌肉圖傳給一個朋友，<br>猜猜他哪塊最有感。</div>
       <div class="dq-share-s">傳出去的那一刻，你已經在練吸引肌肉了。</div>
       <a class="dq-share-b" href="#" id="btn-share">傳給朋友</a>
     </div>
@@ -560,14 +565,14 @@ var DIMS={
   I:{name:"推進肌肉",desc:"Impact・讓他願意動",color:"#C99A4E",textColor:"#8E682B"}
 };
 /* 薄片原語：跟 member／visitor／pro 同一支（改行為四邊要同步）。tint＝量過但不是主力的淡底。 */
-var PALV={A:{c:DIMS.A.color,t:DIMS.A.textColor,tint:"#F3D9CD"},
+var PALV={A:{c:DIMS.A.color,t:DIMS.A.textColor,tint:"#F4E1D9"},
           T:{c:DIMS.T.color,t:DIMS.T.textColor,tint:"#DCE7DE"},
           P:{c:DIMS.P.color,t:DIMS.P.textColor,tint:"#DDE6EE"},
           I:{c:DIMS.I.color,t:DIMS.I.textColor,tint:"#F1E5CC"}};
 function slRow(items,opt){
   opt=opt||{};
   var vals=items.map(function(it){
-    return '<span style="color:'+(it.state==="now"?(PALV[it.dimKey]||{}).t||"#4A1B0C":"#B4A695")+';">'+(it.vTop||"")+'</span>';
+    return '<span style="color:'+(it.state==="now"?(PALV[it.dimKey]||{}).t||"#4A1B0C":"#8A7266")+';">'+(it.vTop||"")+'</span>';
   }).join("");
   var slices=items.map(function(it){
     var p=PALV[it.dimKey]||{c:"#B4A695",t:"#8A7266",tint:"#EFE6DB"};
@@ -581,7 +586,7 @@ function slRow(items,opt){
   var lbls=items.map(function(it){
     var p=PALV[it.dimKey]||{};
     return '<span class="'+(it.state==="todo"?"dim":"")+'">'
-      +(it.lbl2?'<i style="color:'+(it.state==="todo"?"#B4A695":p.t||"#8A7266")+';">'+it.lbl2+'</i>':'')
+      +(it.lbl2?'<i style="color:'+(it.state==="todo"?"#8A7266":p.t||"#8A7266")+';">'+it.lbl2+'</i>':'')
       +it.lbl+'</span>';
   }).join("");
   /* 斜角呼吸位：skewX(-12deg) 會把最高那片的右上角往外推 h*tan12°，
@@ -623,7 +628,18 @@ function mk(tag,cls,txt){
    advTimer 同時是防連點鎖：計時中再點不動作，不會一次跳兩題。 */
 var advTimer=null;
 var tapLockUntil=0;               // 換題後 250ms 內不收點擊——防手快連點誤答下一題
-var DEG_SIZES=[20,27,34,41,48];   // 5 顆圓由小到大＝頻率由低到高
+var DEG_SIZES=[20,37,54,71,88];   // 5 片薄片由矮到高＝頻率由低到高（等差，別憑感覺調）
+/* 選中／沒選中的上色收在一處，初次渲染跟點擊後才不會走兩套。
+   沒選＝中性描邊（灰階打底），選中＝當題肌肉色點名，整排只有一片有顏色。
+   I 例外：原版金 #C99A4E 不鋪實色（品牌紅線），改淡底＋深版描邊。 */
+/* 頭尾兩檔的字已經寫在兩端錨點上了，選中再印一次＝同一句話出現兩遍 */
+function degCap(q,i){ return (i===0||i===q.opts.length-1) ? "" : q.opts[i]; }
+function paintDeg(el,on,dim){
+  /* #9C8879＝3.38:1，可點元件的邊界要過 WCAG 1.4.11 的 3:1，別再調淡 */
+  if(!on){ el.style.background="#fff"; el.style.borderColor="#9C8879"; el.style.boxShadow="none"; return; }
+  if(dim==="I"){ el.style.background="#F1E5CC"; el.style.borderColor="#8E682B"; el.style.boxShadow="none"; }
+  else{ var c=DIMS[dim].color; el.style.background=c; el.style.borderColor=c; el.style.boxShadow="0 3px 10px "+c+"55"; }
+}
 /* 倒數中改點別的選項＝改答案＋重新倒數（不鎖死）；回傳 false 表示這次點擊要忽略 */
 function tapOk(){
   if(Date.now()<tapLockUntil) return false;
@@ -633,11 +649,14 @@ function tapOk(){
 function renderSlices(){
   var box=document.getElementById("prog-slices");
   box.innerHTML="";
+  /* 灰階打底、彩色點名：已答一律中性棕，只有「現在這題」上該維度的色。
+     ⚠️ 別再走「每片一個維度色」——題目是交錯出的，那排會變成彩虹雜訊，
+     而且「這題是哪一維」題目上方的標籤已經講了，長度才是在講「走到哪」。
+     ⚠️ 也別把當前那片調淡（舊版 opacity .35）：重點變成整排最不顯眼的。 */
   QS.forEach(function(q,i){
     var s=document.createElement("i");
-    var c=q.muscle?DIMS[q.dim].color:"#A89283";
-    if(i<cur){ s.style.background=c; }
-    else if(i===cur){ s.style.background=c; s.style.opacity=".35"; }
+    if(i<cur) s.style.background="#A89283";
+    else if(i===cur) s.style.background=q.muscle?DIMS[q.dim].color:"#AF5433";
     box.appendChild(s);
   });
 }
@@ -667,23 +686,19 @@ function renderQ(){
   var wrap=document.getElementById("opts-wrap");
   wrap.innerHTML="";
   if(q.muscle){
-    var col=DIMS[q.dim].color,tcol=DIMS[q.dim].textColor;
+    var tcol=DIMS[q.dim].textColor;
     var row=mk("div","degrow");
     q.opts.forEach(function(o,i){
       var b=document.createElement("button");
       b.className="degw";
       b.setAttribute("aria-label",o);
       var c=mk("span","degc");
-      c.style.width=c.style.height=DEG_SIZES[i]+"px";
-      c.style.borderColor=col;
-      if(ans[cur]===i){ c.style.background=col; c.style.boxShadow="0 0 0 4px "+col+"33"; }
+      c.style.height=DEG_SIZES[i]+"px";
+      paintDeg(c,ans[cur]===i,q.dim);
       b.onclick=function(){
         if(!tapOk()) return;
-        row.querySelectorAll(".degc").forEach(function(el,idx){
-          el.style.background=idx===i?col:"#fff";
-          el.style.boxShadow=idx===i?"0 0 0 4px "+col+"33":"none";
-        });
-        document.getElementById("deg-cap").textContent=o;
+        row.querySelectorAll(".degc").forEach(function(el,idx){ paintDeg(el,idx===i,q.dim); });
+        document.getElementById("deg-cap").textContent=degCap(q,i);
         pickAnswer(i);
       };
       b.appendChild(c);
@@ -694,7 +709,7 @@ function renderQ(){
     lbls.appendChild(mk("span",null,q.opts[0]));
     lbls.appendChild(mk("span",null,q.opts[q.opts.length-1]));
     wrap.appendChild(lbls);
-    var cap=mk("div","degcap",ans[cur]!==undefined?q.opts[ans[cur]]:"");
+    var cap=mk("div","degcap",ans[cur]!==undefined?degCap(q,ans[cur]):"");
     cap.id="deg-cap";
     cap.style.color=tcol;
     wrap.appendChild(cap);
@@ -754,6 +769,40 @@ var ID_LINE={
   T:"大家願意把真心話留給你。",
   P:"遇到問題，大家會說「這要問你」。",
   I:"聽完你說話，人會真的想動起來。"};
+/* MUSCLE MAP（2026-09-15 換薄片，跟 member／visitor／pro 同一套語彙）。
+   四大肌肉排＝0–100 真成數（跟雷達同一把尺），最弱那塊實色＝先練這塊。
+   12 小塊預設收起來（展開全部四排會讓卡片長到 1000px，滑不完），
+   展開後名字露、分數糊＝偷看鉤子。
+   ⚠️ 小塊不用 todo 虛線：它們真的量過了，畫成「還沒解鎖」在薄片語彙裡等於說謊，
+      所以鎖的訊息用文字講，不用形狀講。 */
+var BS_EN={A:"ATTRACT",T:"TRUST",P:"PROFESSIONAL",I:"IMPACT"};
+var MAP_OPEN=false;
+function renderMuscleMap(){
+  var wk=getCombo(scores).wk;
+  var h=slRow(DORD.map(function(k){
+      var pc=Math.min(scores[k],100);
+      return {h:Math.round(24+pc/100*96),state:k===wk?"now":"past",dimKey:k,
+              vTop:pc,lbl:DIMS[k].name.replace("肌肉",""),lbl2:BS_EN[k]};
+    }),{vals:true})
+    +'<div class="dq-wallnote">實色＝先練這塊最有感・淡色＝已經量過。</div>';
+  if(MAP_OPEN){
+    /* 鎖頭字只寫一次，就寫在會看到糊分數的地方——不然四排各掛一次＝四行雜訊 */
+    h+='<div class="dq-bshint">🔒 形狀是真的，分數鎖著——進影響力健身房才全開。</div>'
+      +DORD.map(function(k){
+        return '<div class="dq-subrow"><div class="dq-sec" style="margin-bottom:8px;"><span style="color:'+DIMS[k].textColor+';">'+BS_EN[k]+'</span> · <b>'+DIMS[k].name+'・3 小塊</b></div>'
+          +slRow(musclesOfDim(k).map(function(mkey){
+            var v=muscleScores[mkey]||0;
+            return {h:Math.max(18,Math.round(18+(v-1)/4*70)),state:"past",dimKey:k,
+                    vTop:v.toFixed(1),lbl:MUSCLES[mkey].name,lbl2:mkey};
+          }),{vals:true,fog:true})
+          +'</div>';
+      }).join('');
+  }
+  h+='<button class="dq-walltg" onclick="toggleMuscleMap()">'
+    +(MAP_OPEN?'收合 ▴':'每塊再拆成 3 小塊，看這 12 塊 ▾')+'</button>';
+  document.getElementById("bs-map").innerHTML=h;
+}
+function toggleMuscleMap(){ MAP_OPEN=!MAP_OPEN; renderMuscleMap(); }
 function renderResult(){
   var wk=getCombo(scores).wk;   // atpi-core.js：最弱維判定與健身房同一套（sorted/combo 隨【果-4】下架不再用）
   track("result_view",{weakest_dim:wk,potential:scores.potential});
@@ -800,27 +849,7 @@ function renderResult(){
     ctxBox.style.display="none";
   }
 
-  /* 第二區：MUSCLE MAP（2026-09-15 換薄片，跟 member／visitor／pro 同一套語彙）。
-     四大肌肉排＝0–100 真成數（跟雷達同一把尺），最弱那塊實色＝先練這塊；
-     12 小塊名字露、分數（1–5）模糊＝偷看鉤子。
-     ⚠️ 小塊不用 todo 虛線：它們真的量過了，畫成「還沒解鎖」在薄片語彙裡等於說謊。 */
-  var BS_EN={A:"ATTRACT",T:"TRUST",P:"PROFESSIONAL",I:"IMPACT"};
-  document.getElementById("bs-map").innerHTML=
-    slRow(DORD.map(function(k){
-      var pc=Math.min(scores[k],100);
-      return {h:Math.round(24+pc/100*96),state:k===wk?"now":"past",dimKey:k,
-              vTop:pc,lbl:DIMS[k].name.replace("肌肉",""),lbl2:BS_EN[k]};
-    }),{vals:true})
-    +'<div class="dq-wallnote">實色＝先練這塊最有感・淡色＝已經量過。</div>'
-    +DORD.map(function(k){
-      return '<div class="dq-subrow"><div class="dq-sec" style="margin-bottom:8px;"><span style="color:'+DIMS[k].textColor+';">'+BS_EN[k]+'</span> · <b>'+DIMS[k].name+'・3 小塊</b></div>'
-        +slRow(musclesOfDim(k).map(function(mkey){
-          var v=muscleScores[mkey]||0;
-          return {h:Math.max(18,Math.round(18+(v-1)/4*70)),state:"past",dimKey:k,
-                  vTop:v.toFixed(1),lbl:MUSCLES[mkey].name,lbl2:mkey};
-        }),{vals:true,fog:true})
-        +'</div>';
-    }).join('');
+  renderMuscleMap();
 
   /* 第三區（強項組合路徑）2026-09-05【果-4】下架——文案留在 atpi-core.js COMBO_PATH，之後進 Email 報告。 */
 
