@@ -160,6 +160,10 @@ html,body{background:#F7F1EC;font-family:"Noto Sans TC","PingFang TC",-apple-sys
 .slw{--sg:0px;}
 .srow{display:flex;align-items:flex-end;gap:7px;border-bottom:2px solid rgba(74,27,12,.22);padding:6px calc(4px + var(--sg,0px)) 0 4px;}
 .sl{flex:1;border-radius:6px 6px 0 0;transform:skewX(-12deg);transform-origin:50% 100%;position:relative;transition:height .4s cubic-bezier(.4,0,.2,1);}
+/* 滿格軌（2026-09-15）：每片背後畫一條「這把尺的滿格」淡影，實色只長到你的位置。
+   進步空間用形狀講，不用文字講——這是市場端最想看到的那件事。
+   z-index:-1 安全：.sl 有 transform＝自成堆疊脈絡，軌只會躲到自己的底色後面，不會掉到卡片背景後。 */
+.sl::before{content:"";position:absolute;left:0;right:0;bottom:0;height:var(--fh,0px);background:rgba(74,27,12,.055);border-radius:6px 6px 0 0;z-index:-1;}
 .sl.todo{background:transparent!important;border:1.5px dashed #9C8879;border-bottom:0;}
 .sl.now.gold{background:#F1E5CC!important;border:2px solid #8E682B;border-bottom:0;}
 .slv{display:flex;gap:7px;padding:0 calc(4px + var(--sg,0px)) 0 4px;}
@@ -433,8 +437,12 @@ applyFontScale_(fontScaleNow_());
   <div class="card" style="border-color:#F0E3DB;">
     <!-- 痛 → 解法，同一張卡連著讀（2026-09-15）：
          ①你現在看到的（sym，他認得的畫面）②多數人會怎麼修（CTX_MIS，誤區）③其實卡在哪（肌肉）。
-         不掛場景標籤——老師：「不用特別點名一對一銷售」，用畫面讓他自己對號。 -->
+         句子本身不掛場景標籤——老師：「不用特別點名一對一銷售」，用畫面讓他自己對號。
+         場景名只出現在頁籤上：四個場合他可以自己切著看，因為量到的是同一個習慣，
+         換場合只是換一張他認得的畫面（老師 2026-09-15：「他可以自己切換」）。 -->
     <div id="r-ctx-box" style="display:none;background:#FDF6EF;border-radius:12px;padding:12px 13px;margin-bottom:14px;">
+      <div style="font-size:12.5px;color:#8A7266;margin-bottom:7px;">同一個習慣，四個場合各長這樣——切著看</div>
+      <div id="r-ctx-tabs" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:11px;"></div>
       <div id="r-ctx-sym" style="font-size:16px;font-weight:600;color:#4A1B0C;line-height:1.65;margin-bottom:8px;"></div>
       <div id="r-ctx-mis" style="font-size:14.5px;color:#6E4A3C;line-height:1.75;"></div>
     </div>
@@ -606,6 +614,27 @@ var CTX_MIS=[
     P:"多數人會把內容做得更專業——但「很有料」跟「想找你合作」之間，差的是一個他看得到的實例。",
     I:"多數人會去追流量——但按讚跟行動之間，差的不是人數，是一句明確的邀請。" }
 ];
+/* 頁籤字比 CTX_OPTS.need 短一截：四顆並排在手機上，need 的全名會折成兩行。
+   順序必須跟 CTX_OPTS／CTX_MIS 一致，改一個要改三個。 */
+var CTX_TABS=["職場家人","一對一銷售","上台．帶團隊","自媒體 IP"];
+var ctxView=0;
+function renderCtx(){
+  var wk=getCombo(scores).wk,tc=DIMS[wk].textColor;
+  document.getElementById("r-ctx-tabs").innerHTML=CTX_TABS.map(function(t,i){
+    var on=(i===ctxView);
+    return '<button type="button" onclick="setCtxView('+i+')" aria-pressed="'+on+'" style="font-family:inherit;cursor:pointer;'
+      +'font-size:12.5px;font-weight:700;line-height:1;border-radius:20px;padding:8px 11px;min-height:32px;'
+      +(on?'color:#fff;background:'+tc+';border:1px solid '+tc+';':'color:#8A7266;background:#fff;border:1px solid #E8DDD3;')
+      +'">'+t+'</button>';
+  }).join("");
+  document.getElementById("r-ctx-sym").textContent=CTX_OPTS[ctxView].sym[wk];
+  document.getElementById("r-ctx-mis").textContent=CTX_MIS[ctxView][wk]||"";
+}
+function setCtxView(i){
+  ctxView=i;
+  renderCtx();
+  track("ctx_switch",{ctx:CTX_OPTS[i].need});   // 他切去看哪些場景＝比他自己選的那個更接近真實需求
+}
 /* 結果句真相＝productkit 01-核心定義字典「兩種語言」條（對外入口用結果句）。
    2026-09-01：P＝讓他要找你（前一版「讓他覺得有解」、再前一版「讓人覺得你很會」皆作廢）。
    ✅ 2026-09-01 換色盤：本頁是暖底，四色改用 productkit 21-品牌色彩系統的**暖版**，
@@ -631,7 +660,7 @@ function slRow(items,opt){
   }).join("");
   var slices=items.map(function(it){
     var p=PALV[it.dimKey]||{c:"#B4A695",t:"#8A7266",tint:"#EFE6DB"};
-    var cls="sl "+it.state,sty="height:"+it.h+"px;";
+    var cls="sl "+it.state,sty="height:"+it.h+"px;"+(opt.full?"--fh:"+opt.full+"px;":"");
     if(it.state==="now"){
       if(it.dimKey==="I")cls+=" gold"; /* I 金紅線：淡底＋深版描邊，不鋪實色 */
       else sty+="background:"+p.c+";box-shadow:0 2px 8px "+p.c+"44;";
@@ -825,7 +854,10 @@ var ID_LINE={
   P:"遇到問題，大家會說「這要問你」。",
   I:"聽完你說話，人會真的想動起來。"};
 /* MUSCLE MAP（2026-09-15 換薄片，跟 member／visitor／pro 同一套語彙）。
-   四大肌肉排＝0–100 真成數（跟雷達同一把尺），最弱那塊實色＝先練這塊。
+   ⚠️ 一把尺（2026-09-15 老師：「全部東西都要統一單位」）：大肌肉、小肌群、weak3 小軌
+   一律 0–100（pctFromEval），全站只有這一種肌肉分數單位。/1000 是另一件事——
+   那是四成數相乘後的總量指數，不是某一塊肌肉的位置。
+   最弱那塊實色＝先練這塊。
    12 小塊預設收起來（展開全部四排會讓卡片長到 1000px，滑不完），
    展開後名字露、分數糊＝偷看鉤子。
    ⚠️ 小塊不用 todo 虛線：它們真的量過了，畫成「還沒解鎖」在薄片語彙裡等於說謊，
@@ -838,11 +870,11 @@ function renderMuscleMap(){
       var pc=Math.min(scores[k],100);
       return {h:Math.round(24+pc/100*96),state:k===wk?"now":"past",dimKey:k,
               vTop:pc,lbl:DIMS[k].name.replace("肌肉",""),lbl2:BS_EN[k]};
-    }),{vals:true})
+    }),{vals:true,full:120})
     /* ⚠️ 這一行不能省（2026-09-15）：0–100 長得像百分位，會被讀成「我贏過 62% 的人」。
        它其實是「1–5 量表的位置換算成 0–100」（(分-1)/4×100），沒有常模、不跟任何人比。
        這份測驗目前沒有常模資料，任何跨人比較的說法都是假的。 */
-    +'<div class="dq-wallnote">實色＝先練這塊最有感・淡色＝已經量過。<br>0–100 是你在量表上的位置，不是跟別人比的名次。</div>';
+    +'<div class="dq-wallnote">實色＝先練這塊最有感・淡色＝已經量過・背後淡影＝這把尺的滿格。<br>0–100 ＝ 你在這把尺上已解鎖到哪，不是跟別人比的名次。</div>';
   if(MAP_OPEN){
     /* 鎖頭字只寫一次，就寫在會看到糊分數的地方——不然四排各掛一次＝四行雜訊 */
     h+='<div class="dq-bshint">🔒 形狀是真的，分數鎖著——進影響力健身房才全開。</div>'
@@ -850,9 +882,12 @@ function renderMuscleMap(){
         return '<div class="dq-subrow"><div class="dq-sec" style="margin-bottom:8px;"><span style="color:'+DIMS[k].textColor+';">'+BS_EN[k]+'</span> · <b>'+DIMS[k].name+'・3 小塊</b></div>'
           +slRow(musclesOfDim(k).map(function(mkey){
             var v=muscleScores[mkey]||0;
-            return {h:Math.max(18,Math.round(18+(v-1)/4*70)),state:"past",dimKey:k,
-                    vTop:v.toFixed(1),lbl:MUSCLES[mkey].name,lbl2:mkey};
-          }),{vals:true,fog:true})
+            /* 2026-09-15 統一單位：小塊也走 0–100（pctFromEval），不再寫 1–5。
+               同一張卡上兩把尺＝看的人得自己換算，而且 3.4/5 的小數是假精度（三題整數只有 13 個值）。 */
+            var pc=v?pctFromEval(v):0;
+            return {h:Math.max(18,Math.round(18+pc/100*70)),state:"past",dimKey:k,
+                    vTop:pc,lbl:MUSCLES[mkey].name,lbl2:mkey};
+          }),{vals:true,fog:true,full:88})
           +'</div>';
       }).join('');
   }
@@ -893,16 +928,10 @@ function renderResult(){
      報了一次他自己剛剛選的答案，再報一次下面那張卡就會講的結論，兩句都沒有新資訊。
      現在第一句給他認得的畫面（sym），第二句給他做過但沒用的那個動作（mis）——
      痛點在「方向錯了」，不在「你不夠好」。場景名不出現，讓畫面自己對號。 */
-  var ctxBox=document.getElementById("r-ctx-box");
-  var ctx=(ctxIdx!==null&&ctxIdx!==undefined)?CTX_OPTS[ctxIdx]:null;
-  if(ctx&&ctx.sym){
-    document.getElementById("r-ctx-sym").textContent=ctx.sym[wk];
-    var mis=CTX_MIS[ctxIdx]&&CTX_MIS[ctxIdx][wk];
-    document.getElementById("r-ctx-mis").textContent=mis||"";
-    ctxBox.style.display="block";
-  }else{
-    ctxBox.style.display="none";
-  }
+  /* 沒選場景（LINE 外救援流程可能跳過）就從第一個開始，反正他自己可以切。 */
+  ctxView=(ctxIdx!==null&&ctxIdx!==undefined)?ctxIdx:0;
+  document.getElementById("r-ctx-box").style.display="block";
+  renderCtx();
 
   renderMuscleMap();
 
@@ -946,16 +975,17 @@ function renderResult(){
       +(isPick?"color:#fff;background:"+d.textColor+";":"color:#8A7266;background:#EFE6DB;");
     n.appendChild(tag);
     n.style.display="flex"; n.style.alignItems="center"; n.style.gap="7px";
-    var dots=document.createElement("div");
-    dots.style.cssText="display:flex;gap:4px;";
-    for(var di=1;di<=5;di++){
-      var dot=document.createElement("div");
-      dot.style.cssText="width:9px;height:9px;border-radius:50%;background:"+((muscleScores[mkey]||0)>=di?d.color:"#F0E3DB")+";";
-      dots.appendChild(dot);
-    }
-    var v=mk("div",null,(muscleScores[mkey]||"—")+" / 5");
-    v.style.cssText="font-size:14px;color:#6E4A3C;width:44px;text-align:right;";
-    row.appendChild(n); row.appendChild(dots); row.appendChild(v);
+    /* 2026-09-15 統一單位：原本是 5 顆點＋「3 / 5」，跟上面薄片牆的 0–100 是兩把尺。
+       改成一條 0–100 的小軌——底色＝滿格、實色＝已解鎖，跟薄片背後的淡影同一個講法。 */
+    var pc=muscleScores[mkey]?pctFromEval(muscleScores[mkey]):null;
+    var bar=document.createElement("div");
+    bar.style.cssText="width:64px;height:7px;border-radius:4px;background:#F0E3DB;overflow:hidden;flex:none;";
+    var fill=document.createElement("div");
+    fill.style.cssText="height:100%;border-radius:4px;background:"+d.color+";width:"+(pc||0)+"%;";
+    bar.appendChild(fill);
+    var v=mk("div",null,pc===null?"—":pc);
+    v.style.cssText="font-size:14px;color:#6E4A3C;width:30px;text-align:right;font-variant-numeric:tabular-nums;";
+    row.appendChild(n); row.appendChild(bar); row.appendChild(v);
     w3.appendChild(row);
   });
   document.getElementById("r-cta-desc").textContent=CTA_DESC[wk];
