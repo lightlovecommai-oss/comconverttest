@@ -7,6 +7,21 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700;900&display=swap">
 <style>
+/* ⟦視覺tokens⟧ 由 productkit/_tools/gen_視覺tokens_css.py 產生，請勿手改——改值去 3-教材/_圖產生器/視覺tokens.json */
+:root {
+  --skew: -12deg;          /* 樞紐釘基線 50% 100%，一張圖裡所有片同角同軸 */
+  --slice-r: 9px;
+  /* 三態沒有任何一態是實色——紅線：I 原版金不鋪大面積、一張圖實色最多兩片 */
+  --slice-now: .2;        /* 現在這站，另加深版描邊 */
+  --slice-now-w: 3.5px;
+  --slice-now-lift: 1.16;
+  --slice-done: .5;       /* 走過了 */
+  --slice-todo-w: 2.5px;    /* 還沒到＝虛線 */
+  --slice-todo-a: .35;
+  --slice-todo-dash: 8px 8px;
+  --slice-base: .13;       /* 退場＝灰階打底，不准改虛線（虛線已經是「還沒到」）*/
+}
+/* ⟦/視覺tokens⟧ */
 /* ══ 這一段是正式 index.html 的 CSS 原封不動搬過來（由 _build-quiz-demo.py 注入） ══
    別在這裡改樣式——改了下次重跑產生器就沒了。要改樣式請改 index.html。 */
 
@@ -62,7 +77,7 @@ html,body{background:#F7F1EC;font-family:"Noto Sans TC","PingFang TC",-apple-sys
 /* 2026-09-11 改版：3px 細條退役 → 16 片斜切薄片（§3.9 灰階打底、彩色點名）。
    一題一片：肌肉題亮該肌肉色、GOAL/CTX/SRC/INC 亮中性棕；當題同色半透明＝預告。 */
 .progslices{display:flex;gap:3px;margin-bottom:1.25rem;}
-.progslices i{flex:1;height:9px;background:#EDE4DA;border-radius:2px;transform:skewX(-12deg);transition:background .25s,opacity .25s;}
+.progslices i{flex:1;height:9px;background:#EDE4DA;border-radius:2px;transform:skewX(var(--skew));transition:background .25s,opacity .25s;}
 .qprev{background:none;border:none;color:#8A7266;font-size:14px;padding:10px 0 2px;margin-top:8px;cursor:pointer;font-family:inherit;}
 /* 程度題＝5 片由矮到高的薄片，站在同一條基線上（高度＝程度，跟結果頁同一套語彙）。
    ⚠️ 舊版是「等寬格子裡放不等大的圓」：格子等寬、圓越大，圓與圓的邊緣間距就越窄，
@@ -71,8 +86,8 @@ html,body{background:#F7F1EC;font-family:"Noto Sans TC","PingFang TC",-apple-sys
    點擊區＝整欄（寬約 1/5、高 ≥56px），比原本 52px 的圓好點很多。 */
 .degrow{display:flex;align-items:flex-end;gap:10px;border-bottom:2px solid rgba(74,27,12,.18);padding:16px 19px 0 4px;}
 .degw{flex:1;min-height:56px;display:flex;align-items:flex-end;background:none;border:none;padding:0;cursor:pointer;}
-.degc{display:block;width:100%;border-radius:6px 6px 0 0;background:#fff;border:2px solid #9C8879;border-bottom:0;transform:skewX(-12deg);transform-origin:50% 100%;transition:background .15s,border-color .15s,box-shadow .15s,transform .15s;}
-.degw:active .degc{transform:skewX(-12deg) translateY(3px);}
+.degc{display:block;width:100%;border-radius:6px 6px 0 0;background:#fff;border:2px solid #9C8879;border-bottom:0;transform:skewX(var(--skew));transform-origin:50% 100%;transition:background .15s,border-color .15s,box-shadow .15s,transform .15s;}
+.degw:active .degc{transform:skewX(var(--skew)) translateY(3px);}
 .deglbls{display:flex;justify-content:space-between;font-size:13px;color:#8A7266;margin-top:10px;padding:0 19px 0 4px;}
 .degcap{text-align:center;font-size:15px;font-weight:500;margin-top:12px;min-height:24px;}
 .qlabel{display:inline-block;font-size:14px;background:#F0E3DB;color:#993C1D;border-radius:8px;padding:2px 8px;margin-bottom:8px;}
@@ -141,7 +156,7 @@ html,body{background:#F7F1EC;font-family:"Noto Sans TC","PingFang TC",-apple-sys
    quiz 的鉤子＝「名字露、分數模糊」，所以 12 小塊走 fog（只糊數字，形狀照實） */
 .slw{--sg:0px;}
 .srow{display:flex;align-items:flex-end;gap:7px;border-bottom:2px solid rgba(74,27,12,.22);padding:6px calc(4px + var(--sg,0px)) 0 4px;}
-.sl{flex:1;border-radius:6px 6px 0 0;transform:skewX(-12deg);transform-origin:50% 100%;position:relative;transition:height .4s cubic-bezier(.4,0,.2,1);}
+.sl{flex:1;border-radius:6px 6px 0 0;transform:skewX(var(--skew));transform-origin:50% 100%;position:relative;transition:height .4s cubic-bezier(.4,0,.2,1);}
 /* 滿格軌（2026-09-15）：每片背後畫一條「這把尺的滿格」淡影，實色只長到你的位置。
    進步空間用形狀講，不用文字講——這是市場端最想看到的那件事。
    z-index:-1 安全：.sl 有 transform＝自成堆疊脈絡，軌只會躲到自己的底色後面，不會掉到卡片背景後。 */
@@ -677,7 +692,7 @@ body.x-marks [data-edit]{outline-color:rgba(198,96,58,.38);}
 
   <!-- 第零區：身分卡（2026-09-11 對標 16personalities：先給「你是哪型」的身分，數字其次——
        身分才是願意截圖分享的東西。最強那塊肌肉＝你的型；命名「○型溝通者」為暫定，老師可再改。 -->
-  <div class="card" id="result__r-identity" style="text-align:center;"><div style="font-size:13px;letter-spacing:2px;color:#8A7266;margin-bottom:10px;">你的影響力型態</div><div style="font-size:26px;font-weight:700;color:#4A1B0C;line-height:1.4;margin-bottom:6px;">你是「<span style="color:#5C7464;">信任型</span>」溝通者</div><div style="font-size:15px;color:#6E4A3C;margin-bottom:14px;">大家願意把真心話留給你。</div><div style="display:flex;gap:5px;align-items:center;padding:0 8px;"><div style="flex:50;height:9px;border-radius:3px;transform:skewX(-12deg);background:#DED2C6;"></div><div style="flex:75;height:14px;border-radius:3px;transform:skewX(-12deg);background:#6E8B77;"></div><div style="flex:25;height:9px;border-radius:3px;transform:skewX(-12deg);background:#DED2C6;"></div><div style="flex:50;height:9px;border-radius:3px;transform:skewX(-12deg);background:#DED2C6;"></div></div><div style="display:flex;gap:5px;padding:0 8px;margin-top:6px;"><div style="flex:50;font-size:11px;text-align:center;color:#B4A294;font-weight:400;">吸引</div><div style="flex:75;font-size:11px;text-align:center;color:#5C7464;font-weight:700;">信任</div><div style="flex:25;font-size:11px;text-align:center;color:#B4A294;font-weight:400;">專業</div><div style="flex:50;font-size:11px;text-align:center;color:#B4A294;font-weight:400;">推進</div></div></div>
+  <div class="card" id="result__r-identity" style="text-align:center;"><div style="font-size:13px;letter-spacing:2px;color:#8A7266;margin-bottom:10px;">你的影響力型態</div><div style="font-size:26px;font-weight:700;color:#4A1B0C;line-height:1.4;margin-bottom:6px;">你是「<span style="color:#5C7464;">信任型</span>」溝通者</div><div style="font-size:15px;color:#6E4A3C;margin-bottom:14px;">大家願意把真心話留給你。</div><div style="display:flex;gap:5px;align-items:center;padding:0 8px;"><div style="flex:50;height:9px;border-radius:3px;transform:skewX(var(--skew));background:#DED2C6;"></div><div style="flex:75;height:14px;border-radius:3px;transform:skewX(var(--skew));background:#6E8B77;"></div><div style="flex:25;height:9px;border-radius:3px;transform:skewX(var(--skew));background:#DED2C6;"></div><div style="flex:50;height:9px;border-radius:3px;transform:skewX(var(--skew));background:#DED2C6;"></div></div><div style="display:flex;gap:5px;padding:0 8px;margin-top:6px;"><div style="flex:50;font-size:11px;text-align:center;color:#B4A294;font-weight:400;">吸引</div><div style="flex:75;font-size:11px;text-align:center;color:#5C7464;font-weight:700;">信任</div><div style="flex:25;font-size:11px;text-align:center;color:#B4A294;font-weight:400;">專業</div><div style="flex:50;font-size:11px;text-align:center;color:#B4A294;font-weight:400;">推進</div></div></div>
 
   <!-- 第一區：已解鎖影響力（2026-09-05 老師備註【果-1】：數值從「尚未解鎖(1000−x)」改成已解鎖 x——只講已點亮的，落差感留給 /1000 自己說話） -->
   <div class="card" style="text-align:center;">
