@@ -1028,15 +1028,27 @@ function optLabel(dim,idx){
    沒有這條，健身房解盤台永遠拿不到基線、也就沒東西可念。
    ⚠️ eval 是 append 不是 upsert（體測是時間序列，要看得到進步），所以這裡必須自己防重複送：
       同一組分數只送一次，否則每次重開結果頁都會多疊 12 列假紀錄。 */
+/* 拿不到 LINE 身份時用什麼當鍵——跟 Code.gs 的推導同一套，順序也一樣：
+   ① LINE userId ② web:<email> ③ dev:<裝置碼>（track.js 的 cw_sid，同一台瀏覽器永遠同一個）
+   第三層是 2026-09-21 補的：在 LINE 外測完又按「不領取」的人以前整份結果被丟掉，
+   連他測過都不知道。裝置碼至少讓分數留得下來，之後用 LINE 進來就接得回去。 */
+function identKey_(){
+  if(userId) return userId;
+  var e=(formData.email||"").trim().toLowerCase();
+  if(e) return "web:"+e;
+  var sid=(typeof trackSessionId==="function")?trackSessionId():"";
+  return sid?"dev:"+sid:"";
+}
 async function postEvals(){
-  if(!userId) return;                                   // 拿不到 LINE 身份就沒有人可以掛，跳過
+  var ekey=identKey_();
+  if(!ekey) return;                                     // 連裝置碼都拿不到（localStorage 被關）＝真的沒地方掛
   var evals=MORD.filter(function(m){return muscleScores[m]>=1&&muscleScores[m]<=5;})
                 .map(function(m){return {muscle:m,score:muscleScores[m]};});
   if(evals.length!==MORD.length) return;                // 12 格沒填滿就不當基線送出
-  var sig=userId+"|"+MORD.map(function(m){return muscleScores[m];}).join("");
+  var sig=ekey+"|"+MORD.map(function(m){return muscleScores[m];}).join("");
   try{ if(localStorage.getItem("cct_eval_sent_v1")===sig) return; }catch(e){}
   try{
-    var r=await fetch(SHEET_API,{method:"POST",body:JSON.stringify({action:"eval",lineId:userId,source:"quiz",evals:evals}),headers:{"Content-Type":"text/plain;charset=utf-8"}});
+    var r=await fetch(SHEET_API,{method:"POST",body:JSON.stringify({action:"eval",lineId:ekey,source:"quiz",evals:evals}),headers:{"Content-Type":"text/plain;charset=utf-8"}});
     var d=await r.json().catch(function(){return {};});
     if(d.status!=="ok") throw new Error("bad status: "+(d.status||"unknown"));
     try{ localStorage.setItem("cct_eval_sent_v1",sig); }catch(e){}
@@ -1060,6 +1072,9 @@ async function saveToSheet(){
      GOAL/SRC/INC/CTX 各自走自己的欄位，不再混進 Q 欄。 */
   var rawAnswers=MORD.map(function(m){return muscleScores[m]===undefined?"":muscleScores[m];}).join(",");
   var payload={action:"quiz",userId:userId,displayName:displayName,pictureUrl:pictureUrl,name:formData.name,email:formData.email,job:formData.job,scoreA:scores.A,scoreT:scores.T,scoreP:scores.P,scoreI:scores.I,incomeLevel:INC_LABELS[incIdx]||"",goalIncome:GOAL_LABELS[goalIdx]||"",customerSource:optLabel("SRC",srcIdx),mainAbility:DIMS[sk].name,subAbility:DIMS[uk].name,rawAnswers:rawAnswers,targetContext:ctxLabel,targetDistance:"",targetRank:"",targetNeed:ctxObj?ctxObj.need:"",targetKeyMuscle:DIMS[getCombo(scores).wk].name,timestamp:new Date().toISOString(),track:trackPayload()};
+  /* 裝置碼也當成一條「身份線索」明確送出去（有 LINE 身份時照送）——
+     後端把它記進「(系統)身份對照」，一年後要把匿名那列接回這個人靠的就是它。 */
+  payload.quizSid=(typeof trackSessionId==="function")?trackSessionId():"";
   /* 用 text/plain 送出（簡單請求、不觸發 CORS 預檢），Apps Script 回應帶 access-control-allow-origin:*，
      所以可以移除 no-cors、真正讀到回應並確認寫入結果。失敗自動重試一次。 */
   var msgEl=document.getElementById("saving-msg");
@@ -1183,8 +1198,12 @@ document.getElementById("btn-skip").addEventListener("click",function(){
   track("lead_skip",{});
   renderResult();
   /* 不留資料也要送：測完全部進館，進館的前提是開通名單有這個 userId、體測分頁有基線。
-     只送分數與 LINE 身份，姓名/Email/職業留空——那是他選擇不給的，不偷塞。 */
-  if(userId){saveToSheet();}
+     只送分數與 LINE 身份，姓名/Email/職業留空——那是他選擇不給的，不偷塞。
+     ⭐ 2026-09-21 拿掉 if(userId)：在 LINE 外按這顆的人以前一個字都沒送出去，
+     連他測過都不知道。現在一律送，後端會退到 dev:<裝置碼> 當鍵（identKey_ 同一套）。
+     連裝置碼都拿不到（localStorage 被關）才跳過——那種情況送出去後端也只會退件，
+     白白讓他看到一個「儲存失敗」的紅字。 */
+  if(identKey_()) saveToSheet();
 });
 document.getElementById("btn-rep").addEventListener("click",function(){
   var n=document.getElementById("f-name").value.trim();
@@ -1218,10 +1237,14 @@ document.getElementById("btn-workshop").addEventListener("click",function(){
      沒有 userId（LINE 外測驗）時把 12 格分數夾在 ms= 帶過去——健身房入口在 LIFF 拿到身份的那一刻
      會回頭補寫測驗列＋體格基線，這個人就不會斷在半路（2026-09-08）。 */
   var base="https://app.atpifit.com/";
-  if(userId){ location.href=base+"?id="+encodeURIComponent(userId)+"&from=quiz"; return; }
+  /* sid＝這一站的裝置碼。兩個網域的 localStorage 不互通，健身房那邊的裝置碼是另一組，
+     所以要靠網址把這一組帶過去，「匿名測驗那列」才接得到之後的 LINE 身份（2026-09-21）。 */
+  var sid=(typeof trackSessionId==="function")?trackSessionId():"";
+  var sidQ=sid?"&sid="+encodeURIComponent(sid):"";
+  if(userId){ location.href=base+"?id="+encodeURIComponent(userId)+"&from=quiz"+sidQ; return; }
   var msOk=MORD.every(function(m){return muscleScores[m]>=1&&muscleScores[m]<=5;});
   var ms=msOk?"&ms="+MORD.map(function(m){return muscleScores[m];}).join(","):"";
-  location.href=base+"?from=quiz"+ms;
+  location.href=base+"?from=quiz"+ms+sidQ;
 });
 
 /* 中途離開：答到第幾題就走，是題目太多還是某一題卡住的唯一線索。
