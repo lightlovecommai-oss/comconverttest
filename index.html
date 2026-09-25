@@ -1024,9 +1024,10 @@ function optLabel(dim,idx){
   return "";
 }
 /* ⭐ 把 12 小肌群 1–5 分送進健身房的「(遊戲)體測紀錄」＝學員的體格基線。
+   （分頁真名還是「(遊戲)體測紀錄」＝活識別字，尚未拍板改名；敘述一律寫健檢）
    Code.gs 的 action:"eval" 端點早就寫好在等，只是前端一直沒人呼叫；
    沒有這條，健身房解盤台永遠拿不到基線、也就沒東西可念。
-   ⚠️ eval 是 append 不是 upsert（體測是時間序列，要看得到進步），所以這裡必須自己防重複送：
+   ⚠️ eval 是 append 不是 upsert（健檢是時間序列，要看得到進步），所以這裡必須自己防重複送：
       同一組分數只送一次，否則每次重開結果頁都會多疊 12 列假紀錄。 */
 /* 拿不到 LINE 身份時用什麼當鍵——跟 Code.gs 的推導同一套，順序也一樣：
    ① LINE userId ② web:<email> ③ dev:<裝置碼>（track.js 的 cw_sid，同一台瀏覽器永遠同一個）
@@ -1053,7 +1054,7 @@ async function postEvals(){
     if(d.status!=="ok") throw new Error("bad status: "+(d.status||"unknown"));
     try{ localStorage.setItem("cct_eval_sent_v1",sig); }catch(e){}
   }catch(e){
-    // 體測沒寫進去不影響使用者看結果，也不擋進館——留 log 就好，下次重開會自動再試
+    // 健檢沒寫進去不影響使用者看結果，也不擋進館——留 log 就好，下次重開會自動再試
     console.warn("postEvals 失敗（體格基線這次沒送進健身房）：",e);
   }
 }
@@ -1098,7 +1099,7 @@ async function saveToSheet(){
       msgEl.textContent="資料儲存失敗，請截圖結果或稍後再試一次 🙏";
     }
   }
-  await postEvals();   // 名單寫完再送體測基線；失敗不影響上面已寫好的那一列
+  await postEvals();   // 名單寫完再送健檢基線；失敗不影響上面已寫好的那一列
 }
 async function initLiff(){
   try{
@@ -1125,7 +1126,7 @@ async function initLiff(){
     if(d.form){formData={name:d.form.name||"",email:d.form.email||"",job:d.form.job||""};}
     renderResult();
     /* 已登入(拿得到 userId)就把快取結果補送一次：名單那邊是 upsert、一人一列不重複，
-       體測那邊是 append，靠 postEvals 自己的 signature 去重（同一組分數只送一次）。 */
+       健檢那邊是 append，靠 postEvals 自己的 signature 去重（同一組分數只送一次）。 */
     if(userId){saveToSheet();}
   }catch(e){localStorage.removeItem("cct_result_v3");}}
 }
@@ -1197,7 +1198,7 @@ document.getElementById("btn-skip").addEventListener("click",function(){
   formData={name:"",email:"",job:""};
   track("lead_skip",{});
   renderResult();
-  /* 不留資料也要送：測完全部進館，進館的前提是開通名單有這個 userId、體測分頁有基線。
+  /* 不留資料也要送：測完全部進館，進館的前提是開通名單有這個 userId、健檢紀錄分頁有基線。
      只送分數與 LINE 身份，姓名/Email/職業留空——那是他選擇不給的，不偷塞。
      ⭐ 2026-09-21 拿掉 if(userId)：在 LINE 外按這顆的人以前一個字都沒送出去，
      連他測過都不知道。現在一律送，後端會退到 dev:<裝置碼> 當鍵（identKey_ 同一套）。

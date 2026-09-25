@@ -89,6 +89,7 @@ ATPI 程式真相在 `../../4-溝通健身房/consult-workshop/atpi-core.js`，�
 測完 → POST action:"quiz"  → (漏斗)能力測驗  ：一人一列 upsert，含 Q1..Q12、情境座標五欄
      → POST action:"eval"  → (遊戲)體測紀錄  ：12 列小肌群 1–5，source="quiz" ＝體格分基線
 ```
+（上表「(遊戲)體測紀錄」＝分頁真名，活識別字，未拍板改名；敘述一律寫健檢）
 - `postEvals()` 自己防重複送（`cct_eval_sent_v1` 存 userId＋分數 signature）——
   eval 端點是 **append 不是 upsert**，不擋的話每次重開結果頁都會多疊 12 列假紀錄。
 - **Q1..Q12 ＝ A1..I3 的 1–5 原始分**（照 `MORD` 順序）。
