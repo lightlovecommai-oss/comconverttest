@@ -376,8 +376,12 @@ function render(){
   var id=qs("id");
   var tail=id?("?id="+encodeURIComponent(id)+"&from=report")
              :("?from=report&ms="+MORD.map(function(m){return muscleScores[m];}).join(","));
-  document.getElementById("btn-join").href="https://app.atpifit.com/join.html";
-  document.getElementById("btn-visit").href="https://app.atpifit.com/"+tail;
+  /* 推薦碼跟著走：報告信通常是隔幾天才打開的，ref 是測驗那頁進來時存在這一站的。
+     兩個網域 localStorage 不互通，所以要掛在網址上交棒（同 sid 的理由）。 */
+  var ref_=""; try{ ref_=String(localStorage.getItem("cct_ref")||qs("ref")||"").replace(/[^A-Za-z0-9]/g,"").slice(0,12); }catch(e){}
+  var refQ_=ref_?("&ref="+encodeURIComponent(ref_)):"";
+  document.getElementById("btn-join").href="https://app.atpifit.com/join.html"+(ref_?("?ref="+encodeURIComponent(ref_)):"");
+  document.getElementById("btn-visit").href="https://app.atpifit.com/"+tail+refQ_;
   document.getElementById("btn-join").addEventListener("click",function(){ track("report_cta_join",{weakest_dim:wk}); });
   document.getElementById("btn-visit").addEventListener("click",function(){ track("report_cta_visit",{weakest_dim:wk}); });
 }

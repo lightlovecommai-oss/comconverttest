@@ -711,6 +711,19 @@ var userId="",displayName="",pictureUrl="";
 var liffReady=false;   // liff.init 成功才能給「用 LINE 保存結果」鈕（LINE 外拿不到 userId 時的救援入口）
 var formData={name:"",email:"",job:""};
 
+/* ⭐ ref＝是誰帶他來的（推薦碼，2026-09-28）。推薦連結指向這一站：
+     https://quiz.atpifit.com/?ref=ABC123
+   兩件事要做：①跟著 quiz 那筆 POST 送給後端 ②交棒給健身房時掛在網址上
+   （quiz 與 app 的 localStorage 不互通，跟 sid 一樣只能靠網址過橋）。
+   存起來是因為他可能測完先關掉、過幾天才回來。歸誰的 30 天規則在後端判，這裡不判。
+   ⚠️ 畫面上不顯示任何跟推薦／獎金有關的字。 */
+var REF="";
+try{
+  REF=(new URLSearchParams(location.search).get("ref")||"").replace(/[^A-Za-z0-9]/g,"").slice(0,12);
+  if(REF) localStorage.setItem("cct_ref",REF);
+  else REF=localStorage.getItem("cct_ref")||"";
+}catch(e){}
+
 function show(id){
   document.querySelectorAll(".screen").forEach(function(s){s.classList.remove("active");});
   document.getElementById(id).classList.add("active");
@@ -1076,6 +1089,7 @@ async function saveToSheet(){
   /* 裝置碼也當成一條「身份線索」明確送出去（有 LINE 身份時照送）——
      後端把它記進「(系統)身份對照」，一年後要把匿名那列接回這個人靠的就是它。 */
   payload.quizSid=(typeof trackSessionId==="function")?trackSessionId():"";
+  payload.ref=REF;   // 是誰帶他來的；後端寫進人主檔的「推薦人」欄（空的就當沒人推）
   /* 用 text/plain 送出（簡單請求、不觸發 CORS 預檢），Apps Script 回應帶 access-control-allow-origin:*，
      所以可以移除 no-cors、真正讀到回應並確認寫入結果。失敗自動重試一次。 */
   var msgEl=document.getElementById("saving-msg");
@@ -1242,10 +1256,13 @@ document.getElementById("btn-workshop").addEventListener("click",function(){
      所以要靠網址把這一組帶過去，「匿名測驗那列」才接得到之後的 LINE 身份（2026-09-21）。 */
   var sid=(typeof trackSessionId==="function")?trackSessionId():"";
   var sidQ=sid?"&sid="+encodeURIComponent(sid):"";
-  if(userId){ location.href=base+"?id="+encodeURIComponent(userId)+"&from=quiz"+sidQ; return; }
+  /* ref 也要過橋，理由跟 sid 一樣：兩個網域的 localStorage 不互通，
+     不掛在網址上，健身房那邊就不知道是誰帶他來的。 */
+  var refQ=REF?"&ref="+encodeURIComponent(REF):"";
+  if(userId){ location.href=base+"?id="+encodeURIComponent(userId)+"&from=quiz"+sidQ+refQ; return; }
   var msOk=MORD.every(function(m){return muscleScores[m]>=1&&muscleScores[m]<=5;});
   var ms=msOk?"&ms="+MORD.map(function(m){return muscleScores[m];}).join(","):"";
-  location.href=base+"?from=quiz"+ms+sidQ;
+  location.href=base+"?from=quiz"+ms+sidQ+refQ;
 });
 
 /* 中途離開：答到第幾題就走，是題目太多還是某一題卡住的唯一線索。
