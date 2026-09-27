@@ -160,7 +160,7 @@ story.append(Spacer(1, 8*mm))
 # Footer
 story.append(HRFlowable(width="100%", thickness=0.5, color=BORDER))
 story.append(Spacer(1, 3*mm))
-story.append(Paragraph("溝通變現能力教練　光頭", ps(9, BORDER, 14)))
+story.append(Paragraph("溝通變現能力教練　平凡人光頭", ps(9, BORDER, 14)))
 
 doc.build(story)
 print("PDF 已產出：", OUTPUT)

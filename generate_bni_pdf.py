@@ -45,7 +45,7 @@ story.append(Paragraph("BNI 商業策略資料", ParagraphStyle(
     'title', fontName='PingFang', fontSize=20, textColor=ORANGE,
     leading=30, spaceAfter=4
 )))
-story.append(Paragraph("光頭 · 溝通變現能力教練", style(11, MID)))
+story.append(Paragraph("平凡人光頭 · 溝通變現能力教練", style(11, MID)))
 story.append(Spacer(1, 6*mm))
 story.append(HRFlowable(width="100%", thickness=1, color=BORDER))
 story.append(Spacer(1, 6*mm))
@@ -238,7 +238,7 @@ story.append(Spacer(1, 10*mm))
 story.append(HRFlowable(width="100%", thickness=0.5, color=BORDER))
 story.append(Spacer(1, 3*mm))
 story.append(Paragraph(
-    "溝通變現能力教練　光頭",
+    "溝通變現能力教練　平凡人光頭",
     ParagraphStyle('footer', fontName='PingFang', fontSize=9, textColor=BORDER, leading=14)
 ))
 
